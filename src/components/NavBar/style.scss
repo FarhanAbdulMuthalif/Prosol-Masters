@@ -1,0 +1,94 @@
+.side-bar {
+  width: 40px;
+  height: calc(100vh - 60px);
+  background-color: white;
+  transition: all 500ms ease;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.full-side-bar {
+  width: 180px;
+  height: calc(100vh - 60px);
+  background-color: white;
+  transition: all 500ms ease;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  .header-part-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 500ms ease;
+    #search-sidebar {
+      height: 30px;
+      width: 7rem;
+      margin: 0;
+      padding: 0;
+      margin-top: 1.2rem;
+    }
+    #search-sidebar::placeholder {
+      font-size: 14px;
+    }
+  }
+  nav {
+    width: 180px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+
+    h2 {
+      font-size: 12px;
+      color: #535353;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      margin: 1rem 0;
+      //   align-self: flex-start;
+    }
+    ul {
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      /*  align-items: flex-start; */
+      gap: 3px;
+
+      color: #535353;
+      font-size: 12px;
+      width: 180px;
+      padding: 5px 0;
+      margin: 0;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: all 200ms ease;
+
+      li {
+        color: #535353;
+        width: 180px;
+        padding: 5px 30px;
+        margin: 0;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: all 500ms ease;
+        cursor: pointer;
+        &:hover {
+          color: #0000ff;
+
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        }
+      }
+      .activ-sidebar-link {
+        color: #0000ff;
+        width: 180px;
+        background-color: #e6effc;
+        border-left: 4px solid #0000ff;
+        padding: 8px 30px;
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 500ms ease;
+      }
+    }
+  }
+}
