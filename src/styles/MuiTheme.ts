@@ -9,11 +9,12 @@ export const MuiCreateTheme = createTheme({
           padding: 0,
           "& input::placeholder": {
             color: "#8B4513",
-            opacity: ".8",
+            opacity: ".9",
           },
         },
       },
     },
+
     MuiMenuItem: {
       styleOverrides: {
         root: {
@@ -50,8 +51,9 @@ export const MuiCreateTheme = createTheme({
   },
 
   typography: {
+    fontFamily: "Segoe UI, sans-serif",
     button: {
-      fontWeight: "bold", // Set the button text to bold
+      fontWeight: "500", // Set the button text to bold
       textTransform: "none", // Disable the uppercase transformation
     },
   },

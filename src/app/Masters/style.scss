@@ -1,1 +1,22 @@
-
+.masters-main-content-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.5px solid #c5ccd4;
+}
+.create-plant-wrapper-div {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 10px;
+  .create-plant-field-place-div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: 20px;
+  }
+  .create-plant-action-div {
+    align-self: end;
+    display: flex;
+    gap: 20px;
+  }
+}

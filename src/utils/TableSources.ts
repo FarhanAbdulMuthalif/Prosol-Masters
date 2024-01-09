@@ -4,7 +4,7 @@ export const PlantMasterColumns: GridColDef[] = [
   {
     field: "plantName",
     headerClassName: "super-app-theme--header",
-    flex: 1,
+    flex: 2,
     headerName: "Plant Name",
   },
   {
@@ -14,6 +14,24 @@ export const PlantMasterColumns: GridColDef[] = [
     /*  renderCell: (params) => {
           return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
         }, */
-    flex: 1,
+    flex: 2,
+  },
+  // {
+  //   field: "status",
+  //   headerClassName: "super-app-theme--header",
+  //   headerName: "Status",
+  //   /*  renderCell: (params) => {
+  //         return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
+  //       }, */
+  //   flex: 1,
+  // },
+  {
+    field: "createdBy",
+    headerClassName: "super-app-theme--header",
+    headerName: "Created By",
+    /*  renderCell: (params) => {
+          return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
+        }, */
+    flex: 2,
   },
 ];

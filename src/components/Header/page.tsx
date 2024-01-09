@@ -9,7 +9,7 @@ import "./style.scss";
 
 export default function Header() {
   const currentRoute = usePathname();
-  console.log(currentRoute.split("/"));
+  // console.log(currentRoute.split("/"));
   return (
     <header>
       <Image

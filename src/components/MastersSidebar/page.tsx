@@ -45,8 +45,8 @@ export default function MastersSidebar() {
     .filter((data) => data !== "Masters")[0];
   const CurrentViewList =
     masterNavBar[ExactNameForRender as keyof MasterNavBarDataRenderTypes];
-  console.log(currentRoute);
-  console.log(ExactNameForRender);
+  // console.log(currentRoute);
+  // console.log(ExactNameForRender);
   return (
     <nav className="masters-sidenavbar-class">
       <p>{ExactNameForRender}</p>

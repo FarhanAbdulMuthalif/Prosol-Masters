@@ -8,7 +8,7 @@ import React from "react";
 // }
 
 const OutlineTextField: React.FC<TextFieldProps> = ({ ...props }) => {
-  return <TextField variant="outlined" {...props} />;
+  return <TextField size="small" variant="outlined" {...props} />;
 };
 
 export default OutlineTextField;

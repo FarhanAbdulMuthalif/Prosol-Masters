@@ -1,4 +1,5 @@
 // components/DataGrid.tsx
+import { DataGridHeaderCustomStyles } from "@/utils/sideBarFunc";
 import {
   DataGrid,
   GridColDef,
@@ -22,13 +23,16 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = ({
   ...props
 }) => {
   return (
-    <div style={{ height: 400, width: "100%", backgroundColor: "white" }}>
+    <div style={{ height: "73vh", backgroundColor: "white" }}>
       <DataGrid
+        checkboxSelection
+        disableRowSelectionOnClick
         columns={columns}
         rows={rows}
         onRowSelectionModelChange={onRowSelectionModelChange} // Pass the correct prop
         {...props}
         sx={{ fontSize: "12px" }}
+        classes={DataGridHeaderCustomStyles} // Apply custom styles directly
       />
     </div>
   );

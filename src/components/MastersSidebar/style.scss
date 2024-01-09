@@ -1,10 +1,11 @@
 .masters-sidenavbar-class {
-  height: 95%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 180px;
+  min-width: 180px;
   background-color: white;
+  border-radius: 3px;
   box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
     rgb(9 30 66 / 8%) 0px 2px 4px 1px;
   p {
@@ -18,13 +19,13 @@
     font-size: 12px;
     font-weight: 500;
     color: #6f6f6f;
-
+    letter-spacing: 0.3px;
     li {
       width: 100%;
       height: 30px;
       display: flex;
       align-items: center;
-      padding-left: 10px;
+      padding-left: 30px;
     }
     .active-second-bar-li-class {
       border-left: 3px solid blue;

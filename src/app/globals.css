@@ -60,11 +60,20 @@ label {
   gap: 10px;
 }
 .masters-main-content-section {
-  flex-grow: 1;
   height: 100%;
+  /* flex-grow: 1; */
+  width: 100%;
+  min-width: calc(100vw - 390px);
+  max-width: calc(100vw - 250px);
   display: flex;
   flex-direction: column;
+  gap: 20px;
   padding: 5px;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+    rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+  transition: all 500ms;
 }
 
 .close-icon-wrapper {
@@ -112,9 +121,18 @@ label {
   border-radius: 4px; /* Rounded corners for the thumb */
 }
 .export-import-header-master-div {
-  height: 55px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+}
+.super-app-theme--header {
+  background-color: "rgba(255, 7, 0, 0.55)";
+}
+
+.custom-datagrid .MuiDataGrid-columnHeader {
+  background-color: #e6effc;
+  color: blue;
+  font-size: 13px; /* background-color: #f1f1fa; */
 }
