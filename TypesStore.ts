@@ -1,6 +1,10 @@
-type UseContextHookTypes = {
+import { Dispatch, SetStateAction } from "react";
+
+export type UseContextHookTypes = {
   toogleSidebar: boolean;
   auth: boolean;
+  setPlantData?: Dispatch<SetStateAction<any[] | undefined>>; // Adjust the type here
+  PlantData?: any[] | undefined; // Adjust the type here
 };
 type NavKeyType = {
   [key in string]: NavSinData[];

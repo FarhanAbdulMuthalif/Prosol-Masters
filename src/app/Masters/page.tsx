@@ -1,14 +1,17 @@
 "use client";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
+import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
+import { getAllPlantData } from "@/utils/masters/plant";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
-import { MouseEvent, ReactNode, useState } from "react";
+import { MouseEvent, ReactNode, useContext, useState } from "react";
 import CreatePlant from "./_CreatePlant";
 import Plantgrid from "./_Plantgrid";
 import "./style.scss";
@@ -18,6 +21,7 @@ export default function Masters() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     settabValue(newValue);
   };
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const tabs = [
     { label: "Plant Table", value: "table" },
     { label: "Create Plant", value: "create" },
@@ -31,24 +35,63 @@ export default function Masters() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const PlantDataCon = useContext(UseContextHook);
+  const { setPlantData } = PlantDataCon;
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
   const handleOpenConfirmationDialog = () => {
     setConfirmationDialogOpen(!isConfirmationDialogOpen);
   };
+  const [selectedId, setselectedId] = useState(0);
+  const [isConfirmationDeleteDialogOpen, setConfirmationDeleteDialogOpen] =
+    useState(false);
+  const handleOpenConfirmationDeleteDialog = () => {
+    setConfirmationDeleteDialogOpen(false);
+  };
+  const GetIdandOpenHandler = (val: number) => {
+    setConfirmationDeleteDialogOpen(true);
+    setselectedId(val);
+  };
+  const handlePlantDeleteHandler = async () => {
+    try {
+      const res = await api.delete(`deletePlant/${selectedId}`);
+      const data = await res.data;
+      if (res.status === 200) {
+        setOpenSnackbar(true);
+        setConfirmationDeleteDialogOpen(false);
+      }
+    } catch (e) {
+      console.log(e);
+      // console.log(e.ma)
+    }
+  };
   const tabRenderValuePlant: Record<string, ReactNode> = {
-    table: <Plantgrid selectionIDArr={setSelectionIDArr} />,
+    table: (
+      <Plantgrid
+        selectionIDArr={setSelectionIDArr}
+        handleOpenConfirmationDeleteDialog={GetIdandOpenHandler}
+      />
+    ),
     create: <CreatePlant />,
   };
+
   const handlePlantBulkStatusChangeAction = async () => {
     const res = await api.patch(
       `updateBulkStatusPlantId/${selectionIDArr.toString()}`
     );
-    const data = await res.data;
+    const dataPlantUpdate = await res.data;
+    const dataPlant = await getAllPlantData("getAllPlant");
+    console.log(dataPlant);
+    console.log(dataPlantUpdate);
     if (res.status === 200) {
       setConfirmationDialogOpen(false);
+      if (setPlantData) {
+        setPlantData(dataPlant);
+        setConfirmationDeleteDialogOpen(false);
+      }
     }
   };
+
   return (
     <section className="masters-main-content-section">
       <div className="masters-main-content-header">
@@ -99,6 +142,19 @@ export default function Masters() {
         content="Are you sure you want to change the selected record's status?"
         onConfirm={handlePlantBulkStatusChangeAction}
         onCancel={handleOpenConfirmationDialog}
+      />
+      <ReusableConfirmationDialog
+        open={isConfirmationDeleteDialogOpen}
+        title="Are your sure you want Delete"
+        content="you may lose your record"
+        onConfirm={handlePlantDeleteHandler}
+        onCancel={handleOpenConfirmationDeleteDialog}
+      />
+      <ReusableSnackbar
+        message="Plant Deleted Sucessfully!"
+        severity="success"
+        setOpen={setOpenSnackbar}
+        open={openSnackbar}
       />
     </section>
   );

@@ -20,10 +20,6 @@ export default function CreatePlant() {
   });
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleSnackbarOpen = () => {
-    setOpenSnackbar(!openSnackbar);
-  };
-
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -50,7 +46,7 @@ export default function CreatePlant() {
           plantName: "",
           plantCode: "",
         });
-        handleSnackbarOpen();
+        setOpenSnackbar(true);
       }
     }
   };
