@@ -16,22 +16,11 @@ export const PlantMasterColumns: GridColDef[] = [
         }, */
     flex: 2,
   },
-  // {
-  //   field: "status",
-  //   headerClassName: "super-app-theme--header",
-  //   headerName: "Status",
-  //   /*  renderCell: (params) => {
-  //         return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
-  //       }, */
-  //   flex: 1,
-  // },
+
   {
     field: "createdBy",
     headerClassName: "super-app-theme--header",
     headerName: "Created By",
-    /*  renderCell: (params) => {
-          return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
-        }, */
     flex: 2,
   },
 ];

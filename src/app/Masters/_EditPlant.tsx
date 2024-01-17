@@ -1,25 +1,40 @@
 "use client";
-import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
 
 // Import statements...
 
-export default function CreatePlant() {
+export default function EditPlant({
+  plantName,
+  plantCode,
+  id,
+  status,
+  createdAt,
+  createdBy,
+  updatedBy,
+  updatedAt,
+}: {
+  plantName: string;
+  plantCode: string;
+  id: number;
+  status: boolean;
+  createdAt: string;
+  createdBy: string;
+  updatedBy: string;
+  updatedAt: string;
+}) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
   });
-  const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab } = PlantDataCon;
 
   const [formData, setFormData] = useState({
-    plantName: "",
-    plantCode: "",
+    plantName: plantName,
+    plantCode: plantCode,
   });
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -27,7 +42,7 @@ export default function CreatePlant() {
     e.preventDefault();
 
     const { plantName, plantCode } = formData;
-
+    console.log(plantCode, plantName);
     if (plantName.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
@@ -37,13 +52,13 @@ export default function CreatePlant() {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
     if (plantCode.length > 0 && plantName.length > 0) {
-      const response = await api.post("plant/savePlant", {
+      const response = await api.put(`updatePlant/${id}`, {
         plantCode,
         plantName,
-        status: true,
+        status,
       });
       const data = await response.data;
-      if (response.status === 201) {
+      if (response.status === 200) {
         console.log(data);
         setFormData({
           plantName: "",
@@ -64,7 +79,7 @@ export default function CreatePlant() {
       <div className="create-plant-wrapper-div">
         <div className="create-plant-field-place-div">
           <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab}Name`}
+            placeholder="Enter PlantName"
             type="text"
             value={formData.plantName}
             onChange={handleInputChange}
@@ -75,7 +90,7 @@ export default function CreatePlant() {
             name="plantName"
           />
           <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab}Code`}
+            placeholder="Enter PlantCode"
             type="text"
             value={formData.plantCode}
             onChange={handleInputChange}
@@ -85,6 +100,28 @@ export default function CreatePlant() {
             error={plantFormError.code}
             name="plantCode"
           />
+        </div>
+        <div className="edit-master-audit-trial-view">
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created By :</p>
+              <p className="edit-master-audit-trial-label-value">{createdBy}</p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created At :</p>
+              <p className="edit-master-audit-trial-label-value">{createdAt}</p>
+            </div>
+          </div>
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated By :</p>
+              <p className="edit-master-audit-trial-label-value">{updatedBy}</p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated At :</p>
+              <p className="edit-master-audit-trial-label-value">{updatedAt}</p>
+            </div>
+          </div>
         </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>

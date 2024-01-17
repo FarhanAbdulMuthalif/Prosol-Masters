@@ -1,12 +1,12 @@
 "use client";
-import useFetch from "@/Hooks/useFetch";
 import Header from "@/components/Header/page";
 import Navbar from "@/components/NavBar/page";
 import { MuiCreateTheme } from "@/styles/MuiTheme";
+import { MasterSubFieldWithData, getAllPlantData } from "@/utils/masters/plant";
 import { toogleSidebarHandler } from "@/utils/sideBarFunc";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ThemeProvider } from "@mui/material";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { UseContextHookTypes } from "../../../TypesStore";
 import { UseContextHook } from "../UseContextHook";
 import "./ClientContext.scss";
@@ -14,14 +14,30 @@ import "./ClientContext.scss";
 export default function ClientContext({ children }: { children: ReactNode }) {
   const [toogleSidebar, settoogleSidebar] = useState(true);
   const [auth, setauth] = useState(true);
-  const { data, loading, error } = useFetch("getAllPlant");
-  const [PlantData, setPlantData] = useState<any[] | undefined>(data || []);
+  const [PlantData, setPlantData] = useState<any[] | undefined>([]);
+  const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
+  const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
+    "table"
+  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const dataPlant = await getAllPlantData(`"/plant/getAllPlant"`);
+      setPlantData(dataPlant);
+    };
+    fetchData;
+  }, []);
 
   const ContextVal: UseContextHookTypes = {
     toogleSidebar,
     auth,
     setPlantData,
     PlantData,
+    masters: MasterSubFieldWithData,
+    setSelectedMasterDatatab,
+    SelectedMasterDatatab,
+    tabValue,
+    settabValue,
+    setauth,
   };
 
   const iconRotateHandler = {
@@ -31,25 +47,33 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={MuiCreateTheme}>
       <UseContextHook.Provider value={ContextVal}>
-        <Header />
-        <div className="wrapper-parent">
-          <Navbar OpenSideBar={toogleSidebar} />
-          <div
-            className={toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"}
-            onClick={() => {
-              settoogleSidebar(toogleSidebarHandler);
-            }}
-          >
-            <ArrowForwardIosIcon
-              style={iconRotateHandler}
-              sx={{
-                color: "blue",
-                fontSize: "14px",
-              }}
-            />
-          </div>
-          <div className="wrapper-child">{children}</div>
-        </div>
+        {auth ? (
+          <>
+            <Header />
+            <div className="wrapper-parent">
+              <Navbar OpenSideBar={toogleSidebar} />
+              <div
+                className={
+                  toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"
+                }
+                onClick={() => {
+                  settoogleSidebar(toogleSidebarHandler);
+                }}
+              >
+                <ArrowForwardIosIcon
+                  style={iconRotateHandler}
+                  sx={{
+                    color: "blue",
+                    fontSize: "14px",
+                  }}
+                />
+              </div>
+              <div className="wrapper-child">{children}</div>
+            </div>
+          </>
+        ) : (
+          <>{children}</>
+        )}
       </UseContextHook.Provider>
     </ThemeProvider>
   );
