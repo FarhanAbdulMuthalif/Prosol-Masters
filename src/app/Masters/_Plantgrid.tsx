@@ -54,18 +54,46 @@ export default function Plantgrid({
     }
   };
 
-  const ClmExctData =
-    PlantData && PlantData.length > 0
-      ? Object.keys(PlantData[0]).filter((data) => data !== "status")
-      : [];
-  const masterDatagridColumns: GridColDef[] = ClmExctData?.map((data) => {
-    return {
-      field: data,
-      headerClassName: "super-app-theme--header",
-      flex: 1,
-      headerName: `${data}`,
-    };
-  });
+  const allKeys = PlantData.reduce((keys, obj) => {
+    Object.keys(obj).forEach((key) => {
+      if (!keys.includes(key)) {
+        keys.push(key);
+      }
+    });
+    return keys;
+  }, []);
+
+  // Remove specific keys
+  const filteredKeys = allKeys.filter(
+    (key: string) =>
+      !["status", "createdAt", "updatedAt", "createdBy", "updatedBy"].includes(
+        key
+      )
+  );
+
+  // console.log(filteredKeys);
+  const masterDatagridColumns: GridColDef[] = filteredKeys?.map(
+    (data: string) => {
+      if (data === "plant") {
+        return {
+          field: "plant",
+          headerClassName: "super-app-theme--header",
+          flex: 1,
+
+          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+          renderCell: (params: any) => {
+            return params.row.plant.plantName;
+          },
+        };
+      }
+      return {
+        field: data,
+        headerClassName: "super-app-theme--header",
+        flex: 1,
+        headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+      };
+    }
+  );
   const actionColumn: GridColDef[] = [
     {
       field: "status",

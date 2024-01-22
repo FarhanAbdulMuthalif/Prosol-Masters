@@ -136,3 +136,6 @@ label {
   color: blue;
   font-size: 13px; /* background-color: #f1f1fa; */
 }
+textarea {
+  padding: 5px 0 0 8px !important;
+}

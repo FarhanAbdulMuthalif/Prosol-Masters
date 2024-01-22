@@ -14,6 +14,7 @@ import "./ClientContext.scss";
 export default function ClientContext({ children }: { children: ReactNode }) {
   const [toogleSidebar, settoogleSidebar] = useState(true);
   const [auth, setauth] = useState(true);
+  const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
@@ -38,6 +39,8 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     tabValue,
     settabValue,
     setauth,
+    seteditTabShow,
+    editTabShow,
   };
 
   const iconRotateHandler = {

@@ -11,7 +11,11 @@ const useFetch = (url: string) => {
       try {
         const response = await api.get(url);
         setData(response.data);
-      } catch (error) {
+      } catch (error: any) {
+        console.log(error);
+
+        // console.log(error?.message);
+
         setError(
           error instanceof Error
             ? error

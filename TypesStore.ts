@@ -11,6 +11,8 @@ export type UseContextHookTypes = {
   tabValue?: "table" | "edit" | "create";
   settabValue?: Dispatch<SetStateAction<"table" | "edit" | "create">>;
   setauth?: (val: boolean) => void;
+  seteditTabShow?: (val: boolean) => void;
+  editTabShow?: boolean;
 };
 export type NavKeyType = {
   [key in string]: NavSinData[];
@@ -29,6 +31,7 @@ export type subSecondNavbarType = { name: string; path: string };
 export type mastersProps = {
   Plant: mastersSubFields;
   ProfitCenter: mastersSubFields;
+  PriceControl: mastersSubFields;
   // [key: string]: mastersSubFields;
 };
 
@@ -45,5 +48,28 @@ export type mastersSubFields = {
   delete: string;
   deleteBulk: string;
   update: string;
+  includePlantDropdown: boolean;
 };
-export type ValidMasterDataTabs = "Plant" | "ProfitCenter";
+export type ValidMasterDataTabs = "Plant" | "ProfitCenter" | "PriceControl";
+export interface PostCreateFieldData {
+  id: number;
+  dataType: string;
+  identity?: string;
+  fieldName: string;
+  pattern?: string[];
+  min?: number;
+  max?: number;
+  minLength?: number;
+  maxLength?: number;
+  extraField?: boolean;
+  readable?: boolean;
+  writable?: boolean;
+  showAsColumn?: boolean;
+  enums?: string[];
+  required: boolean;
+  dropDownValues?: Option[];
+}
+export interface Option {
+  id?: string;
+  value: string;
+}

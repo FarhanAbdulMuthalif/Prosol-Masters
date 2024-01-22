@@ -1,10 +1,12 @@
 "use client";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
+import { ValidMasterDataTabs } from "../../../TypesStore";
 
 // Import statements...
 
@@ -32,6 +34,8 @@ export default function EditPlant({
     code: false,
   });
 
+  const PlantDataCon = useContext(UseContextHook);
+  const { masters, SelectedMasterDatatab } = PlantDataCon;
   const [formData, setFormData] = useState({
     plantName: plantName,
     plantCode: plantCode,
@@ -52,11 +56,14 @@ export default function EditPlant({
       setplantFormError((prev) => ({ name: false, code: false }));
     }
     if (plantCode.length > 0 && plantName.length > 0) {
-      const response = await api.put(`updatePlant/${id}`, {
-        plantCode,
-        plantName,
-        status,
-      });
+      const response = await api.put(
+        `${masters[SelectedMasterDatatab as ValidMasterDataTabs].update}/${id}`,
+        {
+          plantCode,
+          plantName,
+          status,
+        }
+      );
       const data = await response.data;
       if (response.status === 200) {
         console.log(data);

@@ -1,0 +1,99 @@
+.drawer-wrapper-form {
+  width: 21rem;
+  height: 100%;
+  display: flex;
+  z-index: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  .header-of-drawer {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #00000029;
+    padding: 0 10px;
+    span {
+      font-size: 14px;
+      color: #6f6f6f;
+      font-weight: bold;
+    }
+  }
+  .drawer-Center-Part {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px;
+    label {
+      align-self: flex-start;
+      color: #6f6f6f;
+      font-size: 12px;
+    }
+    .render-fields-namess {
+      width: 100%;
+      display: flex;
+      gap: 15px;
+      flex-direction: column;
+      align-items: center;
+      .api-chip-wrapper-div {
+        padding: 5px;
+        width: 100%;
+        height: 80px;
+        border-radius: 5px;
+        outline: 1px solid rgba(31, 31, 31, 0.267);
+        overflow-x: hidden;
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+      }
+
+      #DrawerInputFieldCrtId {
+        height: 30px;
+      }
+      #DrawerInputFieldCrtId::placeholder {
+        font-size: 12px;
+        color: brown;
+      }
+      .minmaxval {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        width: 100%;
+        height: 40px;
+        .minmaxLabel {
+          width: 30%;
+          margin: auto 0;
+        }
+      }
+      .validating-checkbox-div {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+
+        * {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+  footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid #00000029;
+    padding: 10px 10px;
+    gap: 10px;
+  }
+}

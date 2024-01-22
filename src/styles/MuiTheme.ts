@@ -4,17 +4,29 @@ export const MuiCreateTheme = createTheme({
   components: {
     MuiInputBase: {
       styleOverrides: {
+        // inputMultiline: {
+        //   "&::placeholder": {
+        //     color: "brown", // Change the color as needed
+        //   },
+        // },
         root: {
           fontSize: "12px",
           padding: 0,
           "& input::placeholder": {
-            color: "#8B4513",
-            opacity: ".9",
+            color: "brown",
+            opacity: ".7",
           },
         },
       },
     },
-
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          fontSize: "12px", // Change the font size as needed
+          margin: 0,
+        },
+      },
+    },
     MuiMenuItem: {
       styleOverrides: {
         root: {
@@ -52,6 +64,7 @@ export const MuiCreateTheme = createTheme({
 
   typography: {
     fontFamily: "Segoe UI, sans-serif",
+    fontSize: 12,
     button: {
       fontWeight: "500", // Set the button text to bold
       textTransform: "none", // Disable the uppercase transformation

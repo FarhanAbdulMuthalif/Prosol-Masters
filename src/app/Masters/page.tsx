@@ -4,6 +4,7 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
+import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
@@ -16,8 +17,10 @@ import { GridRowId } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useState } from "react";
 import { ValidMasterDataTabs } from "../../../TypesStore";
-import CreatePlant from "./_CreatePlant";
+import CreateMastert from "./_CreateMaster";
+import CreateMastertWithDropdown from "./_CreateWithDropdown";
 import EditPlant from "./_EditPlant";
+import EditMasterWithDropdown from "./_EditWithDropdown";
 import Plantgrid from "./_Plantgrid";
 import "./style.scss";
 
@@ -34,17 +37,25 @@ export default function Masters() {
     createdAt: "",
     updatedAt: "",
     updatedBy: "",
+    plant: {
+      id: 0,
+      plantName: "",
+    },
   });
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [
     isConfirmationBulkDeleteDialogOpen,
     setConfirmationBulkDeleteDialogOpen,
   ] = useState(false);
+  const [CreateDrawerOpen, setCreateDrawerOpen] = useState(false);
   const [selectionIDArr, setSelectionIDArr] = useState<GridRowId[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedId, setselectedId] = useState(0);
   const [isConfirmationDeleteDialogOpen, setConfirmationDeleteDialogOpen] =
     useState(false);
+  const HandlerCloseCreateDrawer = () => {
+    setCreateDrawerOpen(false);
+  };
   const PlantDataCon = useContext(UseContextHook);
   const {
     setPlantData,
@@ -54,6 +65,7 @@ export default function Masters() {
     tabValue,
     settabValue,
     auth,
+    editTabShow,
   } = PlantDataCon;
   const router = useRouter();
 
@@ -72,7 +84,12 @@ export default function Masters() {
   const tabs = [
     { label: `${SelectedMasterDatatab} View`, value: "table" },
     { label: `Create ${SelectedMasterDatatab}`, value: "create" },
-    { label: `Edit ${SelectedMasterDatatab}`, value: "edit" },
+
+    {
+      label: tabValue === "edit" ? `Edit ${SelectedMasterDatatab}` : "",
+      value: "edit",
+      disabled: editTabShow,
+    },
   ];
 
   const open = Boolean(anchorEl);
@@ -118,17 +135,33 @@ export default function Masters() {
       // console.log(e.ma)
     }
   };
+  if (!SelectedMasterDatatab) {
+    return null;
+  }
   const EditSetRecordAndGotoAction = (data: any) => {
     setEditDataGet((prev) => {
       return {
-        plantName: data.plantName,
-        plantCode: data.plantCode,
+        plantName:
+          data[
+            `${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Name`
+          ],
+        plantCode:
+          data[
+            `${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Code`
+          ],
         id: data.id,
         status: data.status,
         updatedAt: data.updatedAt,
         updatedBy: data.updatedBy,
         createdAt: data.createdAt,
         createdBy: data.createdBy,
+        plant: { id: data?.plant?.id, plantName: data?.plant?.plantName },
       };
     });
     settabValue("edit");
@@ -141,8 +174,26 @@ export default function Masters() {
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: <CreatePlant />,
-    edit: (
+    create: masters[SelectedMasterDatatab as ValidMasterDataTabs]
+      .includePlantDropdown ? (
+      <CreateMastertWithDropdown />
+    ) : (
+      <CreateMastert />
+    ),
+    edit: masters[SelectedMasterDatatab as ValidMasterDataTabs]
+      .includePlantDropdown ? (
+      <EditMasterWithDropdown
+        plantName={EditDataGet.plantName}
+        plantCode={EditDataGet.plantCode}
+        id={EditDataGet.id}
+        status={EditDataGet.status}
+        createdAt={EditDataGet.createdAt}
+        updatedAt={EditDataGet.updatedAt}
+        updatedBy={EditDataGet.updatedBy}
+        createdBy={EditDataGet.createdBy}
+        plant={EditDataGet.plant}
+      />
+    ) : (
       <EditPlant
         plantName={EditDataGet.plantName}
         plantCode={EditDataGet.plantCode}
@@ -194,6 +245,39 @@ export default function Masters() {
       }
     }
   };
+  const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
+    masters[SelectedMasterDatatab as ValidMasterDataTabs].template
+  }`;
+  const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
+  const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
+    masters[SelectedMasterDatatab as ValidMasterDataTabs].exportExcel
+  }`;
+  const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
+  const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
+    masters[SelectedMasterDatatab as ValidMasterDataTabs].exportPdf
+  }`;
+  const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;
+  const handleDownload = async (DownloadUrl: string, DownloadName: string) => {
+    try {
+      const response = await api.get(DownloadUrl, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${DownloadName}`);
+      document.body.appendChild(link);
+      link.click();
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      } else {
+        console.log("Failed to remove link from the document body.");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="masters-main-content-section">
@@ -221,12 +305,22 @@ export default function Masters() {
             ""
           )}
           <UploadButton />
-          <OutlinedButton startIcon={<FileDownloadIcon />}>
-            <a href={`${URL_FIX_BASE_PATH}/exportTemplatePlant`}>
-              Download Template
-            </a>
+          <OutlinedButton
+            startIcon={<FileDownloadIcon />}
+            onClick={() => {
+              handleDownload(templateDownloadUrl, templateDownloadName);
+            }}
+          >
+            Download Template
           </OutlinedButton>
           <FillButton onClick={handleClick}>Export Type</FillButton>
+          <FillButton
+            onClick={() => {
+              setCreateDrawerOpen(true);
+            }}
+          >
+            Add Fields
+          </FillButton>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -236,11 +330,19 @@ export default function Masters() {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem>
-              <a href={`${URL_FIX_BASE_PATH}/pdfPlantReport`}>PDF Format</a>
+            <MenuItem
+              onClick={() => {
+                handleDownload(pdfDownloadUrl, pdfDownloadName);
+              }}
+            >
+              PDF Format
             </MenuItem>
-            <MenuItem>
-              <a href={`${URL_FIX_BASE_PATH}/exportDataPlant`}>Excel Format</a>
+            <MenuItem
+              onClick={() => {
+                handleDownload(excelDownloadUrl, excelDownloadName);
+              }}
+            >
+              Excel Format
             </MenuItem>
           </Menu>
         </div>
@@ -250,15 +352,15 @@ export default function Masters() {
       </div>
       <ReusableConfirmationDialog
         open={isConfirmationDialogOpen}
-        title="Plant Status Bulk Change"
+        title={`${SelectedMasterDatatab} Status Bulk Change`}
         content="Are you sure you want to change the selected record's status?"
         onConfirm={handlePlantBulkStatusChangeAction}
         onCancel={handleOpenConfirmationDialog}
       />
       <ReusableConfirmationDialog
         open={isConfirmationBulkDeleteDialogOpen}
-        title="Plant Status Bulk Change"
-        content="Are you sure you want to change the selected record's status?"
+        title={`${SelectedMasterDatatab} Delete Bulk `}
+        content="Are you sure you want to delete the selected record's Details?"
         onConfirm={handlePlantBulkDeleteChangeAction}
         onCancel={handleOpenDeleteConfirmationDialog}
       />
@@ -270,10 +372,14 @@ export default function Masters() {
         onCancel={handleOpenConfirmationDeleteDialog}
       />
       <ReusableSnackbar
-        message="Plant Deleted Sucessfully!"
+        message={`${SelectedMasterDatatab} Deleted Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}
+      />
+      <CreateDreawer
+        OpenDrawer={CreateDrawerOpen}
+        HandlerCloseDrawer={HandlerCloseCreateDrawer}
       />
     </section>
   );

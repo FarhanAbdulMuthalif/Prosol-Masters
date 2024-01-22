@@ -4,6 +4,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useContext, useState } from "react";
+import { ValidMasterDataTabs } from "../../../TypesStore";
 import ReusableSnackbar from "../Snackbar/Snackbar";
 import api from "../api";
 
@@ -21,13 +22,9 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function UploadButton() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [AllPlant, setAllPlant] = useState([]);
   const PlantDataCon = useContext(UseContextHook);
-  const { setPlantData } = PlantDataCon;
-  const getPlantfunct = async () => {
-    const dataPlant = await getAllPlantData("getAllPlant");
-    setAllPlant(dataPlant);
-  };
+  const { setPlantData, masters, SelectedMasterDatatab } = PlantDataCon;
+
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -36,9 +33,14 @@ export default function UploadButton() {
       const file = event?.target?.files[0];
       const formData = new FormData();
       formData.append("file", file);
-      const res = await api.post("/ImportExcelDataPlant", formData);
+      const res = await api.post(
+        masters[SelectedMasterDatatab as ValidMasterDataTabs].createBulk,
+        formData
+      );
 
-      const dataPlant = await getAllPlantData("getAllPlant");
+      const dataPlant = await getAllPlantData(
+        masters[SelectedMasterDatatab as ValidMasterDataTabs].getAll
+      );
       if (res.status === 200 || res.status === 201) {
         setOpenSnackbar(true);
         if (setPlantData) {
@@ -59,7 +61,7 @@ export default function UploadButton() {
         <VisuallyHiddenInput onChange={handleFileUpload} type="file" />
       </Button>
       <ReusableSnackbar
-        message="Plant Deleted Sucessfully!"
+        message={`${SelectedMasterDatatab} Bulk created Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}
