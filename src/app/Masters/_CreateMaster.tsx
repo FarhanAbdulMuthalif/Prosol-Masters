@@ -20,12 +20,34 @@ export default function CreateMastert() {
   const PlantDataCon = useContext(UseContextHook);
   const { SelectedMasterDatatab, masters } = PlantDataCon;
 
-  const [formData, setFormData] = useState<any>({ status: true });
+  const [formData, setFormData] = useState<any>({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
+  useEffect(() => {
+    const dynamicFormFieldHandler = async () => {
+      const res = await api.get(
+        `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
+      );
+      const data = await res.data;
+      if (res.status === 200) {
+        console.log(data);
+        setdynamicFields(data);
+      }
+    };
+    dynamicFormFieldHandler();
+  }, [SelectedMasterDatatab]);
+  if (!SelectedMasterDatatab) {
+    return null;
+  }
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
+    // setFormData((prevData: any) => ({
+    //   ...prevData,
+    //   [`${
+    //     SelectedMasterDatatab.charAt(0).toLowerCase() +
+    //     SelectedMasterDatatab.slice(1)
+    //   }Status`]: true,
+    // }));
     const { plantName, plantCode } = formData;
     console.log(formData);
     if (plantName.length === 0) {
@@ -55,24 +77,18 @@ export default function CreateMastert() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [name]: value,
+      [`${
+        SelectedMasterDatatab.charAt(0).toLowerCase() +
+        SelectedMasterDatatab.slice(1)
+      }Status`]: true,
+    }));
   };
   // const dynamicFieldRender={
   //   textField:
   // }
-  useEffect(() => {
-    const dynamicFormFieldHandler = async () => {
-      const res = await api.get(
-        `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
-      );
-      const data = await res.data;
-      if (res.status === 200) {
-        console.log(data);
-        setdynamicFields(data);
-      }
-    };
-    dynamicFormFieldHandler();
-  }, [SelectedMasterDatatab]);
 
   return (
     <form onSubmit={PlantFormSubmitHandler}>
@@ -81,7 +97,7 @@ export default function CreateMastert() {
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Name`}
             type="text"
-            value={formData.plantName}
+            value={formData?.plantName}
             onChange={handleInputChange}
             helperText={
               plantFormError.name
@@ -94,7 +110,7 @@ export default function CreateMastert() {
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
             type="text"
-            value={formData.plantCode}
+            value={formData?.plantCode}
             onChange={handleInputChange}
             helperText={
               plantFormError.code

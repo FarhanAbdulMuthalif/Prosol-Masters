@@ -66,9 +66,16 @@ export default function Plantgrid({
   // Remove specific keys
   const filteredKeys = allKeys.filter(
     (key: string) =>
-      !["status", "createdAt", "updatedAt", "createdBy", "updatedBy"].includes(
-        key
-      )
+      ![
+        `${
+          SelectedMasterDatatab.charAt(0).toLowerCase() +
+          SelectedMasterDatatab.slice(1)
+        }Status`,
+        "createdAt",
+        "updatedAt",
+        "createdBy",
+        "updatedBy",
+      ].includes(key)
   );
 
   // console.log(filteredKeys);
@@ -96,7 +103,10 @@ export default function Plantgrid({
   );
   const actionColumn: GridColDef[] = [
     {
-      field: "status",
+      field: `${
+        SelectedMasterDatatab.charAt(0).toLowerCase() +
+        SelectedMasterDatatab.slice(1)
+      }Status`,
       headerName: "Status",
       flex: 1,
       headerClassName: "super-app-theme--header",
@@ -106,7 +116,14 @@ export default function Plantgrid({
             <Switch
               color="primary"
               size="small"
-              checked={params.row.status}
+              checked={
+                params.row[
+                  `${
+                    SelectedMasterDatatab.charAt(0).toLowerCase() +
+                    SelectedMasterDatatab.slice(1)
+                  }Status`
+                ]
+              }
               onChange={(e) => {
                 SinglePlantStatusHandler(params.row.id);
               }}

@@ -1,0 +1,58 @@
+.usermanagement-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+    rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+  gap: 10px;
+  .usermanagement-main-content-header {
+    padding: 0 5px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.5px solid #c5ccd4;
+  }
+  .create-user-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .create-user-wrapper-inputs {
+      width: 100%;
+      padding: 0 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
+      gap: 20px;
+      .status-user-toogle-div {
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
+        padding: 10px;
+        .status-user-toogle-switch-text {
+          font-size: 12px;
+          color: #6f6f6f;
+          font-weight: bold;
+        }
+      }
+    }
+    .user-error-message-div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      .user-error-message-div-text {
+        color: red;
+        font-weight: 600;
+      }
+    }
+    .create-user-wrapper-action {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+    }
+  }
+}

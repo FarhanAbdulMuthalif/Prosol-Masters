@@ -73,3 +73,7 @@ export interface Option {
   id?: string;
   value: string;
 }
+export type PathObjProps = {
+  Masters: { name: string; path: string }[];
+  UserManagement: { name: string; path: string }[];
+};

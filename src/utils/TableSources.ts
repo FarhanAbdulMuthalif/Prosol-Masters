@@ -24,3 +24,39 @@ export const PlantMasterColumns: GridColDef[] = [
     flex: 2,
   },
 ];
+export const UserTableColumns: GridColDef[] = [
+  {
+    field: "email",
+    headerClassName: "super-app-theme--header",
+    flex: 2,
+    headerName: "Email",
+  },
+  {
+    field: "firstName",
+    headerClassName: "super-app-theme--header",
+    headerName: "FirstName",
+    /*  renderCell: (params) => {
+          return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
+        }, */
+    flex: 1,
+  },
+
+  {
+    field: "lastName",
+    headerClassName: "super-app-theme--header",
+    headerName: "LastName",
+    flex: 1,
+  },
+  {
+    field: "phone",
+    headerClassName: "super-app-theme--header",
+    headerName: "Phone",
+    flex: 1,
+  },
+  {
+    field: "business",
+    headerClassName: "super-app-theme--header",
+    headerName: "Business",
+    flex: 1,
+  },
+];

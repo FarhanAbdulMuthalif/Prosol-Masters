@@ -5,11 +5,19 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import "./style.scss";
 
 export default function Header() {
   const currentRoute = usePathname();
-  // console.log(currentRoute.split("/"));
+  // console.log(currentRoute + "from navbar");
+
+  // const CurrentView = pathObj[currentRoute.slice(1) as keyof PathObjProps] ?? [
+  //   { name: "Plant", path: "/Masters" },
+  //   { name: "General", path: "/Masters/General" },
+  //   { name: "MRPData", path: "/Masters/MRPData" },
+  //   // { name: "Sales & others", path: "/Masters/SalesAndOthers" },
+  // ];
   return (
     <header>
       <Image
@@ -27,6 +35,18 @@ export default function Header() {
         alt="Loading...."
       />
       <ul>
+        <li>
+          <Link
+            className={
+              currentRoute.split("/").includes("UserManagement")
+                ? "active"
+                : "in-active"
+            }
+            href="/UserManagement"
+          >
+            UserManagement
+          </Link>
+        </li>
         <li>
           <Link
             className={
