@@ -21,7 +21,7 @@ export default function Plantgrid({
   const { PlantData, setPlantData, masters, SelectedMasterDatatab } =
     PlantDataCon;
   const getAllLinkName =
-    masters[SelectedMasterDatatab as ValidMasterDataTabs].getAll;
+    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].getAll;
   useEffect(() => {
     console.log(getAllLinkName);
     const fetchData = async () => {
@@ -40,7 +40,7 @@ export default function Plantgrid({
   const SinglePlantStatusHandler = async (id: number) => {
     const res = await api.patch(
       `${
-        masters[SelectedMasterDatatab as ValidMasterDataTabs].updateStatus
+        masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].updateStatus
       }/${id}`
     );
     const dataPlantUpdate = await res.data;

@@ -11,3 +11,10 @@ export const UserInitialState = {
   status: false,
   roles: [],
 };
+export const RoleInitialState = {
+  name: "",
+  description: "",
+  plantId: 0,
+  status: false,
+  privileges: [] as number[],
+};

@@ -60,3 +60,27 @@ export const UserTableColumns: GridColDef[] = [
     flex: 1,
   },
 ];
+export const RoleTableColumns: GridColDef[] = [
+  {
+    field: "name",
+    headerClassName: "super-app-theme--header",
+    flex: 1,
+    headerName: "Name",
+  },
+  {
+    field: "description",
+    headerClassName: "super-app-theme--header",
+    headerName: "description",
+    /*  renderCell: (params) => {
+          return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
+        }, */
+    flex: 2,
+  },
+
+  // {
+  //   field: "plantId",
+  //   headerClassName: "super-app-theme--header",
+  //   headerName: "plantName",
+  //   flex: 1,
+  // },
+];

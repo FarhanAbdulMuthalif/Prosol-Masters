@@ -1,4 +1,5 @@
 "use client";
+import UseAuth from "@/Hooks/useAuth";
 import Header from "@/components/Header/page";
 import Navbar from "@/components/NavBar/page";
 import { MuiCreateTheme } from "@/styles/MuiTheme";
@@ -13,7 +14,7 @@ import "./ClientContext.scss";
 
 export default function ClientContext({ children }: { children: ReactNode }) {
   const [toogleSidebar, settoogleSidebar] = useState(true);
-  const [auth, setauth] = useState(true);
+  const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
@@ -46,37 +47,34 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const iconRotateHandler = {
     transform: toogleSidebar ? "rotate(180deg)" : "",
   };
+  const authHook = UseAuth();
 
   return (
     <ThemeProvider theme={MuiCreateTheme}>
       <UseContextHook.Provider value={ContextVal}>
-        {auth ? (
-          <>
-            <Header />
-            <div className="wrapper-parent">
-              <Navbar OpenSideBar={toogleSidebar} />
-              <div
-                className={
-                  toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"
-                }
-                onClick={() => {
-                  settoogleSidebar(toogleSidebarHandler);
+        <Header />
+        <div className="wrapper-parent">
+          <Navbar OpenSideBar={toogleSidebar} />
+          {authHook ? (
+            <div
+              className={toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"}
+              onClick={() => {
+                settoogleSidebar(toogleSidebarHandler);
+              }}
+            >
+              <ArrowForwardIosIcon
+                style={iconRotateHandler}
+                sx={{
+                  color: "blue",
+                  fontSize: "14px",
                 }}
-              >
-                <ArrowForwardIosIcon
-                  style={iconRotateHandler}
-                  sx={{
-                    color: "blue",
-                    fontSize: "14px",
-                  }}
-                />
-              </div>
-              <div className="wrapper-child">{children}</div>
+              />
             </div>
-          </>
-        ) : (
-          <>{children}</>
-        )}
+          ) : (
+            ""
+          )}
+          <div className="wrapper-child">{children}</div>
+        </div>
       </UseContextHook.Provider>
     </ThemeProvider>
   );

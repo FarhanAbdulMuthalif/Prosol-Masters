@@ -1,4 +1,5 @@
 "use client";
+import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
@@ -14,7 +15,6 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
-import { useRouter } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useState } from "react";
 import { ValidMasterDataTabs } from "../../../TypesStore";
 import CreateMastert from "./_CreateMaster";
@@ -64,14 +64,14 @@ export default function Masters() {
     setSelectedMasterDatatab,
     tabValue,
     settabValue,
-    auth,
+
     editTabShow,
   } = PlantDataCon;
-  const router = useRouter();
-
+  const auth = UseAuth();
   if (!auth) {
-    return router.push("/Login");
+    return null;
   }
+
   if (!tabValue || !settabValue) {
     return null;
   }
@@ -118,7 +118,7 @@ export default function Masters() {
     try {
       const res = await api.delete(
         `${
-          masters[SelectedMasterDatatab as ValidMasterDataTabs].delete
+          masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].delete
         }/${selectedId}`
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
@@ -174,13 +174,13 @@ export default function Masters() {
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: masters[SelectedMasterDatatab as ValidMasterDataTabs]
-      .includePlantDropdown ? (
+    create: masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs]
+      ?.includePlantDropdown ? (
       <CreateMastertWithDropdown />
     ) : (
       <CreateMastert />
     ),
-    edit: masters[SelectedMasterDatatab as ValidMasterDataTabs]
+    edit: masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs]
       .includePlantDropdown ? (
       <EditMasterWithDropdown
         plantName={EditDataGet.plantName}
@@ -207,12 +207,13 @@ export default function Masters() {
     ),
   };
   const getAllLinkName =
-    masters[SelectedMasterDatatab as ValidMasterDataTabs].getAll;
+    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].getAll;
 
   const handlePlantBulkStatusChangeAction = async () => {
     const res = await api.patch(
       `${
-        masters[SelectedMasterDatatab as ValidMasterDataTabs].updateBulkStatus
+        masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs]
+          .updateBulkStatus
       }/${selectionIDArr.toString()}`
     );
     const dataPlantUpdate = await res.data;
@@ -229,7 +230,9 @@ export default function Masters() {
   };
   const handlePlantBulkDeleteChangeAction = async () => {
     const res = await api.delete(
-      `${masters[SelectedMasterDatatab as ValidMasterDataTabs].deleteBulk}`,
+      `${
+        masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].deleteBulk
+      }`,
       { data: selectionIDArr }
     );
     const dataPlantUpdate = await res.data;
@@ -246,15 +249,15 @@ export default function Masters() {
     }
   };
   const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters[SelectedMasterDatatab as ValidMasterDataTabs].template
+    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].template
   }`;
   const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
   const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters[SelectedMasterDatatab as ValidMasterDataTabs].exportExcel
+    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].exportExcel
   }`;
   const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
   const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters[SelectedMasterDatatab as ValidMasterDataTabs].exportPdf
+    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].exportPdf
   }`;
   const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;
   const handleDownload = async (DownloadUrl: string, DownloadName: string) => {

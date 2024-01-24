@@ -1,41 +1,45 @@
+import useFetch from "@/Hooks/useFetch";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import api from "@/components/api";
-import { UserTableColumns } from "@/utils/TableSources";
+import { RoleTableColumns } from "@/utils/TableSources";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Switch } from "@mui/material";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { UserInitialStateProps } from "../../../TypesStore";
+import { RoleInitialStateProps } from "../../../../TypesStore";
 
-export default function UserGrid({
+export default function RoleGrid({
   setSelectionIDArr,
-  UserData,
-  setUserData,
+  RoleData,
+  setRoleData,
   EditSetRecordAndGotoAction,
 }: {
-  UserData: UserInitialStateProps[];
+  RoleData: RoleInitialStateProps[];
   setSelectionIDArr: Dispatch<SetStateAction<GridRowId[]>>;
-  setUserData: Dispatch<SetStateAction<UserInitialStateProps[]>>;
-  EditSetRecordAndGotoAction: (val: UserInitialStateProps) => void;
+  setRoleData: Dispatch<SetStateAction<RoleInitialStateProps[]>>;
+  EditSetRecordAndGotoAction: (val: RoleInitialStateProps) => void;
 }) {
   const [SlectedId, setSlectedId] = useState(0);
   const [OpenDeleteSnackBar, setOpenDeleteSnackBar] = useState(false);
   const [DeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { data: PlantData } = useFetch("/plant/getAllPlant") ?? {
+    data: [],
+  };
   useEffect(() => {
     const fetchData = async () => {
-      const Users = await api.get(`/user/getAllUsers`);
-      setUserData(Users.data);
+      const Roles = await api.get(`/user/getAllRoles?show=false`);
+      setRoleData(Roles.data);
     };
     fetchData();
-  }, [setUserData]);
-  const SingleUserStatusHandler = async (id: number) => {
-    const res = await api.patch(`/user/updateStatusById/${id}`);
+  }, [setRoleData]);
+  const SingleRoleStatusHandler = async (id: number) => {
+    const res = await api.patch(`/user/updateRoleStatusById/${id}`);
     const data = await res.data;
-    const Users = await api.get(`/user/getAllUsers`);
-    setUserData(Users.data);
+    const Roles = await api.get(`/user/getAllRoles?show=false`);
+    setRoleData(Roles.data);
   };
   const handleDeleteCloseDialog = () => {
     setDeleteDialogOpen(false);
@@ -45,16 +49,40 @@ export default function UserGrid({
     setDeleteDialogOpen(true);
   };
   const handleUserDeleteHandler = async () => {
-    const res = await api.delete(`/user/deleteUser/${SlectedId}`);
+    const res = await api.delete(`/user/deleteRole/${SlectedId}`);
     const data = await res.data;
-    const Users = await api.get(`/user/getAllUsers`);
+    const Roles = await api.get(`/user/getAllRoles?show=false`);
     if (res.status === 204) {
       setOpenDeleteSnackBar(true);
       setDeleteDialogOpen(false);
-      setUserData(Users.data);
+      setRoleData(Roles.data);
     }
   };
   const actionColumn: GridColDef[] = [
+    {
+      field: `privileges`,
+      headerName: "Privileges",
+      flex: 2,
+      headerClassName: "super-app-theme--header",
+      renderCell: (params) => {
+        return params.row?.privileges.map((data: any) => data.name).join(", ");
+      },
+    },
+    {
+      field: `plantId`,
+      headerName: "PlantName",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+      renderCell: (params) => {
+        // if (!PlantData) {
+        //   return null;
+        // }
+        return PlantData
+          ? (PlantData as any[]).find((data) => data.id === params.row.plantId)
+              ?.plantName
+          : [];
+      },
+    },
     {
       field: `status`,
       headerName: "Status",
@@ -68,7 +96,7 @@ export default function UserGrid({
               size="small"
               checked={params.row.status}
               onChange={(e) => {
-                SingleUserStatusHandler(params.row.id);
+                SingleRoleStatusHandler(params.row.id);
               }}
             />
           </div>
@@ -106,8 +134,8 @@ export default function UserGrid({
   return (
     <div>
       <CustomDataGrid
-        rows={UserData || []}
-        columns={UserTableColumns.concat(actionColumn)}
+        rows={RoleData || []}
+        columns={RoleTableColumns.concat(actionColumn)}
         onRowSelectionModelChange={(item) => {
           setSelectionIDArr(item);
         }}
@@ -120,7 +148,7 @@ export default function UserGrid({
         onCancel={handleDeleteCloseDialog}
       />
       <ReusableSnackbar
-        message={`User Deleted Sucessfully!`}
+        message={`Role Deleted Sucessfully!`}
         severity="success"
         setOpen={setOpenDeleteSnackBar}
         open={OpenDeleteSnackBar}

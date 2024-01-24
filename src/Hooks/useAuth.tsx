@@ -1,65 +1,37 @@
 import apiLogin from "@/components/apiLogin";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface User {
-  id: number;
-  firstName: string;
-  // Add other user-related information as needed
-}
-
-interface Auth {
-  accessToken: string | null;
-  user: User | null;
-  isValid: boolean;
-}
-
-const useAuth = (): Auth => {
-  const [auth, setAuth] = useState<Auth>({
-    accessToken: null,
-    user: null,
-    isValid: false,
-  });
+const UseAuth = () => {
+  const [auth, setAuth] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
     // Check if the user is authenticated (you might want to improve this logic)
     const storedAccessToken = localStorage.getItem("accessToken");
-    if (storedAccessToken) {
-      // Validate the token on the server
-      apiLogin
-        .post("/user/auth/validateToken?", { token: storedAccessToken })
-        .then((response) => {
-          const isValid = response.data.message;
-
-          setAuth({
-            accessToken: isValid ? storedAccessToken : null,
-            user: auth.user ? auth.user : null,
-            isValid,
-          });
-
-          // Redirect to login if token is not valid
-          if (!isValid) {
-            router.push("/login");
+    async function fetch() {
+      if (storedAccessToken) {
+        try {
+          const res = await apiLogin.post(
+            `/user/auth/validateToken?token=${storedAccessToken}`
+          );
+          console.log(res.data.message);
+          if (res.status === 200) {
+            setAuth(true);
           }
-        })
-        .catch((error) => {
-          console.error("Error validating token:", error);
-        });
-    } else {
-      setAuth({
-        accessToken: null,
-        user: null,
-        isValid: false,
-      });
+        } catch (e: any) {
+          router.push("/Login");
 
-      // Redirect to login if no token is found
-      router.push("/login");
+          setAuth(false);
+          console.log(e?.data?.message);
+        }
+      }
     }
-  }, [router, auth.user]);
+    fetch();
+  }, [router]);
 
   return auth;
 };
 
-export default useAuth;
+export default UseAuth;

@@ -1,3 +1,4 @@
+import UseAuth from "@/Hooks/useAuth";
 import { pathObj } from "@/utils/LinkData";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, TextField } from "@mui/material";
@@ -9,7 +10,10 @@ import "./style.scss";
 export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
   const currentRoute = usePathname();
   // console.log(currentRoute + "from navbar");
-
+  const auth = UseAuth();
+  if (!auth) {
+    return null;
+  }
   const CurrentView = pathObj[
     currentRoute.split("/").filter((n) => n)[0] as keyof PathObjProps
   ] ?? [

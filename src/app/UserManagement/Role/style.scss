@@ -32,6 +32,25 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
       gap: 20px;
+      .status-role-div {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        .status-role-div-checkbox-list {
+          display: flex;
+          gap: 10px;
+        }
+        span {
+          font-size: 12px;
+          color: #6f6f6f;
+        }
+        .status-role-div-text {
+          font-size: 12px;
+          color: #6f6f6f;
+          font-weight: 500;
+        }
+      }
       .status-user-toogle-div {
         display: flex;
         width: 100%;

@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import UseAuth from "@/Hooks/useAuth";
 import "./style.scss";
 
 export default function Header() {
@@ -18,6 +19,10 @@ export default function Header() {
   //   { name: "MRPData", path: "/Masters/MRPData" },
   //   // { name: "Sales & others", path: "/Masters/SalesAndOthers" },
   // ];
+  const auth = UseAuth();
+  if (!auth) {
+    return null;
+  }
   return (
     <header>
       <Image

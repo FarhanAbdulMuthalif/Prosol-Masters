@@ -1,57 +1,28 @@
 import useFetch from "@/Hooks/useFetch";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
-import ReusableMultipleSelect from "@/components/Dropdown/MultipleDropdown";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
-import { UserInitialState } from "@/utils/UserDataExport";
-import { SelectChangeEvent, Switch } from "@mui/material";
+import { RoleInitialState } from "@/utils/UserDataExport";
+import {
+  Checkbox,
+  FormControlLabel,
+  SelectChangeEvent,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { FormEvent, useState } from "react";
-import { UserInitialStateProps } from "../../../TypesStore";
 
-export default function EditUser({
-  settabValue,
-  EditDataGet,
-}: {
-  settabValue: (val: string) => void;
-  EditDataGet: UserInitialStateProps;
-}) {
-  const ArrId = {
-    ...EditDataGet,
-    roles: EditDataGet.roles.map((item: any) => item?.id),
-  };
-  const { id, email, ...filteredData } = ArrId;
-  // Define a type for the keys to remove
-  type KeysToRemove = "createdAt" | "createdBy" | "updatedAt" | "updatedBy";
-
-  // List of keys to be removed
-  const keysToRemove: KeysToRemove[] = [
-    "createdAt",
-    "createdBy",
-    "updatedAt",
-    "updatedBy",
-  ];
-
-  // Create a new object by filtering out specified keys
-  const filteredUserData = { ...filteredData };
-
-  keysToRemove.forEach((key) => delete filteredUserData[key]);
-
-  const [formData, setFormData] = useState(filteredUserData);
+export default function CreateRole() {
+  const [formData, setFormData] = useState(RoleInitialState);
   const [FormErrorMessage, setFormErrorMessage] = useState("");
   const [openSnackbar, setopenSnackbar] = useState(false);
-
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
     data: [],
   };
-  const { data: departentArray } = useFetch("/plant/getAllDepartment") ?? {
-    data: [],
-  };
-  const { data: rolesArray } = useFetch("/user/getAllRoles") ?? {
-    data: [],
-  };
+
   const PlantDropDownData = originalArray
     ? (originalArray as { id: number; plantName: string }[]).map(
         ({ id, plantName }) => ({
@@ -60,20 +31,7 @@ export default function EditUser({
         })
       )
     : [];
-  const RolesDropDownData = rolesArray
-    ? (rolesArray as { id: number; name: string }[]).map(({ id, name }) => ({
-        value: id,
-        label: name,
-      }))
-    : [];
-  const DepartmentDropDownData = departentArray
-    ? (departentArray as { id: number; departmentName: string }[]).map(
-        ({ id, departmentName }) => ({
-          value: id,
-          label: departmentName,
-        })
-      )
-    : [];
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "status") {
@@ -98,13 +56,11 @@ export default function EditUser({
   const UserFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
     const requiredFields: (keyof typeof formData)[] = [
-      "firstName",
-      "lastName",
-      "phone",
-      "business",
+      "name",
+      "description",
       "plantId",
-      "roles",
-      "departmentId",
+      "status",
+      "privileges",
     ];
     const emptyFields = requiredFields.filter((field) => {
       const value = formData[field];
@@ -123,86 +79,67 @@ export default function EditUser({
       return;
     }
 
-    // Validate phone using regex
-    const phoneRegex = /^[1-9]\d{9}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      setFormErrorMessage("Please enter a valid 10-digit phone number.");
-      return;
-    }
     setFormErrorMessage("");
-    const res = await api.put(`/user/updateById/${id}`, formData);
+    const res = await api.post("/user/saveRole", formData);
     const data = res.data;
-    if (res.status === 200) {
+    if (res.status === 201) {
       setopenSnackbar(true);
-      setFormData(UserInitialState);
-      settabValue("table");
+      setFormData(RoleInitialState);
+    }
+  };
+  const checkHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setFormData((prev) => ({
+        ...prev,
+        privileges: [...prev.privileges, Number(value)],
+      }));
+    }
+
+    // Case 2  : The user unchecks the box
+    else {
+      setFormData((prev) => ({
+        ...prev,
+        privileges: prev.privileges.filter((e: number) => e !== Number(value)),
+      }));
     }
   };
   return (
     <form className="create-user-wrapper" onSubmit={UserFormSubmitHandler}>
       <div className="create-user-wrapper-inputs">
         <OutlineTextField
-          placeholder={`Enter FirstName`}
+          placeholder={`Enter Name`}
           type="text"
-          value={formData.firstName}
+          value={formData.name}
           onChange={handleInputChange}
-          name="firstName"
+          name="name"
         />
         <OutlineTextField
-          placeholder={`Enter LastName`}
+          placeholder={`Enter Description`}
           type="text"
-          value={formData.lastName}
+          value={formData.description}
           onChange={handleInputChange}
-          name="lastName"
-        />
-
-        <OutlineTextField
-          placeholder={`Enter Phone No`}
-          type="number"
-          value={formData.phone}
-          onChange={handleInputChange}
-          name="phone"
+          name="description"
         />
 
         <NameSingleSelectDropdown
-          label="Select Department"
+          label="Select Plant"
           value={
-            formData.departmentId
-              ? DepartmentDropDownData.find(
-                  (data) => data.value === formData.departmentId
+            formData.plantId
+              ? PlantDropDownData.find(
+                  (data) => data.value === formData.plantId
                 )?.label || ""
               : ""
           }
           onChange={handleSelectChange}
-          options={DepartmentDropDownData ?? []}
-          name="departmentId"
-        />
-
-        <ReusableMultipleSelect
-          label="Select Plant"
-          values={formData.plantId ? formData.plantId : []}
           options={PlantDropDownData ?? []}
-          onChange={multiplehandleSelectChange}
           name="plantId"
-        />
-        <ReusableMultipleSelect
-          label="Select Role"
-          values={formData.roles ? formData.roles : []}
-          options={RolesDropDownData ?? []}
-          onChange={multiplehandleSelectChange}
-          name="roles"
-        />
-        <OutlineTextField
-          placeholder={`Enter Business`}
-          type="text"
-          value={formData.business}
-          onChange={handleInputChange}
-          name="business"
         />
         <div className="status-user-toogle-div">
           <p className="status-user-toogle-switch-text">
-            User Status {`(Active / Inactive)`}
+            Role Status {`(Active / Inactive)`}
           </p>
+
           <span>:</span>
           <Switch
             color="primary"
@@ -211,6 +148,68 @@ export default function EditUser({
             onChange={handleInputChange}
             name="status"
           />
+        </div>
+        <div className="status-role-div">
+          <p className="status-role-div-text">Privilages </p>
+          <span>:</span>
+          <div className="status-role-div-checkbox-list">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={checkHandler2}
+                  checked={formData.privileges.includes(1)}
+                  value="1"
+                />
+              }
+              label={
+                <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                  Create
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={checkHandler2}
+                  checked={formData.privileges.includes(2)}
+                  value="2"
+                />
+              }
+              label={
+                <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                  Read
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={checkHandler2}
+                  checked={formData.privileges.includes(3)}
+                  value="3"
+                />
+              }
+              label={
+                <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                  Update
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={checkHandler2}
+                  checked={formData.privileges.includes(4)}
+                  value="4"
+                />
+              }
+              label={
+                <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                  Delete
+                </Typography>
+              }
+            />
+          </div>
         </div>
       </div>
       {FormErrorMessage.length > 0 ? (
@@ -225,7 +224,7 @@ export default function EditUser({
         <FillButton type="submit">Submit</FillButton>
       </div>
       <ReusableSnackbar
-        message={`User Updated Sucessfully!`}
+        message={`Role Created Sucessfully!`}
         severity="success"
         setOpen={setopenSnackbar}
         open={openSnackbar}

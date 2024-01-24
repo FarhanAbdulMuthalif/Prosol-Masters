@@ -29,13 +29,23 @@ export type MasterNavBarDataRenderTypes = {
 export type subSecondNavbarType = { name: string; path: string };
 
 export type mastersProps = {
-  Plant: mastersSubFields;
-  ProfitCenter: mastersSubFields;
-  PriceControl: mastersSubFields;
-  // [key: string]: mastersSubFields;
+  Plant: mastersPlantSubFields;
+  General: Record<string, string>;
+  MRPData: Record<string, string>;
+};
+export type mastersPlantSubFields = {
+  Plant: mastersSubsubFields;
+  ProfitCenter: mastersSubsubFields;
+  PriceControl: mastersSubsubFields;
+  StorageBin: mastersSubsubFields;
+  StorageLocation: mastersSubsubFields;
+  ValuationClass: mastersSubsubFields;
+  ValuationCategory: mastersSubsubFields;
+  VarianceKey: mastersSubsubFields;
+  Department: mastersSubsubFields;
 };
 
-export type mastersSubFields = {
+export type mastersSubsubFields = {
   getAll: string;
   getSingle: string;
   create: string;
@@ -76,4 +86,34 @@ export interface Option {
 export type PathObjProps = {
   Masters: { name: string; path: string }[];
   UserManagement: { name: string; path: string }[];
+};
+export type UserInitialStateProps = {
+  id?: number;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  business: string;
+  departmentId: number;
+  plantId: number[];
+  status: boolean;
+  roles: any[];
+  createdAt?: string;
+  createdBy?: string;
+  updatedAt?: string;
+  updatedBy?: string;
+};
+export type RoleInitialStateProps = {
+  id?: number;
+  name: string;
+  description: string;
+  plantId: number;
+  status: boolean;
+  privileges: number[];
+  createdAt?: string;
+  createdBy?: string;
+  updatedAt?: string;
+  updatedBy?: string;
 };
