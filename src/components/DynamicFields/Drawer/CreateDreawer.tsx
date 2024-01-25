@@ -1,14 +1,19 @@
+import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
+import ReusableSnackbar from "@/components/Snackbar/Snackbar";
+import api from "@/components/api";
 import { initialDynamicStateField } from "@/utils/DynamicFields/DynamicFieldsData";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, SelectChangeEvent } from "@mui/material";
+import { useRouter } from "next/navigation";
 import {
   ChangeEvent,
   FormEvent,
   KeyboardEvent,
   ReactNode,
+  useContext,
   useState,
 } from "react";
 import { Option, PostCreateFieldData } from "../../../../TypesStore";
@@ -33,12 +38,18 @@ export default function CreateDreawer({
   const [ChipArrayList, setChipArrayList] = useState<string[]>([]);
   const [CreateFieldSetObj, setCreateFieldSetObj] =
     useState<PostCreateFieldData>(initialDynamicStateField);
+  const [SnackBarSucess, setSnackBarSucess] = useState(false);
   const [DropDownChipArrayList, setDropDownChipArrayList] = useState<Option[]>(
     []
   );
   const setChipIntoDivHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setChipTextIndiual(e.target.value);
   };
+  const router = useRouter();
+  const { SelectedMasterDatatab, settabValue } = useContext(UseContextHook);
+  if (!SelectedMasterDatatab || !settabValue) {
+    return null;
+  }
   const handleFieldTypeChangeSelect = (e: SelectChangeEvent) => {
     setFieldTypeSelect(e.target.value as string);
     setCreateFieldSetObj((prev: PostCreateFieldData) => {
@@ -162,6 +173,15 @@ export default function CreateDreawer({
       console.log(e);
       console.log(CreateFieldSetObj);
       try {
+        const res = await api.post(
+          `/dynamic/saveField/${SelectedMasterDatatab}`,
+          CreateFieldSetObj
+        );
+        if (res.status === 201) {
+          setSnackBarSucess(true);
+          HandlerCloseDrawer();
+          settabValue("table");
+        }
       } catch (e: any) {
         console.log(e.response);
         if (e.response && e.response.data) {
@@ -189,7 +209,7 @@ export default function CreateDreawer({
         showAsColumn: true,
         enums: [],
 
-        dropDownValues: DropDownChipArrayList,
+        dropDowns: DropDownChipArrayList,
       };
       console.log(dataSet);
       if (
@@ -227,7 +247,7 @@ export default function CreateDreawer({
         showAsColumn: true,
         enums: ChipArrayList,
 
-        dropDownValues: [],
+        dropDowns: [],
       };
       if (
         CreateFieldSetObj.fieldName.length < 1 ||
@@ -287,6 +307,12 @@ export default function CreateDreawer({
             Save
           </FillButton>
         </footer>
+        <ReusableSnackbar
+          message={`Field Created Sucessfully!`}
+          severity="success"
+          setOpen={setSnackBarSucess}
+          open={SnackBarSucess}
+        />
       </form>
     </Drawer>
   );

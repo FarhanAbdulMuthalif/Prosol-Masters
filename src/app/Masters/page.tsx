@@ -15,8 +15,9 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
+import { usePathname } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useState } from "react";
-import { ValidMasterDataTabs } from "../../../TypesStore";
+import { ValidMasterDataTabs, mastersProps } from "../../../TypesStore";
 import CreateMastert from "./_CreateMaster";
 import CreateMastertWithDropdown from "./_CreateWithDropdown";
 import EditPlant from "./_EditPlant";
@@ -28,20 +29,7 @@ export default function Masters() {
   // const [tabValue, settabValue] = useState("table");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditTabVisible, setEditTabVisible] = useState(false);
-  const [EditDataGet, setEditDataGet] = useState({
-    plantName: "",
-    plantCode: "",
-    id: 0,
-    status: false,
-    createdBy: "",
-    createdAt: "",
-    updatedAt: "",
-    updatedBy: "",
-    plant: {
-      id: 0,
-      plantName: "",
-    },
-  });
+  const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [
     isConfirmationBulkDeleteDialogOpen,
@@ -56,6 +44,14 @@ export default function Masters() {
   const HandlerCloseCreateDrawer = () => {
     setCreateDrawerOpen(false);
   };
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
   const PlantDataCon = useContext(UseContextHook);
   const {
     setPlantData,
@@ -118,7 +114,8 @@ export default function Masters() {
     try {
       const res = await api.delete(
         `${
-          masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].delete
+          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+            .delete
         }/${selectedId}`
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
@@ -139,31 +136,7 @@ export default function Masters() {
     return null;
   }
   const EditSetRecordAndGotoAction = (data: any) => {
-    setEditDataGet((prev) => {
-      return {
-        plantName:
-          data[
-            `${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`
-          ],
-        plantCode:
-          data[
-            `${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`
-          ],
-        id: data.id,
-        status: data.status,
-        updatedAt: data.updatedAt,
-        updatedBy: data.updatedBy,
-        createdAt: data.createdAt,
-        createdBy: data.createdBy,
-        plant: { id: data?.plant?.id, plantName: data?.plant?.plantName },
-      };
-    });
+    setEditDataGet(data);
     settabValue("edit");
   };
   const tabRenderValuePlant: Record<string, ReactNode> = {
@@ -174,72 +147,57 @@ export default function Masters() {
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs]
+    create: masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
       ?.includePlantDropdown ? (
       <CreateMastertWithDropdown />
     ) : (
       <CreateMastert />
     ),
-    edit: masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs]
+    edit: masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
       .includePlantDropdown ? (
-      <EditMasterWithDropdown
-        plantName={EditDataGet.plantName}
-        plantCode={EditDataGet.plantCode}
-        id={EditDataGet.id}
-        status={EditDataGet.status}
-        createdAt={EditDataGet.createdAt}
-        updatedAt={EditDataGet.updatedAt}
-        updatedBy={EditDataGet.updatedBy}
-        createdBy={EditDataGet.createdBy}
-        plant={EditDataGet.plant}
-      />
+      <EditMasterWithDropdown EditDataGet={EditDataGet} />
     ) : (
-      <EditPlant
-        plantName={EditDataGet.plantName}
-        plantCode={EditDataGet.plantCode}
-        id={EditDataGet.id}
-        status={EditDataGet.status}
-        createdAt={EditDataGet.createdAt}
-        updatedAt={EditDataGet.updatedAt}
-        updatedBy={EditDataGet.updatedBy}
-        createdBy={EditDataGet.createdBy}
-      />
+      <EditPlant EditDataGet={EditDataGet} />
     ),
   };
   const getAllLinkName =
-    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].getAll;
+    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].getAll;
 
   const handlePlantBulkStatusChangeAction = async () => {
-    const res = await api.patch(
-      `${
-        masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs]
-          .updateBulkStatus
-      }/${selectionIDArr.toString()}`
-    );
-    const dataPlantUpdate = await res.data;
-    const dataPlant = await getAllPlantData(`${getAllLinkName}`);
-    console.log(dataPlant);
-    console.log(dataPlantUpdate);
-    if (res.status === 200) {
-      setConfirmationDialogOpen(false);
-      if (setPlantData) {
-        setPlantData(dataPlant);
-        setConfirmationDeleteDialogOpen(false);
+    try {
+      const res = await api.patch(
+        `${
+          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+            .updateBulkStatus
+        }`,
+        selectionIDArr
+      );
+      const dataPlantUpdate = await res.data;
+      const dataPlant = await getAllPlantData(`${getAllLinkName}`);
+      console.log(dataPlant);
+      console.log(dataPlantUpdate);
+      if (res.status === 200) {
+        setConfirmationDialogOpen(false);
+        if (setPlantData) {
+          setPlantData(dataPlant);
+          setConfirmationDeleteDialogOpen(false);
+        }
       }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const handlePlantBulkDeleteChangeAction = async () => {
     const res = await api.delete(
       `${
-        masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].deleteBulk
+        masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+          .deleteBulk
       }`,
       { data: selectionIDArr }
     );
-    const dataPlantUpdate = await res.data;
     const dataPlant = await getAllPlantData(`${getAllLinkName}`);
-    console.log(dataPlant);
-    console.log(dataPlantUpdate);
-    if (res.status === 200) {
+
+    if (res.status === 204) {
       setConfirmationBulkDeleteDialogOpen(false);
       setOpenSnackbar(true);
       if (setPlantData) {
@@ -249,15 +207,15 @@ export default function Masters() {
     }
   };
   const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].template
+    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].template
   }`;
   const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
   const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].exportExcel
+    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].exportExcel
   }`;
   const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
   const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].exportPdf
+    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].exportPdf
   }`;
   const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;
   const handleDownload = async (DownloadUrl: string, DownloadName: string) => {

@@ -30,9 +30,10 @@ export type subSecondNavbarType = { name: string; path: string };
 
 export type mastersProps = {
   Plant: mastersPlantSubFields;
-  General: Record<string, string>;
-  MRPData: Record<string, string>;
+  General: mastersPlantSubFields; //need to change
+  MRPData: mastersPlantSubFields; //need to change
 };
+
 export type mastersPlantSubFields = {
   Plant: mastersSubsubFields;
   ProfitCenter: mastersSubsubFields;
@@ -62,7 +63,7 @@ export type mastersSubsubFields = {
 };
 export type ValidMasterDataTabs = "Plant" | "ProfitCenter" | "PriceControl";
 export interface PostCreateFieldData {
-  id: number;
+  id?: number;
   dataType: string;
   identity?: string;
   fieldName: string;
@@ -77,7 +78,7 @@ export interface PostCreateFieldData {
   showAsColumn?: boolean;
   enums?: string[];
   required: boolean;
-  dropDownValues?: Option[];
+  dropDowns?: Option[];
 }
 export interface Option {
   id?: string;

@@ -4,25 +4,41 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import UseAuth from "@/Hooks/useAuth";
+import { Menu, MenuItem } from "@mui/material";
+import { MouseEvent, useState } from "react";
+import api from "../api";
 import "./style.scss";
 
 export default function Header() {
   const currentRoute = usePathname();
-  // console.log(currentRoute + "from navbar");
+  const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  // const CurrentView = pathObj[currentRoute.slice(1) as keyof PathObjProps] ?? [
-  //   { name: "Plant", path: "/Masters" },
-  //   { name: "General", path: "/Masters/General" },
-  //   { name: "MRPData", path: "/Masters/MRPData" },
-  //   // { name: "Sales & others", path: "/Masters/SalesAndOthers" },
-  // ];
   const auth = UseAuth();
   if (!auth) {
     return null;
   }
+  const handleLogout = async () => {
+    try {
+      const res = await api.post("/user/auth/logout");
+      if (res.status === 200) {
+        localStorage.clear();
+        router.push("/Login");
+      }
+    } catch (e: any) {
+      console.log(e?.response);
+    }
+  };
   return (
     <header>
       <Image
@@ -72,10 +88,30 @@ export default function Header() {
           <SettingsIcon sx={{ fontSize: "18px", color: "#535353" }} />
           <HelpIcon sx={{ fontSize: "18px", color: "#535353" }} />
         </div>
-        <div className="Header-Last-Side-Text-img">
+        <div
+          className="Header-Last-Side-Text-img"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={(e) => {
+            handleClick;
+          }}
+        >
           <span>Super Admin</span>
+
           <Image src="/Images/AdminSvg.svg" height={40} width={40} alt="Img" />
         </div>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
       </div>
     </header>
   );

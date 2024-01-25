@@ -16,7 +16,6 @@ const UseAuth = () => {
           const res = await apiLogin.post(
             `/user/auth/validateToken?token=${storedAccessToken}`
           );
-          console.log(res.data.message);
           if (res.status === 200) {
             setAuth(true);
           }
@@ -24,7 +23,6 @@ const UseAuth = () => {
           router.push("/Login");
 
           setAuth(false);
-          console.log(e?.data?.message);
         }
       }
     }

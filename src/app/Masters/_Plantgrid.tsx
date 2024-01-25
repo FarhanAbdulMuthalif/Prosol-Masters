@@ -6,8 +6,9 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Switch } from "@mui/material";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
+import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
-import { ValidMasterDataTabs } from "../../../TypesStore";
+import { ValidMasterDataTabs, mastersProps } from "../../../TypesStore";
 export default function Plantgrid({
   selectionIDArr,
   handleOpenConfirmationDeleteDialog,
@@ -20,8 +21,16 @@ export default function Plantgrid({
   const PlantDataCon = useContext(UseContextHook);
   const { PlantData, setPlantData, masters, SelectedMasterDatatab } =
     PlantDataCon;
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
   const getAllLinkName =
-    masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].getAll;
+    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].getAll;
   useEffect(() => {
     console.log(getAllLinkName);
     const fetchData = async () => {
@@ -40,7 +49,8 @@ export default function Plantgrid({
   const SinglePlantStatusHandler = async (id: number) => {
     const res = await api.patch(
       `${
-        masters.Plant[SelectedMasterDatatab as ValidMasterDataTabs].updateStatus
+        masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+          .updateStatus
       }/${id}`
     );
     const dataPlantUpdate = await res.data;
@@ -91,6 +101,14 @@ export default function Plantgrid({
           renderCell: (params: any) => {
             return params.row.plant.plantName;
           },
+        };
+      }
+      if (data === "id") {
+        return {
+          field: data,
+          headerClassName: "super-app-theme--header",
+          flex: 0.5,
+          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
         };
       }
       return {

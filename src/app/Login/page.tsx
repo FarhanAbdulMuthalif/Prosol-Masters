@@ -63,6 +63,7 @@ const Login = () => {
   if (!setauth) {
     return null;
   }
+
   const SubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -84,6 +85,7 @@ const Login = () => {
         router.push("/Masters");
         router.refresh();
         setauth(true);
+
         // router.refresh();
       }
     } else {

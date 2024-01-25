@@ -5,80 +5,89 @@ import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useState } from "react";
-import { ValidMasterDataTabs } from "../../../TypesStore";
+import { ValidMasterDataTabs, mastersProps } from "../../../TypesStore";
 
 // Import statements...
+type KeysToRemove = "createdAt" | "createdBy" | "updatedAt" | "updatedBy";
 
-export default function EditPlant({
-  plantName,
-  plantCode,
-  id,
-  status,
-  createdAt,
-  createdBy,
-  updatedBy,
-  updatedAt,
-}: {
-  plantName: string;
-  plantCode: string;
-  id: number;
-  status: boolean;
-  createdAt: string;
-  createdBy: string;
-  updatedBy: string;
-  updatedAt: string;
-}) {
+export default function EditPlant({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
   });
+  // const { id, updatedAt, updatedBy, createdBy, createdAt } = EditDataGet;
 
   const PlantDataCon = useContext(UseContextHook);
-  const { masters, SelectedMasterDatatab } = PlantDataCon;
-  const [formData, setFormData] = useState({
-    plantName: plantName,
-    plantCode: plantCode,
-  });
+  const { masters, SelectedMasterDatatab, settabValue } = PlantDataCon;
+  const [formData, setFormData] = useState<any>(EditDataGet);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
+  if (!SelectedMasterDatatab || !settabValue) {
+    return null;
+  }
+  const fieldName = `${
+    SelectedMasterDatatab.charAt(0).toLowerCase() +
+    SelectedMasterDatatab.slice(1)
+  }Name`;
+  const fieldCode = `${
+    SelectedMasterDatatab.charAt(0).toLowerCase() +
+    SelectedMasterDatatab.slice(1)
+  }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    const { plantName, plantCode } = formData;
-    console.log(plantCode, plantName);
-    if (plantName.length === 0) {
+    if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (plantCode.length === 0) {
+    if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
     } else {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
-    if (plantCode.length > 0 && plantName.length > 0) {
+    const { id, email, ...filteredData } = formData;
+
+    // List of keys to be removed
+    const keysToRemove: KeysToRemove[] = [
+      "createdAt",
+      "createdBy",
+      "updatedAt",
+      "updatedBy",
+    ];
+
+    // Create a new object by filtering out specified keys
+    const filteredUserData = { ...filteredData };
+
+    keysToRemove.forEach((key) => delete filteredUserData[key]);
+    if (formData[fieldCode].length && formData[fieldName].length > 0) {
       const response = await api.put(
-        `${masters[SelectedMasterDatatab as ValidMasterDataTabs].update}/${id}`,
-        {
-          plantCode,
-          plantName,
-          status,
-        }
+        `${
+          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+            .update
+        }/${id}`,
+        filteredUserData
       );
       const data = await response.data;
       if (response.status === 200) {
         console.log(data);
-        setFormData({
-          plantName: "",
-          plantCode: "",
-        });
+        setFormData({});
         setOpenSnackbar(true);
+        settabValue("table");
       }
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
 
   return (
@@ -86,47 +95,59 @@ export default function EditPlant({
       <div className="create-plant-wrapper-div">
         <div className="create-plant-field-place-div">
           <OutlineTextField
-            placeholder="Enter PlantName"
+            placeholder={`Enter ${SelectedMasterDatatab} Name`}
             type="text"
-            value={formData.plantName}
+            value={formData[fieldName]}
             onChange={handleInputChange}
             helperText={
-              plantFormError.name ? "PlantName Should not be empty" : ""
+              plantFormError.name
+                ? `${SelectedMasterDatatab}Name Should not be empty`
+                : ""
             }
             error={plantFormError.name}
-            name="plantName"
+            name={fieldName}
           />
           <OutlineTextField
-            placeholder="Enter PlantCode"
+            placeholder={`Enter ${SelectedMasterDatatab} Code`}
             type="text"
-            value={formData.plantCode}
+            value={formData[fieldCode]}
             onChange={handleInputChange}
             helperText={
-              plantFormError.code ? "PlantCode Should not be empty" : ""
+              plantFormError.code
+                ? `${SelectedMasterDatatab}Code Should not be empty`
+                : ""
             }
             error={plantFormError.code}
-            name="plantCode"
+            name={fieldCode}
           />
         </div>
         <div className="edit-master-audit-trial-view">
           <div className="edit-master-audit-wrpr">
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Created By :</p>
-              <p className="edit-master-audit-trial-label-value">{createdBy}</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.createdBy}
+              </p>
             </div>
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Created At :</p>
-              <p className="edit-master-audit-trial-label-value">{createdAt}</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.createdAt}
+              </p>
             </div>
           </div>
           <div className="edit-master-audit-wrpr">
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Updated By :</p>
-              <p className="edit-master-audit-trial-label-value">{updatedBy}</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.updatedBy}
+              </p>
             </div>
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Updated At :</p>
-              <p className="edit-master-audit-trial-label-value">{updatedAt}</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.updatedAt}
+              </p>
             </div>
           </div>
         </div>

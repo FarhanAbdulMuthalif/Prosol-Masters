@@ -1,5 +1,4 @@
 export const initialDynamicStateField = {
-  id: 0,
   fieldName: "",
   dataType: "",
   identity: "",
@@ -14,6 +13,5 @@ export const initialDynamicStateField = {
   writable: true,
   showAsColumn: true,
   enums: [],
-
-  dropDownValues: [],
+  dropDowns: [],
 };

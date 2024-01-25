@@ -6,8 +6,13 @@ import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
+import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import { PostCreateFieldData, ValidMasterDataTabs } from "../../../TypesStore";
+import {
+  PostCreateFieldData,
+  ValidMasterDataTabs,
+  mastersProps,
+} from "../../../TypesStore";
 
 // Import statements...
 
@@ -24,20 +29,40 @@ export default function CreateMastert() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
-      const res = await api.get(
-        `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
-      );
-      const data = await res.data;
-      if (res.status === 200) {
-        console.log(data);
-        setdynamicFields(data);
+      try {
+        const res = await api.get(
+          `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
+        );
+        const data = await res.data;
+        if (res.status === 200) {
+          console.log(data);
+          setdynamicFields(data);
+        }
+      } catch (e: any) {
+        console.log(e?.data?.message);
       }
     };
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab]);
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
   if (!SelectedMasterDatatab) {
     return null;
   }
+  const fieldName = `${
+    SelectedMasterDatatab.charAt(0).toLowerCase() +
+    SelectedMasterDatatab.slice(1)
+  }Name`;
+  const fieldCode = `${
+    SelectedMasterDatatab.charAt(0).toLowerCase() +
+    SelectedMasterDatatab.slice(1)
+  }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -50,26 +75,26 @@ export default function CreateMastert() {
     // }));
     const { plantName, plantCode } = formData;
     console.log(formData);
-    if (plantName.length === 0) {
+    if (formData[fieldName].length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (plantCode.length === 0) {
+    if (formData[fieldCode].length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
     } else {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
-    if (plantCode?.length > 0 && plantName.length > 0) {
+    if (formData[fieldCode].length && formData[fieldName].length > 0) {
       const response = await api.post(
-        `${masters[SelectedMasterDatatab as ValidMasterDataTabs].create}`,
+        `${
+          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+            .create
+        }`,
         formData
       );
       const data = await response.data;
       if (response.status === 201) {
         console.log(data);
-        setFormData({
-          plantName: "",
-          plantCode: "",
-        });
+        setFormData({});
         setOpenSnackbar(true);
       }
     }
@@ -97,7 +122,7 @@ export default function CreateMastert() {
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Name`}
             type="text"
-            value={formData?.plantName}
+            value={formData ? formData[fieldName] : ""}
             onChange={handleInputChange}
             helperText={
               plantFormError.name
@@ -105,12 +130,15 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.name}
-            name="plantName"
+            name={`${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Name`}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
             type="text"
-            value={formData?.plantCode}
+            value={formData ? formData[fieldCode] : ""}
             onChange={handleInputChange}
             helperText={
               plantFormError.code
@@ -118,7 +146,10 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.code}
-            name="plantCode"
+            name={`${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Code`}
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

@@ -9,8 +9,13 @@ import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
 import { SelectChangeEvent } from "@mui/material";
+import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import { PostCreateFieldData, ValidMasterDataTabs } from "../../../TypesStore";
+import {
+  PostCreateFieldData,
+  ValidMasterDataTabs,
+  mastersProps,
+} from "../../../TypesStore";
 
 // Import statements...
 
@@ -46,6 +51,14 @@ export default function CreateMastertWithDropdown() {
     };
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab]);
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
   if (!SelectedMasterDatatab) {
     return null;
   }
@@ -79,7 +92,10 @@ export default function CreateMastertWithDropdown() {
     if (Code.length > 0 && Name.length > 0 && id > 0) {
       try {
         const response = await api.post(
-          `${masters[SelectedMasterDatatab as ValidMasterDataTabs].create}`,
+          `${
+            masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
+              .create
+          }`,
           {
             [`${
               SelectedMasterDatatab.charAt(0).toLowerCase() +
@@ -91,7 +107,10 @@ export default function CreateMastertWithDropdown() {
             }Code`]: Code,
 
             plantId: id,
-            status: true,
+            [`${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Status`]: true,
           }
         );
         const data = await response.data;
