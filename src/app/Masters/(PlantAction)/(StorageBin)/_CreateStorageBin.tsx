@@ -18,11 +18,11 @@ import {
   ValidMasterDataTabs,
   mastersPlantSubFields,
   mastersProps,
-} from "../../../TypesStore";
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastertWithDropdown() {
+export default function CreateStorageBin() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
@@ -32,12 +32,28 @@ export default function CreateMastertWithDropdown() {
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+  const [storgaeLocationData, setstorgaeLocationData] = useState([]);
 
   const PlantDataCon = useContext(UseContextHook);
   const { SelectedMasterDatatab, masters } = PlantDataCon;
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
     data: [],
   };
+  useEffect(() => {
+    async function getter() {
+      try {
+        const res = await api.get(
+          `/plant/getAllByPlantById/${formData.plantId ? formData?.plantId : 0}`
+        );
+        if (res.status === 200) {
+          setstorgaeLocationData(res.data);
+        }
+      } catch (e: any) {
+        console.log(e?.response);
+      }
+    }
+    getter();
+  }, [formData.plantId]);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -72,6 +88,14 @@ export default function CreateMastertWithDropdown() {
           label: plantName,
         })
       )
+    : [];
+  const storgaeLocationDropDownData = storgaeLocationData
+    ? (
+        storgaeLocationData as { id: number; storageLocationName: string }[]
+      ).map(({ id, storageLocationName }) => ({
+        value: id,
+        label: storageLocationName,
+      }))
     : [];
   if (!PlantDropDownData) {
     return null;
@@ -144,6 +168,9 @@ export default function CreateMastertWithDropdown() {
   const DwnValue = PlantDropDownData.find(
     (data) => data.value === formData?.plantId
   )?.label;
+  const StgLcDwnValue = storgaeLocationDropDownData.find(
+    (data) => data.value === formData?.storageLocationId
+  )?.label;
   const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
@@ -197,6 +224,13 @@ export default function CreateMastertWithDropdown() {
             options={PlantDropDownData}
             label={"Select Plant"}
             name="plantId"
+          />
+          <NameSingleSelectDropdown
+            value={StgLcDwnValue ? StgLcDwnValue : ""}
+            onChange={handleSelectChange}
+            options={storgaeLocationDropDownData}
+            label={"Select Storage Location"}
+            name="storageLocationId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

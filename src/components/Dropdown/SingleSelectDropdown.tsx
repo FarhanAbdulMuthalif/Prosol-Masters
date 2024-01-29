@@ -39,7 +39,6 @@ const SingleSelectDropdown: FC<DropdownProps> = ({
         displayEmpty
         onChange={onChange}
         renderValue={(value) => {
-          console.log(value);
           return value ? value : label;
         }}
       >

@@ -17,10 +17,18 @@ import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useState } from "react";
-import { ValidMasterDataTabs, mastersProps } from "../../../TypesStore";
+import {
+  ValidMasterDataTabs,
+  mastersPlantSubFields,
+  mastersProps,
+} from "../../../TypesStore";
+import CreateDepartmentMastert from "./(PlantAction)/(Department)/_CreateDepartment";
+import EditDepartmentMastert from "./(PlantAction)/(Department)/_EditDepartment";
+import CreateStorageBin from "./(PlantAction)/(StorageBin)/_CreateStorageBin";
+import EditStorageBin from "./(PlantAction)/(StorageBin)/_EditStorageBin";
 import CreateMastert from "./_CreateMaster";
 import CreateMastertWithDropdown from "./_CreateWithDropdown";
-import EditPlant from "./_EditPlant";
+import EditMaster from "./_EditMaster";
 import EditMasterWithDropdown from "./_EditWithDropdown";
 import Plantgrid from "./_Plantgrid";
 import "./style.scss";
@@ -28,7 +36,6 @@ import "./style.scss";
 export default function Masters() {
   // const [tabValue, settabValue] = useState("table");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [EditTabVisible, setEditTabVisible] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [
@@ -79,7 +86,10 @@ export default function Masters() {
   };
   const tabs = [
     { label: `${SelectedMasterDatatab} View`, value: "table" },
-    { label: `Create ${SelectedMasterDatatab}`, value: "create" },
+    {
+      label: `Create ${SelectedMasterDatatab}`,
+      value: "create",
+    },
 
     {
       label: tabValue === "edit" ? `Edit ${SelectedMasterDatatab}` : "",
@@ -114,13 +124,14 @@ export default function Masters() {
     try {
       const res = await api.delete(
         `${
-          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-            .delete
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ]?.delete
         }/${selectedId}`
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
       const data = await res.data;
-      if (res.status === 200) {
+      if (res.status === 204) {
         setOpenSnackbar(true);
         setConfirmationDeleteDialogOpen(false);
         if (setPlantData) {
@@ -147,28 +158,40 @@ export default function Masters() {
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-      ?.includePlantDropdown ? (
+    create: (masters[ExactPath] as mastersPlantSubFields)[
+      SelectedMasterDatatab as ValidMasterDataTabs
+    ]?.includePlantDropdown ? (
       <CreateMastertWithDropdown />
+    ) : SelectedMasterDatatab === "Department" ? (
+      <CreateDepartmentMastert />
+    ) : SelectedMasterDatatab === "StorageBin" ? (
+      <CreateStorageBin />
     ) : (
       <CreateMastert />
     ),
-    edit: masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-      .includePlantDropdown ? (
+    edit: (masters[ExactPath] as mastersPlantSubFields)[
+      SelectedMasterDatatab as ValidMasterDataTabs
+    ]?.includePlantDropdown ? (
       <EditMasterWithDropdown EditDataGet={EditDataGet} />
+    ) : SelectedMasterDatatab === "Department" ? (
+      <EditDepartmentMastert EditDataGet={EditDataGet} />
+    ) : SelectedMasterDatatab === "StorageBin" ? (
+      <EditStorageBin EditDataGet={EditDataGet} />
     ) : (
-      <EditPlant EditDataGet={EditDataGet} />
+      <EditMaster EditDataGet={EditDataGet} />
     ),
   };
-  const getAllLinkName =
-    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].getAll;
+  const getAllLinkName = (masters[ExactPath] as mastersPlantSubFields)[
+    SelectedMasterDatatab as ValidMasterDataTabs
+  ]?.getAll;
 
   const handlePlantBulkStatusChangeAction = async () => {
     try {
       const res = await api.patch(
         `${
-          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-            .updateBulkStatus
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ].updateBulkStatus
         }`,
         selectionIDArr
       );
@@ -190,8 +213,9 @@ export default function Masters() {
   const handlePlantBulkDeleteChangeAction = async () => {
     const res = await api.delete(
       `${
-        masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-          .deleteBulk
+        (masters[ExactPath] as mastersPlantSubFields)[
+          SelectedMasterDatatab as ValidMasterDataTabs
+        ].deleteBulk
       }`,
       { data: selectionIDArr }
     );
@@ -207,15 +231,21 @@ export default function Masters() {
     }
   };
   const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].template
+    (masters[ExactPath] as mastersPlantSubFields)[
+      SelectedMasterDatatab as ValidMasterDataTabs
+    ].template
   }`;
   const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
   const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].exportExcel
+    (masters[ExactPath] as mastersPlantSubFields)[
+      SelectedMasterDatatab as ValidMasterDataTabs
+    ].exportExcel
   }`;
   const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
   const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
-    masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs].exportPdf
+    (masters[ExactPath] as mastersPlantSubFields)[
+      SelectedMasterDatatab as ValidMasterDataTabs
+    ].exportPdf
   }`;
   const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;
   const handleDownload = async (DownloadUrl: string, DownloadName: string) => {

@@ -23,10 +23,10 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   );
   useEffect(() => {
     const fetchData = async () => {
-      const dataPlant = await getAllPlantData(`"/plant/getAllPlant"`);
+      const dataPlant = await getAllPlantData(`/plant/getAllPlant`);
       setPlantData(dataPlant);
     };
-    fetchData;
+    fetchData();
   }, []);
 
   const ContextVal: UseContextHookTypes = {

@@ -17,7 +17,7 @@ export default function Header() {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -94,7 +94,7 @@ export default function Header() {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
           onClick={(e) => {
-            handleClick;
+            handleClick(e);
           }}
         >
           <span>Super Admin</span>

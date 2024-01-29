@@ -4,20 +4,22 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 
 interface DropdownProps {
   label: string;
   value: number | string;
   onChange: (event: SelectChangeEvent) => void;
-  options: { value: number | string; label: ReactNode }[];
+  options: { value: string }[];
+  name: string;
 }
 
-const SimpleDropdown: FC<DropdownProps> = ({
+const DynamicSingleSelectDropdown: FC<DropdownProps> = ({
   label,
   value,
   onChange,
   options,
+  name,
 }) => {
   const menuItemStyle = {
     fontSize: "12px",
@@ -32,23 +34,22 @@ const SimpleDropdown: FC<DropdownProps> = ({
   return (
     <FormControl fullWidth>
       <Select
-        id="dropdown"
-        value={value?.toString()}
+        name={name}
+        value={value ? value.toString() : ""}
         sx={SelectStyle}
-        name="id"
         placeholder={label}
         displayEmpty
         onChange={onChange}
         renderValue={(value) => {
-          return value ? value : "Select Plant";
+          return value ? value : label;
         }}
       >
-        <MenuItem sx={menuItemStyle} value="">
-          Select Plant
+        <MenuItem sx={menuItemStyle} value="" disabled>
+          {label}
         </MenuItem>
         {options.map((option) => (
           <MenuItem key={option.value} sx={menuItemStyle} value={option.value}>
-            {option.label}
+            {option.value}
           </MenuItem>
         ))}
       </Select>
@@ -56,4 +57,4 @@ const SimpleDropdown: FC<DropdownProps> = ({
   );
 };
 
-export default SimpleDropdown;
+export default DynamicSingleSelectDropdown;

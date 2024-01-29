@@ -3,8 +3,13 @@ import { getAllPlantData } from "@/utils/masters/plant";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { usePathname } from "next/navigation";
 import { useContext, useState } from "react";
-import { ValidMasterDataTabs } from "../../../TypesStore";
+import {
+  ValidMasterDataTabs,
+  mastersPlantSubFields,
+  mastersProps,
+} from "../../../TypesStore";
 import ReusableSnackbar from "../Snackbar/Snackbar";
 import api from "../api";
 
@@ -24,22 +29,34 @@ export default function UploadButton() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const PlantDataCon = useContext(UseContextHook);
   const { setPlantData, masters, SelectedMasterDatatab } = PlantDataCon;
-
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     console.log("jhkj");
+
     if (event.target.files && event.target?.files[0]) {
       const file = event?.target?.files[0];
       const formData = new FormData();
       formData.append("file", file);
       const res = await api.post(
-        masters[SelectedMasterDatatab as ValidMasterDataTabs].createBulk,
+        (masters[ExactPath] as mastersPlantSubFields)[
+          SelectedMasterDatatab as ValidMasterDataTabs
+        ].createBulk,
         formData
       );
 
       const dataPlant = await getAllPlantData(
-        masters[SelectedMasterDatatab as ValidMasterDataTabs].getAll
+        (masters[ExactPath] as mastersPlantSubFields)[
+          SelectedMasterDatatab as ValidMasterDataTabs
+        ].getAll
       );
       if (res.status === 200 || res.status === 201) {
         setOpenSnackbar(true);
@@ -56,6 +73,7 @@ export default function UploadButton() {
         variant="contained"
         startIcon={<CloudUploadIcon />}
         size="small"
+        sx={{ whiteSpace: "nowrap" }}
       >
         Bulk Upload file
         <VisuallyHiddenInput onChange={handleFileUpload} type="file" />

@@ -9,11 +9,12 @@ import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import {
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMasterGeneralDataTabs,
+  mastersGeneralSubFields,
   mastersProps,
-} from "../../../TypesStore";
-export default function Plantgrid({
+} from "../../../../../TypesStore";
+
+export default function Generalgrid({
   selectionIDArr,
   handleOpenConfirmationDeleteDialog,
   EditSetRecordAndGotoAction,
@@ -33,8 +34,8 @@ export default function Plantgrid({
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  const getAllLinkName = (masters[ExactPath] as mastersPlantSubFields)[
-    SelectedMasterDatatab as ValidMasterDataTabs
+  const getAllLinkName = (masters[ExactPath] as mastersGeneralSubFields)[
+    SelectedMasterDatatab as ValidMasterGeneralDataTabs
   ]?.getAll;
   useEffect(() => {
     console.log(getAllLinkName);
@@ -54,8 +55,8 @@ export default function Plantgrid({
   const SinglePlantStatusHandler = async (id: number) => {
     const res = await api.patch(
       `${
-        (masters[ExactPath] as mastersPlantSubFields)[
-          SelectedMasterDatatab as ValidMasterDataTabs
+        (masters[ExactPath] as mastersGeneralSubFields)[
+          SelectedMasterDatatab as ValidMasterGeneralDataTabs
         ]?.updateStatus
       }/${id}`
     );
@@ -84,8 +85,9 @@ export default function Plantgrid({
     (key: string) =>
       ![
         `${
-          SelectedMasterDatatab.charAt(0).toLowerCase() +
-          SelectedMasterDatatab.slice(1)
+          (masters[ExactPath] as mastersGeneralSubFields)[
+            SelectedMasterDatatab as ValidMasterGeneralDataTabs
+          ]?.keyName
         }Status`,
         "createdAt",
         "updatedAt",
@@ -140,8 +142,9 @@ export default function Plantgrid({
   const actionColumn: GridColDef[] = [
     {
       field: `${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
+        (masters[ExactPath] as mastersGeneralSubFields)[
+          SelectedMasterDatatab as ValidMasterGeneralDataTabs
+        ]?.keyName
       }Status`,
       headerName: "Status",
       flex: 1,
@@ -155,8 +158,9 @@ export default function Plantgrid({
               checked={
                 params.row[
                   `${
-                    SelectedMasterDatatab.charAt(0).toLowerCase() +
-                    SelectedMasterDatatab.slice(1)
+                    (masters[ExactPath] as mastersGeneralSubFields)[
+                      SelectedMasterDatatab as ValidMasterGeneralDataTabs
+                    ]?.keyName
                   }Status`
                 ]
               }

@@ -6,11 +6,15 @@ import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
+import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
+import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
+import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
   PostCreateFieldData,
   ValidMasterDataTabs,
+  mastersPlantSubFields,
   mastersProps,
 } from "../../../TypesStore";
 
@@ -35,7 +39,6 @@ export default function CreateMastert() {
         );
         const data = await res.data;
         if (res.status === 200) {
-          console.log(data);
           setdynamicFields(data);
         }
       } catch (e: any) {
@@ -73,7 +76,6 @@ export default function CreateMastert() {
     //     SelectedMasterDatatab.slice(1)
     //   }Status`]: true,
     // }));
-    const { plantName, plantCode } = formData;
     console.log(formData);
     if (formData[fieldName].length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
@@ -86,15 +88,18 @@ export default function CreateMastert() {
     if (formData[fieldCode].length && formData[fieldName].length > 0) {
       const response = await api.post(
         `${
-          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-            .create
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ].create
         }`,
         formData
       );
       const data = await response.data;
       if (response.status === 201) {
         console.log(data);
-        setFormData({});
+        setFormData((prev: any) => {
+          return { [fieldName]: "", [fieldCode]: "" };
+        });
         setOpenSnackbar(true);
       }
     }
@@ -114,6 +119,17 @@ export default function CreateMastert() {
   // const dynamicFieldRender={
   //   textField:
   // }
+  const handleSelectChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+  };
+  const handleMultiSelectChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [name]: Array.isArray(value) ? value : [],
+    }));
+  };
 
   return (
     <form onSubmit={PlantFormSubmitHandler}>
@@ -181,6 +197,24 @@ export default function CreateMastert() {
                       maxLength: data.max,
                       minLength: data.min,
                     }}
+                  />
+                ) : data.dataType === "dropDown" &&
+                  data.identity === "single" ? (
+                  <DynamicSingleSelectDropdown
+                    label={`Select ${data.fieldName}`}
+                    value={formData[data.fieldName]}
+                    onChange={handleSelectChange}
+                    options={data.dropDowns ? data.dropDowns : []}
+                    name={data.fieldName}
+                  />
+                ) : data.dataType === "dropDown" &&
+                  data.identity === "multiple" ? (
+                  <MultipleDynamicSelectDropdown
+                    label={`Select ${data.fieldName}`}
+                    value={formData[data.fieldName]}
+                    onChange={handleMultiSelectChange}
+                    options={data.dropDowns ? data.dropDowns : []}
+                    name={data.fieldName}
                   />
                 ) : (
                   ""

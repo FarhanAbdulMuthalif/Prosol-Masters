@@ -1,9 +1,7 @@
 "use client";
-import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
-import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
@@ -14,6 +12,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
+  KeysToRemoveEditMaster,
   PostCreateFieldData,
   ValidMasterDataTabs,
   mastersPlantSubFields,
@@ -22,22 +21,18 @@ import {
 
 // Import statements...
 
-export default function CreateMastertWithDropdown() {
+export default function EditMaster({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
-    id: false,
   });
-  const [formData, setFormData] = useState<any>({});
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+  // const { id, updatedAt, updatedBy, createdBy, createdAt } = EditDataGet;
 
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
-  const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
-    data: [],
-  };
+  const { masters, SelectedMasterDatatab, settabValue } = PlantDataCon;
+  const [formData, setFormData] = useState<any>(EditDataGet);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -62,18 +57,7 @@ export default function CreateMastertWithDropdown() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
-    return null;
-  }
-  const PlantDropDownData = originalArray
-    ? (originalArray as { id: number; plantName: string }[]).map(
-        ({ id, plantName }) => ({
-          value: id,
-          label: plantName,
-        })
-      )
-    : [];
-  if (!PlantDropDownData) {
+  if (!SelectedMasterDatatab || !settabValue) {
     return null;
   }
   const fieldName = `${
@@ -90,61 +74,49 @@ export default function CreateMastertWithDropdown() {
     if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-
     if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
-    }
-    if (formData["plantId"] < 1) {
-      setplantFormError((prev) => ({ ...prev, id: true }));
     } else {
-      setplantFormError((prev) => ({ name: false, code: false, id: false }));
+      setplantFormError((prev) => ({ name: false, code: false }));
     }
+    const { id, email, ...filteredData } = formData;
 
-    if (formData[fieldCode]?.length > 0 && formData[fieldName]?.length > 0) {
-      try {
-        const response = await api.post(
-          `${
-            (masters[ExactPath] as mastersPlantSubFields)[
-              SelectedMasterDatatab as ValidMasterDataTabs
-            ].create
-          }`,
-          formData
-        );
-        const data = await response.data;
-        if (response.status === 201) {
-          console.log(data);
-          setFormData((prev: any) => {
-            return { [fieldName]: "", [fieldCode]: "" };
-          });
-          setOpenSnackbar(true);
-        }
-      } catch (error: any) {
-        console.log(error);
-        console.log(error.response.data);
-        console.log(error.response.data.message);
+    // List of keys to be removed
+    const keysToRemove: KeysToRemoveEditMaster[] = [
+      "createdAt",
+      "createdBy",
+      "updatedAt",
+      "updatedBy",
+    ];
+
+    // Create a new object by filtering out specified keys
+    const filteredUserData = { ...filteredData };
+
+    keysToRemove.forEach((key) => delete filteredUserData[key]);
+    if (formData[fieldCode].length && formData[fieldName].length > 0) {
+      const response = await api.put(
+        `${
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ].update
+        }/${id}`,
+        filteredUserData
+      );
+      const data = await response.data;
+      if (response.status === 200) {
+        console.log(data);
+        setFormData({});
+        setOpenSnackbar(true);
+        settabValue("table");
       }
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData: any) => ({
-      ...prevData,
-      [name]: value,
-      [`${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
-      }Status`]: true,
-    }));
-  };
-  const handleSelectChange = (e: SelectChangeEvent) => {
-    const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
-  const DwnValue = PlantDropDownData.find(
-    (data) => data.value === formData?.plantId
-  )?.label;
-  const handleSelectDynChange = (e: SelectChangeEvent) => {
+  const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
@@ -162,7 +134,7 @@ export default function CreateMastertWithDropdown() {
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Name`}
             type="text"
-            value={formData ? formData[fieldName] : ""}
+            value={formData[fieldName]}
             onChange={handleInputChange}
             helperText={
               plantFormError.name
@@ -170,15 +142,12 @@ export default function CreateMastertWithDropdown() {
                 : ""
             }
             error={plantFormError.name}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`}
+            name={fieldName}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
             type="text"
-            value={formData ? formData[fieldCode] : ""}
+            value={formData[fieldCode]}
             onChange={handleInputChange}
             helperText={
               plantFormError.code
@@ -186,17 +155,7 @@ export default function CreateMastertWithDropdown() {
                 : ""
             }
             error={plantFormError.code}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`}
-          />
-          <NameSingleSelectDropdown
-            value={DwnValue ? DwnValue : ""}
-            onChange={handleSelectChange}
-            options={PlantDropDownData}
-            label={"Select Plant"}
-            name="plantId"
+            name={fieldCode}
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
@@ -234,7 +193,7 @@ export default function CreateMastertWithDropdown() {
                   <DynamicSingleSelectDropdown
                     label={`Select ${data.fieldName}`}
                     value={formData[data.fieldName]}
-                    onChange={handleSelectDynChange}
+                    onChange={handleSelectChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
                   />
@@ -254,13 +213,43 @@ export default function CreateMastertWithDropdown() {
             );
           })}
         </div>
+        <div className="edit-master-audit-trial-view">
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.createdBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.createdAt}
+              </p>
+            </div>
+          </div>
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.updatedBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.updatedAt}
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
       <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
+        message={`${SelectedMasterDatatab} updated Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}

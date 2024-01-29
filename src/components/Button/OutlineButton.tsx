@@ -15,7 +15,7 @@ const OutlinedButton: React.FC<OutlinedButtonProps> = ({
     <Button
       {...props}
       variant="outlined"
-      sx={{ fontSize: "12px", padding: "4px 8px" }}
+      sx={{ fontSize: "12px", padding: "4px 8px", whiteSpace: "nowrap" }}
     >
       {children}
     </Button>

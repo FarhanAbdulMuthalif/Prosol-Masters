@@ -3,22 +3,23 @@ import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
-import SimpleDropdown from "@/components/Dropdown/SimpleDropdown";
+import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
+import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
+import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import { ValidMasterDataTabs, mastersProps } from "../../../TypesStore";
-
-// Import statements...
-type KeysToRemove =
-  | "createdAt"
-  | "createdBy"
-  | "updatedAt"
-  | "updatedBy"
-  | "plant";
+import {
+  KeysToRemoveEditMaster,
+  PostCreateFieldData,
+  ValidMasterDataTabs,
+  mastersPlantSubFields,
+  mastersProps,
+} from "../../../TypesStore";
 
 export default function EditMasterWithDropdown({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
@@ -33,9 +34,26 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
     data: [],
   };
+  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+
   useEffect(() => {
+    const dynamicFormFieldHandler = async () => {
+      try {
+        const res = await api.get(
+          `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
+        );
+        const data = await res.data;
+        if (res.status === 200) {
+          setdynamicFields(data);
+        }
+      } catch (e: any) {
+        console.log(e?.data?.message);
+      }
+    };
     setFormData((prev: any) => ({ ...prev, plantId: prev?.plant?.id }));
-  }, []);
+    dynamicFormFieldHandler();
+  }, [SelectedMasterDatatab]);
+
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -70,7 +88,7 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
     const { id, email, ...filteredData } = formData;
 
     // List of keys to be removed
-    const keysToRemove: KeysToRemove[] = [
+    const keysToRemove: KeysToRemoveEditMaster[] = [
       "createdAt",
       "createdBy",
       "updatedAt",
@@ -85,8 +103,9 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
     if (formData[fieldCode]?.length && formData[fieldName]?.length > 0) {
       const response = await api.put(
         `${
-          masters[ExactPath][SelectedMasterDatatab as ValidMasterDataTabs]
-            .update
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ].update
         }/${id}`,
         filteredUserData
       );
@@ -122,6 +141,18 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
   const DwnValue = PlantDropDownData.find(
     (data) => data.value === formData.plantId
   )?.label;
+  const handleSelectDynChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+  };
+  const handleMultiSelectChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [name]: Array.isArray(value) ? value : [],
+    }));
+  };
+
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
@@ -129,7 +160,7 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Name`}
             type="text"
-            value={formData[fieldName]}
+            value={formData ? formData[fieldName] : ""}
             onChange={handleInputChange}
             helperText={
               plantFormError.name
@@ -137,12 +168,15 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
                 : ""
             }
             error={plantFormError.name}
-            name={fieldName}
+            name={`${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Name`}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
             type="text"
-            value={formData[fieldCode]}
+            value={formData ? formData[fieldCode] : ""}
             onChange={handleInputChange}
             helperText={
               plantFormError.code
@@ -150,14 +184,73 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
                 : ""
             }
             error={plantFormError.code}
-            name={fieldCode}
+            name={`${
+              SelectedMasterDatatab.charAt(0).toLowerCase() +
+              SelectedMasterDatatab.slice(1)
+            }Code`}
           />
-          <SimpleDropdown
+          <NameSingleSelectDropdown
             value={DwnValue ? DwnValue : ""}
             onChange={handleSelectChange}
             options={PlantDropDownData}
             label={"Select Plant"}
+            name="plantId"
           />
+          {dynamicFields?.map((data: PostCreateFieldData) => {
+            return (
+              <>
+                {data.dataType === "textField" ? (
+                  <OutlineTextField
+                    placeholder={`Enter ${data.fieldName}`}
+                    key={data.id}
+                    type={data.identity}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
+                    name={data.fieldName}
+                    inputProps={{
+                      autoComplete: "new-password",
+                      maxLength: data.max,
+                      minLength: data.min,
+                    }}
+                  />
+                ) : data.dataType === "textArea" ? (
+                  <TextareaOutline
+                    placeholder={`Enter ${data.fieldName}`}
+                    key={data.id}
+                    rows={typeof Number(data.identity) ? data.identity : 2}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
+                    name={data.fieldName}
+                    inputProps={{
+                      autoComplete: "new-password",
+                      maxLength: data.max,
+                      minLength: data.min,
+                    }}
+                  />
+                ) : data.dataType === "dropDown" &&
+                  data.identity === "single" ? (
+                  <DynamicSingleSelectDropdown
+                    label={`Select ${data.fieldName}`}
+                    value={formData[data.fieldName]}
+                    onChange={handleSelectDynChange}
+                    options={data.dropDowns ? data.dropDowns : []}
+                    name={data.fieldName}
+                  />
+                ) : data.dataType === "dropDown" &&
+                  data.identity === "multiple" ? (
+                  <MultipleDynamicSelectDropdown
+                    label={`Select ${data.fieldName}`}
+                    value={formData[data.fieldName]}
+                    onChange={handleMultiSelectChange}
+                    options={data.dropDowns ? data.dropDowns : []}
+                    name={data.fieldName}
+                  />
+                ) : (
+                  ""
+                )}
+              </>
+            );
+          })}
         </div>
         <div className="edit-master-audit-trial-view">
           <div className="edit-master-audit-wrpr">
@@ -195,7 +288,7 @@ export default function EditMasterWithDropdown({ EditDataGet }: any) {
         </div>
       </div>
       <ReusableSnackbar
-        message="Plant created Sucessfully!"
+        message={`${SelectedMasterDatatab} updated Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}

@@ -30,23 +30,23 @@ export type subSecondNavbarType = { name: string; path: string };
 
 export type mastersProps = {
   Plant: mastersPlantSubFields;
-  General: mastersPlantSubFields; //need to change
-  MRPData: mastersPlantSubFields; //need to change
+  General: mastersGeneralSubFields;
+  MRPData: mastersMRPSubFields;
 };
 
 export type mastersPlantSubFields = {
-  Plant: mastersSubsubFields;
-  ProfitCenter: mastersSubsubFields;
-  PriceControl: mastersSubsubFields;
-  StorageBin: mastersSubsubFields;
-  StorageLocation: mastersSubsubFields;
-  ValuationClass: mastersSubsubFields;
-  ValuationCategory: mastersSubsubFields;
-  VarianceKey: mastersSubsubFields;
-  Department: mastersSubsubFields;
+  Plant: mastersPlantSubsubFields;
+  ProfitCenter: mastersPlantSubsubFields;
+  PriceControl: mastersPlantSubsubFields;
+  StorageBin: mastersPlantSubsubFields;
+  StorageLocation: mastersPlantSubsubFields;
+  ValuationClass: mastersPlantSubsubFields;
+  ValuationCategory: mastersPlantSubsubFields;
+  VarianceKey: mastersPlantSubsubFields;
+  Department: mastersPlantSubsubFields;
 };
 
-export type mastersSubsubFields = {
+export type mastersPlantSubsubFields = {
   getAll: string;
   getSingle: string;
   create: string;
@@ -61,7 +61,58 @@ export type mastersSubsubFields = {
   update: string;
   includePlantDropdown: boolean;
 };
-export type ValidMasterDataTabs = "Plant" | "ProfitCenter" | "PriceControl";
+export type mastersGeneralSubFields = {
+  IndustrySector: mastersGeneralSubsubFields;
+  MaterialType: mastersGeneralSubsubFields;
+  BaseUOP: mastersGeneralSubsubFields;
+  UnitOfIssue: mastersGeneralSubsubFields;
+  AlternateUOM: mastersGeneralSubsubFields;
+  InspectionType: mastersGeneralSubsubFields;
+  InspectionCode: mastersGeneralSubsubFields;
+  Division: mastersGeneralSubsubFields;
+  SalesUnit: mastersGeneralSubsubFields;
+};
+export type mastersMRPSubFields = {
+  MRPType: mastersGeneralSubsubFields;
+  MRPController: mastersGeneralSubsubFields;
+  LOTSize: mastersGeneralSubsubFields;
+  ProcurementType: mastersGeneralSubsubFields;
+  PlanningStrgyGrp: mastersGeneralSubsubFields;
+  AvailableGroup: mastersGeneralSubsubFields;
+  ScheduleMargin: mastersGeneralSubsubFields;
+};
+export type mastersGeneralSubsubFields = {
+  getAll: string;
+  getSingle: string;
+  create: string;
+  createBulk: string;
+  updateStatus: string;
+  updateBulkStatus: string;
+  template: string;
+  exportPdf: string;
+  exportExcel: string;
+  delete: string;
+  deleteBulk: string;
+  update: string;
+  includePlantDropdown: boolean;
+  keyName: string;
+};
+export type ValidMasterDataTabs =
+  | "Plant"
+  | "ProfitCenter"
+  | "PriceControl"
+  | "ValuationClass";
+export type ValidMasterGeneralDataTabs =
+  | "IndustrySector"
+  | "MaterialType"
+  | "BaseUOP"
+  | "UnitOfIssue"
+  | "AlternateUOM"
+  | "InspectionCode"
+  | "InspectionType"
+  | "Division"
+  | "SalesUnit";
+
 export interface PostCreateFieldData {
   id?: number;
   dataType: string;
@@ -118,3 +169,10 @@ export type RoleInitialStateProps = {
   updatedAt?: string;
   updatedBy?: string;
 };
+export type KeysToRemoveEditMaster =
+  | "createdAt"
+  | "createdBy"
+  | "updatedAt"
+  | "updatedBy"
+  | "plant"
+  | "storageLocation";

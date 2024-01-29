@@ -18,11 +18,11 @@ import {
   ValidMasterDataTabs,
   mastersPlantSubFields,
   mastersProps,
-} from "../../../TypesStore";
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastertWithDropdown() {
+export default function CreateValuationClass() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
@@ -35,7 +35,7 @@ export default function CreateMastertWithDropdown() {
 
   const PlantDataCon = useContext(UseContextHook);
   const { SelectedMasterDatatab, masters } = PlantDataCon;
-  const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
+  const { data: originalArray } = useFetch("/general/getAllMaterial") ?? {
     data: [],
   };
   useEffect(() => {
@@ -66,10 +66,10 @@ export default function CreateMastertWithDropdown() {
     return null;
   }
   const PlantDropDownData = originalArray
-    ? (originalArray as { id: number; plantName: string }[]).map(
-        ({ id, plantName }) => ({
-          value: id,
-          label: plantName,
+    ? (originalArray as { materialCode: number; materialName: string }[]).map(
+        ({ materialCode, materialName }) => ({
+          value: materialCode,
+          label: materialName,
         })
       )
     : [];

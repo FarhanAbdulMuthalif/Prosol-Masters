@@ -14,30 +14,55 @@ import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
+  KeysToRemoveEditMaster,
   PostCreateFieldData,
   ValidMasterDataTabs,
   mastersPlantSubFields,
   mastersProps,
-} from "../../../TypesStore";
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastertWithDropdown() {
+export default function EditStorageBin({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
     id: false,
   });
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>(EditDataGet);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+  const [storgaeLocationData, setstorgaeLocationData] = useState([]);
 
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  const { SelectedMasterDatatab, masters, settabValue } = PlantDataCon;
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
     data: [],
   };
+  useEffect(() => {
+    setFormData((prev: any) => ({
+      ...prev,
+      plantId: prev?.plant?.id,
+      storageLocationId: prev?.storageLocation?.id,
+    }));
+  }, []);
+  useEffect(() => {
+    async function getter() {
+      try {
+        const res = await api.get(
+          `/plant/getAllByPlantById/${formData?.plantId}`
+        );
+        if (res.status === 200) {
+          setstorgaeLocationData(res.data);
+        }
+      } catch (e: any) {
+        console.log(e?.response);
+      }
+    }
+    getter();
+  }, [formData.plantId]);
+
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -62,7 +87,7 @@ export default function CreateMastertWithDropdown() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
+  if (!SelectedMasterDatatab || !settabValue) {
     return null;
   }
   const PlantDropDownData = originalArray
@@ -73,9 +98,19 @@ export default function CreateMastertWithDropdown() {
         })
       )
     : [];
-  if (!PlantDropDownData) {
+  const storgaeLocationDropDownData = storgaeLocationData
+    ? (
+        storgaeLocationData as { id: number; storageLocationName: string }[]
+      ).map(({ id, storageLocationName }) => ({
+        value: id,
+        label: storageLocationName,
+      }))
+    : [];
+  if (!PlantDropDownData || !storgaeLocationDropDownData) {
     return null;
   }
+  console.log(PlantDropDownData);
+  console.log(storgaeLocationDropDownData);
   const fieldName = `${
     SelectedMasterDatatab.charAt(0).toLowerCase() +
     SelectedMasterDatatab.slice(1)
@@ -99,24 +134,39 @@ export default function CreateMastertWithDropdown() {
     } else {
       setplantFormError((prev) => ({ name: false, code: false, id: false }));
     }
+    const { id, ...filteredData } = formData;
+
+    // List of keys to be removed
+    const keysToRemove: KeysToRemoveEditMaster[] = [
+      "createdAt",
+      "createdBy",
+      "updatedAt",
+      "updatedBy",
+      "plant",
+      "storageLocation",
+    ];
+
+    // Create a new object by filtering out specified keys
+    const filteredUserData = { ...filteredData };
+
+    keysToRemove.forEach((key) => delete filteredUserData[key]);
 
     if (formData[fieldCode]?.length > 0 && formData[fieldName]?.length > 0) {
       try {
-        const response = await api.post(
+        const response = await api.put(
           `${
             (masters[ExactPath] as mastersPlantSubFields)[
               SelectedMasterDatatab as ValidMasterDataTabs
-            ].create
-          }`,
-          formData
+            ].update
+          }/${id}`,
+          filteredUserData
         );
         const data = await response.data;
-        if (response.status === 201) {
+        if (response.status === 200) {
           console.log(data);
-          setFormData((prev: any) => {
-            return { [fieldName]: "", [fieldCode]: "" };
-          });
+          setFormData({});
           setOpenSnackbar(true);
+          settabValue("table");
         }
       } catch (error: any) {
         console.log(error);
@@ -143,6 +193,9 @@ export default function CreateMastertWithDropdown() {
   };
   const DwnValue = PlantDropDownData.find(
     (data) => data.value === formData?.plantId
+  )?.label;
+  const StgLcDwnValue = storgaeLocationDropDownData.find(
+    (data) => data.value === formData?.storageLocationId
   )?.label;
   const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
@@ -197,6 +250,13 @@ export default function CreateMastertWithDropdown() {
             options={PlantDropDownData}
             label={"Select Plant"}
             name="plantId"
+          />
+          <NameSingleSelectDropdown
+            value={StgLcDwnValue ? StgLcDwnValue : ""}
+            onChange={handleSelectChange}
+            options={storgaeLocationDropDownData}
+            label={"Select Storage Location"}
+            name="storageLocationId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
@@ -260,7 +320,7 @@ export default function CreateMastertWithDropdown() {
         </div>
       </div>
       <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
+        message={`${SelectedMasterDatatab} updated Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}
