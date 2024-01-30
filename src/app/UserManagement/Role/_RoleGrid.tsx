@@ -30,16 +30,24 @@ export default function RoleGrid({
   };
   useEffect(() => {
     const fetchData = async () => {
-      const Roles = await api.get(`/user/getAllRoles?show=false`);
-      setRoleData(Roles.data);
+      try {
+        const Roles = await api.get(`/user/getAllRoles?show=false`);
+        setRoleData(Roles.data);
+      } catch (e: any) {
+        console.log(e?.response);
+      }
     };
     fetchData();
   }, [setRoleData]);
   const SingleRoleStatusHandler = async (id: number) => {
-    const res = await api.patch(`/user/updateRoleStatusById/${id}`);
-    const data = await res.data;
-    const Roles = await api.get(`/user/getAllRoles?show=false`);
-    setRoleData(Roles.data);
+    try {
+      const res = await api.patch(`/user/updateRoleStatusById/${id}`);
+      const data = await res.data;
+      const Roles = await api.get(`/user/getAllRoles?show=false`);
+      setRoleData(Roles.data);
+    } catch (e: any) {
+      console.log(e?.response);
+    }
   };
   const handleDeleteCloseDialog = () => {
     setDeleteDialogOpen(false);
@@ -49,13 +57,17 @@ export default function RoleGrid({
     setDeleteDialogOpen(true);
   };
   const handleUserDeleteHandler = async () => {
-    const res = await api.delete(`/user/deleteRole/${SlectedId}`);
-    const data = await res.data;
-    const Roles = await api.get(`/user/getAllRoles?show=false`);
-    if (res.status === 204) {
-      setOpenDeleteSnackBar(true);
-      setDeleteDialogOpen(false);
-      setRoleData(Roles.data);
+    try {
+      const res = await api.delete(`/user/deleteRole/${SlectedId}`);
+      const data = await res.data;
+      const Roles = await api.get(`/user/getAllRoles?show=false`);
+      if (res.status === 204) {
+        setOpenDeleteSnackBar(true);
+        setDeleteDialogOpen(false);
+        setRoleData(Roles.data);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const actionColumn: GridColDef[] = [

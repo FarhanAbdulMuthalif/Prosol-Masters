@@ -2,6 +2,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
@@ -92,20 +93,24 @@ export default function EditDepartmentMastert({ EditDataGet }: any) {
 
     keysToRemove.forEach((key) => delete filteredUserData[key]);
     if (formData[fieldName].length > 0) {
-      const response = await api.put(
-        `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
-          ].update
-        }/${id}`,
-        filteredUserData
-      );
-      const data = await response.data;
-      if (response.status === 200) {
-        console.log(data);
-        settabValue("table");
-        setFormData({});
-        setOpenSnackbar(true);
+      try {
+        const response = await api.put(
+          `${
+            (masters[ExactPath] as mastersPlantSubFields)[
+              SelectedMasterDatatab as ValidMasterDataTabs
+            ].update
+          }/${id}`,
+          filteredUserData
+        );
+        const data = await response.data;
+        if (response.status === 200) {
+          console.log(data);
+          settabValue("table");
+          setFormData({});
+          setOpenSnackbar(true);
+        }
+      } catch (e: any) {
+        console.log(e?.response);
       }
     }
   };
@@ -206,12 +211,50 @@ export default function EditDepartmentMastert({ EditDataGet }: any) {
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
                   />
+                ) : data.dataType === "radioButton" ? (
+                  <RadioGroupComponent
+                    label={`${data.fieldName} :`}
+                    name={data.fieldName}
+                    options={data.enums ? data?.enums : []}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
+                  />
                 ) : (
                   ""
                 )}
               </>
             );
           })}
+        </div>
+        <div className="edit-master-audit-trial-view">
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.createdBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.createdAt}
+              </p>
+            </div>
+          </div>
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.updatedBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.updatedAt}
+              </p>
+            </div>
+          </div>
         </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>

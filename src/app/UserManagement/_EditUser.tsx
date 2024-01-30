@@ -49,7 +49,7 @@ export default function EditUser({
   const { data: departentArray } = useFetch("/plant/getAllDepartment") ?? {
     data: [],
   };
-  const { data: rolesArray } = useFetch("/user/getAllRoles") ?? {
+  const { data: rolesArray } = useFetch("/user/getAllRoles?show=false") ?? {
     data: [],
   };
   const PlantDropDownData = originalArray
@@ -130,12 +130,16 @@ export default function EditUser({
       return;
     }
     setFormErrorMessage("");
-    const res = await api.put(`/user/updateById/${id}`, formData);
-    const data = res.data;
-    if (res.status === 200) {
-      setopenSnackbar(true);
-      setFormData(UserInitialState);
-      settabValue("table");
+    try {
+      const res = await api.put(`/user/updateById/${id}`, formData);
+      const data = res.data;
+      if (res.status === 200) {
+        setopenSnackbar(true);
+        setFormData(UserInitialState);
+        settabValue("table");
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   return (

@@ -20,9 +20,8 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     { name: "Plant", path: "/Masters" },
     { name: "General", path: "/Masters/General" },
     { name: "MRPData", path: "/Masters/MRPData" },
-    // { name: "Sales & others", path: "/Masters/SalesAndOthers" },
+    { name: "Sales&Others", path: "/Masters/SalesAndOthers" },
   ];
-  console.log(CurrentView);
   return (
     <div className={OpenSideBar ? "full-side-bar" : "side-bar"}>
       {OpenSideBar ? (

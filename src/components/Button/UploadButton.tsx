@@ -46,23 +46,27 @@ export default function UploadButton() {
       const file = event?.target?.files[0];
       const formData = new FormData();
       formData.append("file", file);
-      const res = await api.post(
-        (masters[ExactPath] as mastersPlantSubFields)[
-          SelectedMasterDatatab as ValidMasterDataTabs
-        ].createBulk,
-        formData
-      );
+      try {
+        const res = await api.post(
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ].createBulk,
+          formData
+        );
 
-      const dataPlant = await getAllPlantData(
-        (masters[ExactPath] as mastersPlantSubFields)[
-          SelectedMasterDatatab as ValidMasterDataTabs
-        ].getAll
-      );
-      if (res.status === 200 || res.status === 201) {
-        setOpenSnackbar(true);
-        if (setPlantData) {
-          setPlantData(dataPlant);
+        const dataPlant = await getAllPlantData(
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ].getAll
+        );
+        if (res.status === 200 || res.status === 201) {
+          setOpenSnackbar(true);
+          if (setPlantData) {
+            setPlantData(dataPlant);
+          }
         }
+      } catch (e: any) {
+        console.log(e?.response);
       }
     }
   };

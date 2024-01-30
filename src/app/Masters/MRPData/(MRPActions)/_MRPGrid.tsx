@@ -9,12 +9,12 @@ import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import {
-  ValidMasterGeneralDataTabs,
-  mastersGeneralSubFields,
+  ValidMasterMRPDataTabs,
+  mastersMRPSubFields,
   mastersProps,
 } from "../../../../../TypesStore";
 
-export default function Generalgrid({
+export default function MRPGrid({
   selectionIDArr,
   handleOpenConfirmationDeleteDialog,
   EditSetRecordAndGotoAction,
@@ -34,14 +34,14 @@ export default function Generalgrid({
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  const getAllLinkName = (masters[ExactPath] as mastersGeneralSubFields)[
-    SelectedMasterDatatab as ValidMasterGeneralDataTabs
+  const getAllLinkName = (masters[ExactPath] as mastersMRPSubFields)[
+    SelectedMasterDatatab as ValidMasterMRPDataTabs
   ]?.getAll;
   useEffect(() => {
+    console.log(getAllLinkName);
     const fetchData = async () => {
       try {
         const res = await api.get(`${getAllLinkName}`);
-        console.log(res);
         if (setPlantData) {
           setPlantData(res.data);
         }
@@ -59,8 +59,8 @@ export default function Generalgrid({
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersGeneralSubFields)[
-            SelectedMasterDatatab as ValidMasterGeneralDataTabs
+          (masters[ExactPath] as mastersMRPSubFields)[
+            SelectedMasterDatatab as ValidMasterMRPDataTabs
           ]?.updateStatus
         }/${id}`
       );
@@ -92,8 +92,8 @@ export default function Generalgrid({
     (key: string) =>
       ![
         `${
-          (masters[ExactPath] as mastersGeneralSubFields)[
-            SelectedMasterDatatab as ValidMasterGeneralDataTabs
+          (masters[ExactPath] as mastersMRPSubFields)[
+            SelectedMasterDatatab as ValidMasterMRPDataTabs
           ]?.keyName
         }Status`,
         "createdAt",
@@ -149,8 +149,8 @@ export default function Generalgrid({
   const actionColumn: GridColDef[] = [
     {
       field: `${
-        (masters[ExactPath] as mastersGeneralSubFields)[
-          SelectedMasterDatatab as ValidMasterGeneralDataTabs
+        (masters[ExactPath] as mastersMRPSubFields)[
+          SelectedMasterDatatab as ValidMasterMRPDataTabs
         ]?.keyName
       }Status`,
       headerName: "Status",
@@ -165,8 +165,8 @@ export default function Generalgrid({
               checked={
                 params.row[
                   `${
-                    (masters[ExactPath] as mastersGeneralSubFields)[
-                      SelectedMasterDatatab as ValidMasterGeneralDataTabs
+                    (masters[ExactPath] as mastersMRPSubFields)[
+                      SelectedMasterDatatab as ValidMasterMRPDataTabs
                     ]?.keyName
                   }Status`
                 ]

@@ -9,12 +9,12 @@ import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import {
-  ValidMasterGeneralDataTabs,
-  mastersGeneralSubFields,
+  ValidMastersSalesAndOthersTabs,
   mastersProps,
+  mastersSalesAndOthersSubFields,
 } from "../../../../../TypesStore";
 
-export default function Generalgrid({
+export default function SalesAndOthersGrid({
   selectionIDArr,
   handleOpenConfirmationDeleteDialog,
   EditSetRecordAndGotoAction,
@@ -34,14 +34,14 @@ export default function Generalgrid({
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  const getAllLinkName = (masters[ExactPath] as mastersGeneralSubFields)[
-    SelectedMasterDatatab as ValidMasterGeneralDataTabs
+  const getAllLinkName = (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+    SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
   ]?.getAll;
   useEffect(() => {
+    console.log(getAllLinkName);
     const fetchData = async () => {
       try {
         const res = await api.get(`${getAllLinkName}`);
-        console.log(res);
         if (setPlantData) {
           setPlantData(res.data);
         }
@@ -59,8 +59,8 @@ export default function Generalgrid({
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersGeneralSubFields)[
-            SelectedMasterDatatab as ValidMasterGeneralDataTabs
+          (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+            SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
           ]?.updateStatus
         }/${id}`
       );
@@ -92,8 +92,8 @@ export default function Generalgrid({
     (key: string) =>
       ![
         `${
-          (masters[ExactPath] as mastersGeneralSubFields)[
-            SelectedMasterDatatab as ValidMasterGeneralDataTabs
+          (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+            SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
           ]?.keyName
         }Status`,
         "createdAt",
@@ -118,15 +118,15 @@ export default function Generalgrid({
           },
         };
       }
-      if (data === "storageLocation") {
+      if (data === "salesOrganization") {
         return {
-          field: "storageLocation",
+          field: "salesOrganization",
           headerClassName: "super-app-theme--header",
           flex: 1,
 
           headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
           renderCell: (params: any) => {
-            return params.row.storageLocation.storageLocationName;
+            return params.row.salesOrganization.soName;
           },
         };
       }
@@ -149,8 +149,8 @@ export default function Generalgrid({
   const actionColumn: GridColDef[] = [
     {
       field: `${
-        (masters[ExactPath] as mastersGeneralSubFields)[
-          SelectedMasterDatatab as ValidMasterGeneralDataTabs
+        (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+          SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
         ]?.keyName
       }Status`,
       headerName: "Status",
@@ -165,8 +165,8 @@ export default function Generalgrid({
               checked={
                 params.row[
                   `${
-                    (masters[ExactPath] as mastersGeneralSubFields)[
-                      SelectedMasterDatatab as ValidMasterGeneralDataTabs
+                    (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+                      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
                     ]?.keyName
                   }Status`
                 ]

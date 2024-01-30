@@ -1,7 +1,9 @@
 "use client";
+import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
@@ -14,24 +16,29 @@ import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
   PostCreateFieldData,
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMasterMRPDataTabs,
+  mastersMRPSubFields,
   mastersProps,
-} from "../../../TypesStore";
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastert() {
+export default function CreateMRPDataWithPlant() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
+    id: false,
   });
+  const [formData, setFormData] = useState<any>({});
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+
   const PlantDataCon = useContext(UseContextHook);
   const { SelectedMasterDatatab, masters } = PlantDataCon;
-
-  const [formData, setFormData] = useState<any>({});
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
+    data: [],
+  };
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -59,39 +66,49 @@ export default function CreateMastert() {
   if (!SelectedMasterDatatab) {
     return null;
   }
+  const PlantDropDownData = originalArray
+    ? (originalArray as { id: number; plantName: string }[]).map(
+        ({ id, plantName }) => ({
+          value: id,
+          label: plantName,
+        })
+      )
+    : [];
+  if (!PlantDropDownData) {
+    return null;
+  }
   const fieldName = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersMRPSubFields)[
+      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    ].keyName
   }Name`;
   const fieldCode = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersMRPSubFields)[
+      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    ].keyName
   }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    // setFormData((prevData: any) => ({
-    //   ...prevData,
-    //   [`${
-    //     SelectedMasterDatatab.charAt(0).toLowerCase() +
-    //     SelectedMasterDatatab.slice(1)
-    //   }Status`]: true,
-    // }));
-    console.log(formData);
-    if (formData[fieldName].length === 0) {
+    if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (formData[fieldCode].length === 0) {
+
+    if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
-    } else {
-      setplantFormError((prev) => ({ name: false, code: false }));
     }
-    if (formData[fieldCode].length && formData[fieldName].length > 0) {
+    if (formData["plantId"] < 1) {
+      setplantFormError((prev) => ({ ...prev, id: true }));
+    } else {
+      setplantFormError((prev) => ({ name: false, code: false, id: false }));
+    }
+    if (formData[fieldCode]?.length > 0 && formData[fieldName]?.length > 0) {
+      console.log(formData);
       try {
         const response = await api.post(
           `${
-            (masters[ExactPath] as mastersPlantSubFields)[
-              SelectedMasterDatatab as ValidMasterDataTabs
+            (masters[ExactPath] as mastersMRPSubFields)[
+              SelectedMasterDatatab as ValidMasterMRPDataTabs
             ].create
           }`,
           formData
@@ -104,8 +121,10 @@ export default function CreateMastert() {
           });
           setOpenSnackbar(true);
         }
-      } catch (e: any) {
-        console.log(e?.response);
+      } catch (error: any) {
+        console.log(error);
+        console.log(error.response.data);
+        console.log(error.response.data.message);
       }
     }
   };
@@ -116,15 +135,20 @@ export default function CreateMastert() {
       ...prevData,
       [name]: value,
       [`${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
+        (masters[ExactPath] as mastersMRPSubFields)[
+          SelectedMasterDatatab as ValidMasterMRPDataTabs
+        ].keyName
       }Status`]: true,
     }));
   };
-  // const dynamicFieldRender={
-  //   textField:
-  // }
   const handleSelectChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+  };
+  const DwnValue = PlantDropDownData.find(
+    (data) => data.value === formData?.plantId
+  )?.label;
+  const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
@@ -135,7 +159,6 @@ export default function CreateMastert() {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
-
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
@@ -152,8 +175,9 @@ export default function CreateMastert() {
             }
             error={plantFormError.name}
             name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
+              (masters[ExactPath] as mastersMRPSubFields)[
+                SelectedMasterDatatab as ValidMasterMRPDataTabs
+              ].keyName
             }Name`}
           />
           <OutlineTextField
@@ -168,9 +192,17 @@ export default function CreateMastert() {
             }
             error={plantFormError.code}
             name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
+              (masters[ExactPath] as mastersMRPSubFields)[
+                SelectedMasterDatatab as ValidMasterMRPDataTabs
+              ].keyName
             }Code`}
+          />
+          <NameSingleSelectDropdown
+            value={DwnValue ? DwnValue : ""}
+            onChange={handleSelectChange}
+            options={PlantDropDownData}
+            label={"Select Plant"}
+            name="plantId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
@@ -208,7 +240,7 @@ export default function CreateMastert() {
                   <DynamicSingleSelectDropdown
                     label={`Select ${data.fieldName}`}
                     value={formData[data.fieldName]}
-                    onChange={handleSelectChange}
+                    onChange={handleSelectDynChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
                   />

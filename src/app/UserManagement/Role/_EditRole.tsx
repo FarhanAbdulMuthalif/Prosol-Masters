@@ -107,12 +107,16 @@ export default function EditRole({
     }
 
     setFormErrorMessage("");
-    const res = await api.put(`/user/updateRole/${id}`, formData);
-    const data = res.data;
-    if (res.status === 200) {
-      setopenSnackbar(true);
-      setFormData(RoleInitialState);
-      settabValue("table");
+    try {
+      const res = await api.put(`/user/updateRole/${id}`, formData);
+      const data = res.data;
+      if (res.status === 200) {
+        setopenSnackbar(true);
+        setFormData(RoleInitialState);
+        settabValue("table");
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const checkHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {

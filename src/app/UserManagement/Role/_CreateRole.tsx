@@ -80,11 +80,15 @@ export default function CreateRole() {
     }
 
     setFormErrorMessage("");
-    const res = await api.post("/user/saveRole", formData);
-    const data = res.data;
-    if (res.status === 201) {
-      setopenSnackbar(true);
-      setFormData(RoleInitialState);
+    try {
+      const res = await api.post("/user/saveRole", formData);
+      const data = res.data;
+      if (res.status === 201) {
+        setopenSnackbar(true);
+        setFormData(RoleInitialState);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const checkHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {

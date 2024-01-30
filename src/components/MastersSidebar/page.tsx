@@ -8,7 +8,12 @@ import "./style.scss";
 
 export default function MastersSidebar() {
   const CntxData = useContext(UseContextHook);
-  const { masters, SelectedMasterDatatab, setSelectedMasterDatatab } = CntxData;
+  const {
+    masters,
+    SelectedMasterDatatab,
+    setSelectedMasterDatatab,
+    settabValue,
+  } = CntxData;
   const auth = UseAuth();
   const pathName = usePathname();
   const ExactPath = pathName
@@ -18,7 +23,7 @@ export default function MastersSidebar() {
   if (!auth) {
     return null;
   }
-  if (!setSelectedMasterDatatab || !SelectedMasterDatatab) {
+  if (!setSelectedMasterDatatab || !SelectedMasterDatatab || !settabValue) {
     return null; // or some other fallback or loading state
   }
   return (
@@ -39,6 +44,7 @@ export default function MastersSidebar() {
             }
             onClick={() => {
               setSelectedMasterDatatab(data);
+              settabValue("table");
             }}
           >
             {data}

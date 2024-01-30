@@ -26,16 +26,24 @@ export default function UserGrid({
   const [DeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
-      const Users = await api.get(`/user/getAllUsers`);
-      setUserData(Users.data);
+      try {
+        const Users = await api.get(`/user/getAllUsers`);
+        setUserData(Users.data);
+      } catch (e: any) {
+        console.log(e?.response);
+      }
     };
     fetchData();
   }, [setUserData]);
   const SingleUserStatusHandler = async (id: number) => {
-    const res = await api.patch(`/user/updateStatusById/${id}`);
-    const data = await res.data;
-    const Users = await api.get(`/user/getAllUsers`);
-    setUserData(Users.data);
+    try {
+      const res = await api.patch(`/user/updateStatusById/${id}`);
+      const data = await res.data;
+      const Users = await api.get(`/user/getAllUsers`);
+      setUserData(Users.data);
+    } catch (e: any) {
+      console.log(e?.response);
+    }
   };
   const handleDeleteCloseDialog = () => {
     setDeleteDialogOpen(false);
@@ -45,13 +53,17 @@ export default function UserGrid({
     setDeleteDialogOpen(true);
   };
   const handleUserDeleteHandler = async () => {
-    const res = await api.delete(`/user/deleteUser/${SlectedId}`);
-    const data = await res.data;
-    const Users = await api.get(`/user/getAllUsers`);
-    if (res.status === 204) {
-      setOpenDeleteSnackBar(true);
-      setDeleteDialogOpen(false);
-      setUserData(Users.data);
+    try {
+      const res = await api.delete(`/user/deleteUser/${SlectedId}`);
+      const data = await res.data;
+      const Users = await api.get(`/user/getAllUsers`);
+      if (res.status === 204) {
+        setOpenDeleteSnackBar(true);
+        setDeleteDialogOpen(false);
+        setUserData(Users.data);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const actionColumn: GridColDef[] = [

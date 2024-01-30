@@ -69,23 +69,34 @@ export default function Role() {
     setbulkStatusDialog(true);
   };
   const bulkDeleteConformation = async () => {
-    const res = await api.delete("/user/deleteBatchRole", {
-      data: selectionIDArr,
-    });
-    const Users = await api.get(`/user/getAllRoles?show=false`);
-    if (res.status === 200) {
-      setblkdltSucess(true);
-      setRoleData(Users.data);
-      setbulkDeleteDialog(false);
+    try {
+      const res = await api.delete("/user/deleteBatchRole", {
+        data: selectionIDArr,
+      });
+      const Users = await api.get(`/user/getAllRoles?show=false`);
+      if (res.status === 200) {
+        setblkdltSucess(true);
+        setRoleData(Users.data);
+        setbulkDeleteDialog(false);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const bulkStatusConformation = async () => {
-    const res = await api.patch("/user/updateBulkStatusRoleId", selectionIDArr);
-    const Roles = await api.get(`/user/getAllRoles?show=false`);
-    if (res.status === 200) {
-      setRoleData(Roles.data);
-      setbulkStatusDialog(false);
-      setblkstatusSucess(true);
+    try {
+      const res = await api.patch(
+        "/user/updateBulkStatusRoleId",
+        selectionIDArr
+      );
+      const Roles = await api.get(`/user/getAllRoles?show=false`);
+      if (res.status === 200) {
+        setRoleData(Roles.data);
+        setbulkStatusDialog(false);
+        setblkstatusSucess(true);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const handleOpenDeleteConfirmationDialog = () => {

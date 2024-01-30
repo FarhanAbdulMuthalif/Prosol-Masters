@@ -4,6 +4,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
+import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
@@ -246,6 +247,14 @@ export default function CreateMastertWithDropdown() {
                     onChange={handleMultiSelectChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
+                  />
+                ) : data.dataType === "radioButton" ? (
+                  <RadioGroupComponent
+                    label={`${data.fieldName} :`}
+                    name={data.fieldName}
+                    options={data.enums ? data?.enums : []}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
                   />
                 ) : (
                   ""

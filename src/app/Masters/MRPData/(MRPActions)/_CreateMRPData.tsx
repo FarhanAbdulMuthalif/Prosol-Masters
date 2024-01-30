@@ -14,14 +14,14 @@ import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
   PostCreateFieldData,
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMasterMRPDataTabs,
+  mastersMRPSubFields,
   mastersProps,
-} from "../../../TypesStore";
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastert() {
+export default function CreateMRPData() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
@@ -60,12 +60,14 @@ export default function CreateMastert() {
     return null;
   }
   const fieldName = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersMRPSubFields)[
+      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    ]?.keyName
   }Name`;
   const fieldCode = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersMRPSubFields)[
+      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    ]?.keyName
   }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
@@ -90,8 +92,8 @@ export default function CreateMastert() {
       try {
         const response = await api.post(
           `${
-            (masters[ExactPath] as mastersPlantSubFields)[
-              SelectedMasterDatatab as ValidMasterDataTabs
+            (masters[ExactPath] as mastersMRPSubFields)[
+              SelectedMasterDatatab as ValidMasterMRPDataTabs
             ].create
           }`,
           formData
@@ -116,8 +118,9 @@ export default function CreateMastert() {
       ...prevData,
       [name]: value,
       [`${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
+        (masters[ExactPath] as mastersMRPSubFields)[
+          SelectedMasterDatatab as ValidMasterMRPDataTabs
+        ]?.keyName
       }Status`]: true,
     }));
   };
@@ -151,10 +154,7 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.name}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`}
+            name={`${fieldName}Name`}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
@@ -167,10 +167,7 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.code}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`}
+            name={`${fieldCode}Code`}
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

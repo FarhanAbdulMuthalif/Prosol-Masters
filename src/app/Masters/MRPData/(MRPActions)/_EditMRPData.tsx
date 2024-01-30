@@ -13,25 +13,27 @@ import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
+  KeysToRemoveEditMaster,
   PostCreateFieldData,
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMasterMRPDataTabs,
+  mastersMRPSubFields,
   mastersProps,
-} from "../../../TypesStore";
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastert() {
+export default function EditMRPData({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
   });
-  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
-  const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  // const { id, updatedAt, updatedBy, createdBy, createdAt } = EditDataGet;
 
-  const [formData, setFormData] = useState<any>({});
+  const PlantDataCon = useContext(UseContextHook);
+  const { masters, SelectedMasterDatatab, settabValue } = PlantDataCon;
+  const [formData, setFormData] = useState<any>(EditDataGet);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -56,53 +58,60 @@ export default function CreateMastert() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
+  if (!SelectedMasterDatatab || !settabValue) {
     return null;
   }
   const fieldName = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersMRPSubFields)[
+      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    ]?.keyName
   }Name`;
   const fieldCode = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersMRPSubFields)[
+      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    ]?.keyName
   }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    // setFormData((prevData: any) => ({
-    //   ...prevData,
-    //   [`${
-    //     SelectedMasterDatatab.charAt(0).toLowerCase() +
-    //     SelectedMasterDatatab.slice(1)
-    //   }Status`]: true,
-    // }));
-    console.log(formData);
-    if (formData[fieldName].length === 0) {
+    if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (formData[fieldCode].length === 0) {
+    if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
     } else {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
+    const { id, email, ...filteredData } = formData;
+
+    // List of keys to be removed
+    const keysToRemove: KeysToRemoveEditMaster[] = [
+      "createdAt",
+      "createdBy",
+      "updatedAt",
+      "updatedBy",
+    ];
+
+    // Create a new object by filtering out specified keys
+    const filteredUserData = { ...filteredData };
+
+    keysToRemove.forEach((key) => delete filteredUserData[key]);
     if (formData[fieldCode].length && formData[fieldName].length > 0) {
       try {
-        const response = await api.post(
+        const response = await api.put(
           `${
-            (masters[ExactPath] as mastersPlantSubFields)[
-              SelectedMasterDatatab as ValidMasterDataTabs
-            ].create
-          }`,
-          formData
+            (masters[ExactPath] as mastersMRPSubFields)[
+              SelectedMasterDatatab as ValidMasterMRPDataTabs
+            ].update
+          }/${id}`,
+          filteredUserData
         );
         const data = await response.data;
-        if (response.status === 201) {
+        if (response.status === 200) {
           console.log(data);
-          setFormData((prev: any) => {
-            return { [fieldName]: "", [fieldCode]: "" };
-          });
+          setFormData({});
           setOpenSnackbar(true);
+          settabValue("table");
         }
       } catch (e: any) {
         console.log(e?.response);
@@ -112,18 +121,8 @@ export default function CreateMastert() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData: any) => ({
-      ...prevData,
-      [name]: value,
-      [`${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
-      }Status`]: true,
-    }));
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
-  // const dynamicFieldRender={
-  //   textField:
-  // }
   const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
@@ -135,7 +134,6 @@ export default function CreateMastert() {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
-
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
@@ -143,7 +141,7 @@ export default function CreateMastert() {
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Name`}
             type="text"
-            value={formData ? formData[fieldName] : ""}
+            value={formData[fieldName]}
             onChange={handleInputChange}
             helperText={
               plantFormError.name
@@ -151,15 +149,12 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.name}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`}
+            name={fieldName}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
             type="text"
-            value={formData ? formData[fieldCode] : ""}
+            value={formData[fieldCode]}
             onChange={handleInputChange}
             helperText={
               plantFormError.code
@@ -167,10 +162,7 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.code}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`}
+            name={fieldCode}
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
@@ -236,13 +228,43 @@ export default function CreateMastert() {
             );
           })}
         </div>
+        <div className="edit-master-audit-trial-view">
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.createdBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.createdAt}
+              </p>
+            </div>
+          </div>
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.updatedBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData.updatedAt}
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
       <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
+        message={`${SelectedMasterDatatab} updated Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}

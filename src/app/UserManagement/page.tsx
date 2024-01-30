@@ -72,26 +72,34 @@ export default function UserManagement() {
     setbulkStatusDialog(true);
   };
   const bulkDeleteConformation = async () => {
-    const res = await api.delete("/user/deleteBatchUser", {
-      data: selectionIDArr,
-    });
-    const Users = await api.get(`/user/getAllUsers`);
-    if (res.status === 200) {
-      setblkdltSucess(true);
-      setUserData(Users.data);
-      setbulkDeleteDialog(false);
+    try {
+      const res = await api.delete("/user/deleteBatchUser", {
+        data: selectionIDArr,
+      });
+      const Users = await api.get(`/user/getAllUsers`);
+      if (res.status === 200) {
+        setblkdltSucess(true);
+        setUserData(Users.data);
+        setbulkDeleteDialog(false);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const bulkStatusConformation = async () => {
-    const res = await api.patch(
-      "/user/updateBulkStatusUsingId",
-      selectionIDArr
-    );
-    const Users = await api.get(`/user/getAllUsers`);
-    if (res.status === 200) {
-      setUserData(Users.data);
-      setbulkStatusDialog(false);
-      setblkstatusSucess(true);
+    try {
+      const res = await api.patch(
+        "/user/updateBulkStatusUsingId",
+        selectionIDArr
+      );
+      const Users = await api.get(`/user/getAllUsers`);
+      if (res.status === 200) {
+        setUserData(Users.data);
+        setbulkStatusDialog(false);
+        setblkstatusSucess(true);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   const handleOpenDeleteConfirmationDialog = () => {

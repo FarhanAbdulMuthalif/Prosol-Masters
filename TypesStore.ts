@@ -32,6 +32,7 @@ export type mastersProps = {
   Plant: mastersPlantSubFields;
   General: mastersGeneralSubFields;
   MRPData: mastersMRPSubFields;
+  SalesAndOthers: mastersSalesAndOthersSubFields;
 };
 
 export type mastersPlantSubFields = {
@@ -78,8 +79,23 @@ export type mastersMRPSubFields = {
   LOTSize: mastersGeneralSubsubFields;
   ProcurementType: mastersGeneralSubsubFields;
   PlanningStrgyGrp: mastersGeneralSubsubFields;
-  AvailableGroup: mastersGeneralSubsubFields;
+  AvailCheck: mastersGeneralSubsubFields;
   ScheduleMargin: mastersGeneralSubsubFields;
+};
+export type mastersSalesAndOthersSubFields = {
+  AccAssignment: mastersGeneralSubsubFields;
+  DeliveringPlant: mastersGeneralSubsubFields;
+  DistributionChannel: mastersGeneralSubsubFields;
+  ItemCategoryGroup: mastersGeneralSubsubFields;
+  LoadingGroup: mastersGeneralSubsubFields;
+  MaterialStrategicGroup: mastersGeneralSubsubFields;
+  OrderUnit: mastersGeneralSubsubFields;
+  PurchasingGroup: mastersGeneralSubsubFields;
+  PurchasingValueKey: mastersGeneralSubsubFields;
+  SalesOrganization: mastersGeneralSubsubFields;
+  TaxClassificaionClass: mastersGeneralSubsubFields;
+  TaxClassificationType: mastersGeneralSubsubFields;
+  TransportationGroup: mastersGeneralSubsubFields;
 };
 export type mastersGeneralSubsubFields = {
   getAll: string;
@@ -97,6 +113,20 @@ export type mastersGeneralSubsubFields = {
   includePlantDropdown: boolean;
   keyName: string;
 };
+export type ValidMastersSalesAndOthersTabs =
+  | "AccAssignment"
+  | "DeliveringPlant"
+  | "DistributionChannel"
+  | "ItemCategoryGroup"
+  | "LoadingGroup"
+  | "MaterialStrategicGroup"
+  | "OrderUnit"
+  | "PurchasingGroup"
+  | "PurchasingValueKey"
+  | "SalesOrganization"
+  | "TaxClassificaionClass"
+  | "TaxClassificationType"
+  | "TransportationGroup";
 export type ValidMasterDataTabs =
   | "Plant"
   | "ProfitCenter"
@@ -112,6 +142,14 @@ export type ValidMasterGeneralDataTabs =
   | "InspectionType"
   | "Division"
   | "SalesUnit";
+export type ValidMasterMRPDataTabs =
+  | "MRPType"
+  | "MRPController"
+  | "LOTSize"
+  | "ProcurementType"
+  | "PlanningStrgyGrp"
+  | "AvailCheck"
+  | "ScheduleMargin";
 
 export interface PostCreateFieldData {
   id?: number;
@@ -175,4 +213,5 @@ export type KeysToRemoveEditMaster =
   | "updatedAt"
   | "updatedBy"
   | "plant"
+  | "salesOrganization"
   | "storageLocation";

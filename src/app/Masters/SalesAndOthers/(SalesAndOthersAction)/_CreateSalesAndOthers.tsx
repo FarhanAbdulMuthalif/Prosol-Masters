@@ -14,14 +14,14 @@ import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
   PostCreateFieldData,
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMastersSalesAndOthersTabs,
   mastersProps,
-} from "../../../TypesStore";
+  mastersSalesAndOthersSubFields,
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function CreateMastert() {
+export default function CreateSalesAndOthers() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
@@ -60,12 +60,14 @@ export default function CreateMastert() {
     return null;
   }
   const fieldName = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+    ]?.keyName
   }Name`;
   const fieldCode = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+    ]?.keyName
   }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
@@ -90,8 +92,8 @@ export default function CreateMastert() {
       try {
         const response = await api.post(
           `${
-            (masters[ExactPath] as mastersPlantSubFields)[
-              SelectedMasterDatatab as ValidMasterDataTabs
+            (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+              SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
             ].create
           }`,
           formData
@@ -116,8 +118,9 @@ export default function CreateMastert() {
       ...prevData,
       [name]: value,
       [`${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
+        (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+          SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+        ]?.keyName
       }Status`]: true,
     }));
   };
@@ -151,10 +154,7 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.name}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`}
+            name={fieldName}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
@@ -167,10 +167,7 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.code}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`}
+            name={fieldCode}
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

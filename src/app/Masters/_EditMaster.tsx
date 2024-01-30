@@ -2,6 +2,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
@@ -94,20 +95,24 @@ export default function EditMaster({ EditDataGet }: any) {
 
     keysToRemove.forEach((key) => delete filteredUserData[key]);
     if (formData[fieldCode].length && formData[fieldName].length > 0) {
-      const response = await api.put(
-        `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
-          ].update
-        }/${id}`,
-        filteredUserData
-      );
-      const data = await response.data;
-      if (response.status === 200) {
-        console.log(data);
-        setFormData({});
-        setOpenSnackbar(true);
-        settabValue("table");
+      try {
+        const response = await api.put(
+          `${
+            (masters[ExactPath] as mastersPlantSubFields)[
+              SelectedMasterDatatab as ValidMasterDataTabs
+            ].update
+          }/${id}`,
+          filteredUserData
+        );
+        const data = await response.data;
+        if (response.status === 200) {
+          console.log(data);
+          setFormData({});
+          setOpenSnackbar(true);
+          settabValue("table");
+        }
+      } catch (e: any) {
+        console.log(e?.response);
       }
     }
   };
@@ -206,6 +211,14 @@ export default function EditMaster({ EditDataGet }: any) {
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
                   />
+                ) : data.dataType === "radioButton" ? (
+                  <RadioGroupComponent
+                    label={`${data.fieldName} :`}
+                    name={data.fieldName}
+                    options={data.enums ? data?.enums : []}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
+                  />
                 ) : (
                   ""
                 )}
@@ -218,13 +231,13 @@ export default function EditMaster({ EditDataGet }: any) {
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Created By :</p>
               <p className="edit-master-audit-trial-label-value">
-                {formData.createdBy}
+                {formData?.createdBy}
               </p>
             </div>
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Created At :</p>
               <p className="edit-master-audit-trial-label-value">
-                {formData.createdAt}
+                {formData?.createdAt}
               </p>
             </div>
           </div>
@@ -232,13 +245,13 @@ export default function EditMaster({ EditDataGet }: any) {
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Updated By :</p>
               <p className="edit-master-audit-trial-label-value">
-                {formData.updatedBy}
+                {formData?.updatedBy}
               </p>
             </div>
             <div className="edit-master-audit-trial-single-view">
               <p className="edit-master-audit-trial-label">Updated At :</p>
               <p className="edit-master-audit-trial-label-value">
-                {formData.updatedAt}
+                {formData?.updatedAt}
               </p>
             </div>
           </div>

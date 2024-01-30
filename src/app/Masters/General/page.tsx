@@ -177,23 +177,27 @@ export default function General() {
     }
   };
   const handlePlantBulkDeleteChangeAction = async () => {
-    const res = await api.delete(
-      `${
-        (masters[ExactPath] as mastersPlantSubFields)[
-          SelectedMasterDatatab as ValidMasterDataTabs
-        ]?.deleteBulk
-      }`,
-      { data: selectionIDArr }
-    );
-    const dataPlant = await getAllPlantData(`${getAllLinkName}`);
+    try {
+      const res = await api.delete(
+        `${
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ]?.deleteBulk
+        }`,
+        { data: selectionIDArr }
+      );
+      const dataPlant = await getAllPlantData(`${getAllLinkName}`);
 
-    if (res.status === 204) {
-      setConfirmationBulkDeleteDialogOpen(false);
-      setOpenSnackbar(true);
-      if (setPlantData) {
-        setPlantData(dataPlant);
-        setConfirmationDeleteDialogOpen(false);
+      if (res.status === 204) {
+        setConfirmationBulkDeleteDialogOpen(false);
+        setOpenSnackbar(true);
+        if (setPlantData) {
+          setPlantData(dataPlant);
+          setConfirmationDeleteDialogOpen(false);
+        }
       }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
 

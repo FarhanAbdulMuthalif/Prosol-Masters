@@ -253,7 +253,6 @@ export default function CreateDreawer({
         writable: true,
         showAsColumn: true,
         enums: ChipArrayList,
-
         dropDowns: [],
       };
       if (
@@ -263,6 +262,15 @@ export default function CreateDreawer({
         return alert("required field should not be empty");
       }
       try {
+        const res = await api.post(
+          `/dynamic/saveField/${SelectedMasterDatatab}`,
+          dataSet
+        );
+        if (res.status === 201) {
+          setSnackBarSucess(true);
+          HandlerCloseDrawer();
+          settabValue("table");
+        }
       } catch (e: any) {
         console.log(e.response);
         if (e.response && e.response.data) {

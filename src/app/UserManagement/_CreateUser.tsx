@@ -20,7 +20,7 @@ export default function CreateUser() {
   const { data: departentArray } = useFetch("/plant/getAllDepartment") ?? {
     data: [],
   };
-  const { data: rolesArray } = useFetch("/user/getAllRoles") ?? {
+  const { data: rolesArray } = useFetch("/user/getAllRoles?show=false") ?? {
     data: [],
   };
   const PlantDropDownData = originalArray
@@ -121,11 +121,15 @@ export default function CreateUser() {
       return;
     }
     setFormErrorMessage("");
-    const res = await api.post("/user/saveUser", formData);
-    const data = res.data;
-    if (res.status === 201) {
-      setopenSnackbar(true);
-      setFormData(UserInitialState);
+    try {
+      const res = await api.post("/user/saveUser", formData);
+      const data = res.data;
+      if (res.status === 201) {
+        setopenSnackbar(true);
+        setFormData(UserInitialState);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
   return (

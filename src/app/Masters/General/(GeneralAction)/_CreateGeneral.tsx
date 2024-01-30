@@ -2,6 +2,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
@@ -88,21 +89,25 @@ export default function CreateGeneral() {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
     if (formData[fieldCode].length && formData[fieldName].length > 0) {
-      const response = await api.post(
-        `${
-          (masters[ExactPath] as mastersGeneralSubFields)[
-            SelectedMasterDatatab as ValidMasterGeneralDataTabs
-          ].create
-        }`,
-        formData
-      );
-      const data = await response.data;
-      if (response.status === 201) {
-        console.log(data);
-        setFormData((prev: any) => {
-          return { [fieldName]: "", [fieldCode]: "" };
-        });
-        setOpenSnackbar(true);
+      try {
+        const response = await api.post(
+          `${
+            (masters[ExactPath] as mastersGeneralSubFields)[
+              SelectedMasterDatatab as ValidMasterGeneralDataTabs
+            ].create
+          }`,
+          formData
+        );
+        const data = await response.data;
+        if (response.status === 201) {
+          console.log(data);
+          setFormData((prev: any) => {
+            return { [fieldName]: "", [fieldCode]: "" };
+          });
+          setOpenSnackbar(true);
+        }
+      } catch (e: any) {
+        console.log(e?.response);
       }
     }
   };
@@ -220,6 +225,14 @@ export default function CreateGeneral() {
                     onChange={handleMultiSelectChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
+                  />
+                ) : data.dataType === "radioButton" ? (
+                  <RadioGroupComponent
+                    label={`${data.fieldName} :`}
+                    name={data.fieldName}
+                    options={data.enums ? data?.enums : []}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
                   />
                 ) : (
                   ""

@@ -1,7 +1,9 @@
 "use client";
+import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
@@ -13,25 +15,28 @@ import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
+  KeysToRemoveEditMaster,
   PostCreateFieldData,
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMastersSalesAndOthersTabs,
   mastersProps,
-} from "../../../TypesStore";
+  mastersSalesAndOthersSubFields,
+} from "../../../../../../TypesStore";
 
-// Import statements...
-
-export default function CreateMastert() {
+export default function EditSalesOrganization({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
   });
-  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
-  const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
 
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>(EditDataGet);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const PlantDataCon = useContext(UseContextHook);
+  const { SelectedMasterDatatab, masters, settabValue } = PlantDataCon;
+  const { data: originalArray } = useFetch("/sales/getAllSo") ?? {
+    data: [],
+  };
+  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -46,8 +51,13 @@ export default function CreateMastert() {
         console.log(e?.data?.message);
       }
     };
+    setFormData((prev: any) => ({
+      ...prev,
+      salesOrganizationId: prev?.plant?.id,
+    }));
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab]);
+
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -56,75 +66,95 @@ export default function CreateMastert() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
+
+  if (!SelectedMasterDatatab || !settabValue) {
     return null;
   }
   const fieldName = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+    ].keyName
   }Name`;
   const fieldCode = `${
-    SelectedMasterDatatab.charAt(0).toLowerCase() +
-    SelectedMasterDatatab.slice(1)
+    (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+    ].keyName
   }Code`;
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    // setFormData((prevData: any) => ({
-    //   ...prevData,
-    //   [`${
-    //     SelectedMasterDatatab.charAt(0).toLowerCase() +
-    //     SelectedMasterDatatab.slice(1)
-    //   }Status`]: true,
-    // }));
-    console.log(formData);
-    if (formData[fieldName].length === 0) {
+    if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (formData[fieldCode].length === 0) {
+    if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
     } else {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
-    if (formData[fieldCode].length && formData[fieldName].length > 0) {
+    const { id, email, ...filteredData } = formData;
+
+    // List of keys to be removed
+    const keysToRemove: KeysToRemoveEditMaster[] = [
+      "createdAt",
+      "createdBy",
+      "updatedAt",
+      "updatedBy",
+      "salesOrganization",
+    ];
+
+    // Create a new object by filtering out specified keys
+    const filteredUserData = { ...filteredData };
+
+    keysToRemove.forEach((key) => delete filteredUserData[key]);
+    if (formData[fieldCode]?.length && formData[fieldName]?.length > 0) {
       try {
-        const response = await api.post(
+        const response = await api.put(
           `${
-            (masters[ExactPath] as mastersPlantSubFields)[
-              SelectedMasterDatatab as ValidMasterDataTabs
-            ].create
-          }`,
-          formData
+            (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+              SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+            ].update
+          }/${id}`,
+          filteredUserData
         );
         const data = await response.data;
-        if (response.status === 201) {
+        if (response.status === 200) {
           console.log(data);
-          setFormData((prev: any) => {
-            return { [fieldName]: "", [fieldCode]: "" };
-          });
           setOpenSnackbar(true);
+          settabValue("table");
         }
       } catch (e: any) {
         console.log(e?.response);
       }
     }
   };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({
       ...prevData,
-      [name]: value,
-      [`${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
-      }Status`]: true,
+      salesOrganizationId: value,
     }));
   };
-  // const dynamicFieldRender={
-  //   textField:
-  // }
-  const handleSelectChange = (e: SelectChangeEvent) => {
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+  };
+
+  const PlantDropDownData = originalArray
+    ? (originalArray as { id: number; soName: string }[]).map(
+        ({ id, soName }) => ({
+          value: id,
+          label: soName,
+        })
+      )
+    : [];
+  if (!PlantDropDownData) {
+    return null;
+  }
+  const DwnValue = PlantDropDownData.find(
+    (data) => data.value === formData.salesOrganizationId
+  )?.label;
+  const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
@@ -151,10 +181,7 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.name}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`}
+            name={`${fieldName}Name`}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
@@ -167,10 +194,14 @@ export default function CreateMastert() {
                 : ""
             }
             error={plantFormError.code}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`}
+            name={`${fieldCode}Code`}
+          />
+          <NameSingleSelectDropdown
+            value={DwnValue ? DwnValue : ""}
+            onChange={handleSelectChange}
+            options={PlantDropDownData}
+            label={"Select Sales Organization"}
+            name="salesOrganizationId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
@@ -208,7 +239,7 @@ export default function CreateMastert() {
                   <DynamicSingleSelectDropdown
                     label={`Select ${data.fieldName}`}
                     value={formData[data.fieldName]}
-                    onChange={handleSelectChange}
+                    onChange={handleSelectDynChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
                   />
@@ -236,13 +267,43 @@ export default function CreateMastert() {
             );
           })}
         </div>
+        <div className="edit-master-audit-trial-view">
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.createdBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Created At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.createdAt}
+              </p>
+            </div>
+          </div>
+          <div className="edit-master-audit-wrpr">
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated By :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.updatedBy}
+              </p>
+            </div>
+            <div className="edit-master-audit-trial-single-view">
+              <p className="edit-master-audit-trial-label">Updated At :</p>
+              <p className="edit-master-audit-trial-label-value">
+                {formData?.updatedAt}
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
       <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
+        message={`${SelectedMasterDatatab} updated Sucessfully!`}
         severity="success"
         setOpen={setOpenSnackbar}
         open={openSnackbar}

@@ -4,6 +4,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
+import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
@@ -66,9 +67,9 @@ export default function CreateValuationClass() {
     return null;
   }
   const PlantDropDownData = originalArray
-    ? (originalArray as { materialCode: number; materialName: string }[]).map(
-        ({ materialCode, materialName }) => ({
-          value: materialCode,
+    ? (originalArray as { id: number; materialName: string }[]).map(
+        ({ id, materialName }) => ({
+          value: id,
           label: materialName,
         })
       )
@@ -94,7 +95,7 @@ export default function CreateValuationClass() {
     if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
     }
-    if (formData["plantId"] < 1) {
+    if (formData["materialTypeId"] < 1) {
       setplantFormError((prev) => ({ ...prev, id: true }));
     } else {
       setplantFormError((prev) => ({ name: false, code: false, id: false }));
@@ -142,7 +143,7 @@ export default function CreateValuationClass() {
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
   const DwnValue = PlantDropDownData.find(
-    (data) => data.value === formData?.plantId
+    (data) => data.value === formData?.materialTypeId
   )?.label;
   const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
@@ -195,8 +196,8 @@ export default function CreateValuationClass() {
             value={DwnValue ? DwnValue : ""}
             onChange={handleSelectChange}
             options={PlantDropDownData}
-            label={"Select Plant"}
-            name="plantId"
+            label={"Select Material Type"}
+            name="materialTypeId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
@@ -246,6 +247,14 @@ export default function CreateValuationClass() {
                     onChange={handleMultiSelectChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
+                  />
+                ) : data.dataType === "radioButton" ? (
+                  <RadioGroupComponent
+                    label={`${data.fieldName} :`}
+                    name={data.fieldName}
+                    options={data.enums ? data?.enums : []}
+                    value={formData[data.fieldName]}
+                    onChange={handleInputChange}
                   />
                 ) : (
                   ""

@@ -2,41 +2,33 @@
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
-import OutlinedButton from "@/components/Button/OutlineButton";
-import UploadButton from "@/components/Button/UploadButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
 import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
-import api, { URL_FIX_BASE_PATH } from "@/components/api";
+import api from "@/components/api";
 import { getAllPlantData } from "@/utils/masters/plant";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
-import { MouseEvent, ReactNode, useContext, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import {
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMastersSalesAndOthersTabs,
   mastersProps,
-} from "../../../TypesStore";
-import CreateDepartmentMastert from "./(PlantAction)/(Department)/_CreateDepartment";
-import EditDepartmentMastert from "./(PlantAction)/(Department)/_EditDepartment";
-import CreateStorageBin from "./(PlantAction)/(StorageBin)/_CreateStorageBin";
-import EditStorageBin from "./(PlantAction)/(StorageBin)/_EditStorageBin";
-import CreateValuationClass from "./(PlantAction)/(ValuationClass)/_CreateValuationClass";
-import EditValuationClass from "./(PlantAction)/(ValuationClass)/_EditValuationClass";
-import CreateMastert from "./_CreateMaster";
-import CreateMastertWithDropdown from "./_CreateWithDropdown";
-import EditMaster from "./_EditMaster";
-import EditMasterWithDropdown from "./_EditWithDropdown";
-import Plantgrid from "./_Plantgrid";
+  mastersSalesAndOthersSubFields,
+} from "../../../../TypesStore";
+
+import CreateSalesOrganization from "./(SalesAndOthersAction)/(SalesOrganiztion))/_CreateSalesOrganization";
+import EditSalesOrganization from "./(SalesAndOthersAction)/(SalesOrganiztion))/_EditSalesOrganization";
+import CreateSalesAndOthers from "./(SalesAndOthersAction)/_CreateSalesAndOthers";
+import CreateSalesAndOtherswithPlant from "./(SalesAndOthersAction)/_CreateSalesAndOtherswithPlant";
+import EditSalesAndOthers from "./(SalesAndOthersAction)/_EditSalesAndOthers";
+import EditSalesAndOthersWithPlant from "./(SalesAndOthersAction)/_EditSalesAndOthersWithPlant";
+import SalesAndOthersGrid from "./(SalesAndOthersAction)/_SalesAndOthersGrid";
 import "./style.scss";
 
-export default function Masters() {
-  // const [tabValue, settabValue] = useState("table");
+export default function SalesAndOthers() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -46,7 +38,6 @@ export default function Masters() {
   ] = useState(false);
   const [CreateDrawerOpen, setCreateDrawerOpen] = useState(false);
   const [selectionIDArr, setSelectionIDArr] = useState<GridRowId[]>([]);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedId, setselectedId] = useState(0);
   const [isConfirmationDeleteDialogOpen, setConfirmationDeleteDialogOpen] =
     useState(false);
@@ -69,9 +60,13 @@ export default function Masters() {
     setSelectedMasterDatatab,
     tabValue,
     settabValue,
-
     editTabShow,
   } = PlantDataCon;
+  useEffect(() => {
+    if (setSelectedMasterDatatab) {
+      setSelectedMasterDatatab("AccAssignment");
+    }
+  }, [setSelectedMasterDatatab]);
   const auth = UseAuth();
   if (!auth) {
     return null;
@@ -100,14 +95,6 @@ export default function Masters() {
     },
   ];
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleOpenConfirmationDialog = () => {
     setConfirmationDialogOpen(!isConfirmationDialogOpen);
   };
@@ -126,9 +113,9 @@ export default function Masters() {
     try {
       const res = await api.delete(
         `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
-          ]?.delete
+          (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+            SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+          ].delete
         }/${selectedId}`
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
@@ -154,50 +141,42 @@ export default function Masters() {
   };
   const tabRenderValuePlant: Record<string, ReactNode> = {
     table: (
-      <Plantgrid
+      <SalesAndOthersGrid
         selectionIDArr={setSelectionIDArr}
         handleOpenConfirmationDeleteDialog={GetIdandOpenHandler}
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: (masters[ExactPath] as mastersPlantSubFields)[
-      SelectedMasterDatatab as ValidMasterDataTabs
+    create: (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
     ]?.includePlantDropdown ? (
-      <CreateMastertWithDropdown />
-    ) : SelectedMasterDatatab === "Department" ? (
-      <CreateDepartmentMastert />
-    ) : SelectedMasterDatatab === "StorageBin" ? (
-      <CreateStorageBin />
-    ) : SelectedMasterDatatab === "ValuationClass" ? (
-      <CreateValuationClass />
+      <CreateSalesAndOtherswithPlant />
+    ) : SelectedMasterDatatab === "DistributionChannel" ? (
+      <CreateSalesOrganization />
     ) : (
-      <CreateMastert />
+      <CreateSalesAndOthers />
     ),
-    edit: (masters[ExactPath] as mastersPlantSubFields)[
-      SelectedMasterDatatab as ValidMasterDataTabs
+    edit: (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+      SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
     ]?.includePlantDropdown ? (
-      <EditMasterWithDropdown EditDataGet={EditDataGet} />
-    ) : SelectedMasterDatatab === "Department" ? (
-      <EditDepartmentMastert EditDataGet={EditDataGet} />
-    ) : SelectedMasterDatatab === "StorageBin" ? (
-      <EditStorageBin EditDataGet={EditDataGet} />
-    ) : SelectedMasterDatatab === "ValuationClass" ? (
-      <EditValuationClass EditDataGet={EditDataGet} />
+      <EditSalesAndOthersWithPlant EditDataGet={EditDataGet} />
+    ) : SelectedMasterDatatab === "DistributionChannel" ? (
+      <EditSalesOrganization EditDataGet={EditDataGet} />
     ) : (
-      <EditMaster EditDataGet={EditDataGet} />
+      <EditSalesAndOthers EditDataGet={EditDataGet} />
     ),
   };
-  const getAllLinkName = (masters[ExactPath] as mastersPlantSubFields)[
-    SelectedMasterDatatab as ValidMasterDataTabs
+  const getAllLinkName = (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+    SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
   ]?.getAll;
 
   const handlePlantBulkStatusChangeAction = async () => {
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
-          ].updateBulkStatus
+          (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+            SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+          ]?.updateBulkStatus
         }`,
         selectionIDArr
       );
@@ -220,9 +199,9 @@ export default function Masters() {
     try {
       const res = await api.delete(
         `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
-          ].deleteBulk
+          (masters[ExactPath] as mastersSalesAndOthersSubFields)[
+            SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
+          ]?.deleteBulk
         }`,
         { data: selectionIDArr }
       );
@@ -238,45 +217,6 @@ export default function Masters() {
       }
     } catch (e: any) {
       console.log(e?.response);
-    }
-  };
-  const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersPlantSubFields)[
-      SelectedMasterDatatab as ValidMasterDataTabs
-    ]?.template
-  }`;
-  const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
-  const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersPlantSubFields)[
-      SelectedMasterDatatab as ValidMasterDataTabs
-    ]?.exportExcel
-  }`;
-  const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
-  const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersPlantSubFields)[
-      SelectedMasterDatatab as ValidMasterDataTabs
-    ]?.exportPdf
-  }`;
-  const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;
-  const handleDownload = async (DownloadUrl: string, DownloadName: string) => {
-    try {
-      const response = await api.get(DownloadUrl, {
-        responseType: "blob",
-      });
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${DownloadName}`);
-      document.body.appendChild(link);
-      link.click();
-      if (link.parentNode) {
-        link.parentNode.removeChild(link);
-      } else {
-        console.log("Failed to remove link from the document body.");
-      }
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -305,16 +245,6 @@ export default function Masters() {
           ) : (
             ""
           )}
-          <UploadButton />
-          <OutlinedButton
-            startIcon={<FileDownloadIcon />}
-            onClick={() => {
-              handleDownload(templateDownloadUrl, templateDownloadName);
-            }}
-          >
-            Download Template
-          </OutlinedButton>
-          <FillButton onClick={handleClick}>Export Type</FillButton>
           <FillButton
             onClick={() => {
               setCreateDrawerOpen(true);
@@ -322,30 +252,6 @@ export default function Masters() {
           >
             Add Fields
           </FillButton>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem
-              onClick={() => {
-                handleDownload(pdfDownloadUrl, pdfDownloadName);
-              }}
-            >
-              PDF Format
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleDownload(excelDownloadUrl, excelDownloadName);
-              }}
-            >
-              Excel Format
-            </MenuItem>
-          </Menu>
         </div>
       </div>
       <div className="masters-main-content-body">

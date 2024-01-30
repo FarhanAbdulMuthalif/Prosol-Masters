@@ -38,35 +38,45 @@ export default function Plantgrid({
   ]?.getAll;
   useEffect(() => {
     console.log(getAllLinkName);
-    const fetchData = async () => {
-      const res = await api.get(`${getAllLinkName}`);
-      console.log(res);
-      if (setPlantData) {
-        setPlantData(res.data);
-      }
-    };
-    fetchData();
+    if (getAllLinkName) {
+      const fetchData = async () => {
+        try {
+          const res = await api.get(`${getAllLinkName}`);
+          console.log(res);
+          if (setPlantData) {
+            setPlantData(res.data);
+          }
+        } catch (e: any) {
+          console.log(e?.response);
+        }
+      };
+      fetchData();
+    }
   }, [setPlantData, getAllLinkName]);
   if (!SelectedMasterDatatab || !PlantData) {
     return null;
   }
 
   const SinglePlantStatusHandler = async (id: number) => {
-    const res = await api.patch(
-      `${
-        (masters[ExactPath] as mastersPlantSubFields)[
-          SelectedMasterDatatab as ValidMasterDataTabs
-        ]?.updateStatus
-      }/${id}`
-    );
-    const dataPlantUpdate = await res.data;
+    try {
+      const res = await api.patch(
+        `${
+          (masters[ExactPath] as mastersPlantSubFields)[
+            SelectedMasterDatatab as ValidMasterDataTabs
+          ]?.updateStatus
+        }/${id}`
+      );
+      const dataPlantUpdate = await res.data;
 
-    const dataPlant = await getAllPlantData(`${getAllLinkName}`);
-    console.log(dataPlantUpdate);
-    if (res.status === 200) {
-      if (setPlantData) {
-        setPlantData(dataPlant);
+      const dataPlant = await getAllPlantData(`${getAllLinkName}`);
+      console.log(dataPlantUpdate);
+      if (res.status === 200) {
+        if (setPlantData) {
+          setPlantData(dataPlant);
+        }
       }
+    } catch (e: any) {
+      console.log(e?.response);
     }
   };
 
