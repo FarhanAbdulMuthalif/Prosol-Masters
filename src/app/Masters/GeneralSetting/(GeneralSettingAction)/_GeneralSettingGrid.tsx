@@ -9,11 +9,12 @@ import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import {
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
+  ValidMasterGeneralSettingabs,
+  masterGeneralSettingsSubFields,
   mastersProps,
-} from "../../../TypesStore";
-export default function Plantgrid({
+} from "../../../../../TypesStore";
+
+export default function GeneralSettingGrid({
   selectionIDArr,
   handleOpenConfirmationDeleteDialog,
   EditSetRecordAndGotoAction,
@@ -33,23 +34,21 @@ export default function Plantgrid({
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  const getAllLinkName = (masters[ExactPath] as mastersPlantSubFields)[
-    SelectedMasterDatatab as ValidMasterDataTabs
+  const getAllLinkName = (masters[ExactPath] as masterGeneralSettingsSubFields)[
+    SelectedMasterDatatab as ValidMasterGeneralSettingabs
   ]?.getAll;
   useEffect(() => {
-    if (getAllLinkName) {
-      const fetchData = async () => {
-        try {
-          const res = await api.get(`${getAllLinkName}`);
-          if (setPlantData) {
-            setPlantData(res.data);
-          }
-        } catch (e: any) {
-          console.log(e?.response);
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`${getAllLinkName}`);
+        if (setPlantData) {
+          setPlantData(res.data);
         }
-      };
-      fetchData();
-    }
+      } catch (e: any) {
+        console.log(e?.response);
+      }
+    };
+    fetchData();
   }, [setPlantData, getAllLinkName]);
   if (!SelectedMasterDatatab || !PlantData) {
     return null;
@@ -59,8 +58,8 @@ export default function Plantgrid({
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
+          (masters[ExactPath] as masterGeneralSettingsSubFields)[
+            SelectedMasterDatatab as ValidMasterGeneralSettingabs
           ]?.updateStatus
         }/${id}`
       );
@@ -92,8 +91,9 @@ export default function Plantgrid({
     (key: string) =>
       ![
         `${
-          SelectedMasterDatatab.charAt(0).toLowerCase() +
-          SelectedMasterDatatab.slice(1)
+          (masters[ExactPath] as masterGeneralSettingsSubFields)[
+            SelectedMasterDatatab as ValidMasterGeneralSettingabs
+          ]?.keyName
         }Status`,
         "createdAt",
         "updatedAt",
@@ -148,8 +148,9 @@ export default function Plantgrid({
   const actionColumn: GridColDef[] = [
     {
       field: `${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
+        (masters[ExactPath] as masterGeneralSettingsSubFields)[
+          SelectedMasterDatatab as ValidMasterGeneralSettingabs
+        ]?.keyName
       }Status`,
       headerName: "Status",
       flex: 1,
@@ -163,8 +164,9 @@ export default function Plantgrid({
               checked={
                 params.row[
                   `${
-                    SelectedMasterDatatab.charAt(0).toLowerCase() +
-                    SelectedMasterDatatab.slice(1)
+                    (masters[ExactPath] as masterGeneralSettingsSubFields)[
+                      SelectedMasterDatatab as ValidMasterGeneralSettingabs
+                    ]?.keyName
                   }Status`
                 ]
               }

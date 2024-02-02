@@ -16,41 +16,59 @@ export default function MastersSidebar() {
   } = CntxData;
   const auth = UseAuth();
   const pathName = usePathname();
-  const ExactPath = pathName
+  const ExactPathArr = pathName
     .split("/")
     .filter((n) => n)
     .filter((n) => n !== "Masters");
-  if (!auth) {
-    return null;
-  }
-  if (!setSelectedMasterDatatab || !SelectedMasterDatatab || !settabValue) {
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
+
+  if (
+    !auth ||
+    !setSelectedMasterDatatab ||
+    !SelectedMasterDatatab ||
+    !settabValue
+  ) {
     return null; // or some other fallback or loading state
   }
+  const selectedMasterData =
+    masters[
+      (ExactPathArr.length === 0
+        ? "Plant"
+        : ExactPathArr[0]) as keyof mastersProps
+    ];
+  // console.log(typeof ExactPath);
+  if (!selectedMasterData) {
+    return null; // or handle the case where selectedMasterData is undefined
+  }
   return (
-    <nav className="masters-sidenavbar-class">
-      <p>{SelectedMasterDatatab}</p>
-      <ul>
-        {Object.keys(
-          masters[
-            (ExactPath.length > 0
-              ? ExactPath
-              : ["Plant"])[0] as keyof mastersProps
-          ]
-        )?.map((data: string) => (
-          <li
-            key={data}
-            className={
-              SelectedMasterDatatab === data ? "active-second-bar-li-class" : ""
-            }
-            onClick={() => {
-              setSelectedMasterDatatab(data);
-              settabValue("table");
-            }}
-          >
-            {data}
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <>
+      {ExactPath !== "Vendor" ? (
+        <nav className="masters-sidenavbar-class">
+          <p>{SelectedMasterDatatab}</p>
+          <ul>
+            {Object.keys(selectedMasterData)?.map((data: string) => (
+              <li
+                key={data}
+                className={
+                  SelectedMasterDatatab === data
+                    ? "active-second-bar-li-class"
+                    : ""
+                }
+                onClick={() => {
+                  setSelectedMasterDatatab(data);
+                  settabValue("table");
+                }}
+              >
+                {data}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : (
+        ""
+      )}
+    </>
   );
 }

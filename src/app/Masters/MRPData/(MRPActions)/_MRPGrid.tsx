@@ -38,7 +38,6 @@ export default function MRPGrid({
     SelectedMasterDatatab as ValidMasterMRPDataTabs
   ]?.getAll;
   useEffect(() => {
-    console.log(getAllLinkName);
     const fetchData = async () => {
       try {
         const res = await api.get(`${getAllLinkName}`);

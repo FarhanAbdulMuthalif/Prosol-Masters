@@ -75,7 +75,22 @@ label {
     rgb(9 30 66 / 8%) 0px 2px 4px 1px;
   transition: all 500ms;
 }
-
+.masters-vendor-main-content-section {
+  height: 100%;
+  /* flex-grow: 1; */
+  width: 100%;
+  min-width: calc(100vw - 200px);
+  max-width: calc(100vw - 60px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 5px;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+    rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+  transition: all 500ms;
+}
 .close-icon-wrapper {
   height: 34px;
   width: 34px;
@@ -112,13 +127,14 @@ label {
 }
 /* For WebKit browsers (Chrome, Safari) */
 *::-webkit-scrollbar {
-  width: 8px; /* Adjust the width as per your preference */
-  background-color: #8888882f;
+  width: 8px !important; /* Adjust the width as per your preference */
+  height: 8px;
+  background-color: #8888882f !important;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color of the scrollbar thumb */
-  border-radius: 4px; /* Rounded corners for the thumb */
+  background-color: #888 !important; /* Color of the scrollbar thumb */
+  border-radius: 4px !important; /* Rounded corners for the thumb */
 }
 .export-import-header-master-div {
   height: 40px;

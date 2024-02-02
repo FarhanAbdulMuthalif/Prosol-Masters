@@ -15,22 +15,20 @@ import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
 import {
-  ValidMasterMRPDataTabs,
-  mastersMRPSubFields,
   mastersProps,
+  mastersVendorSubsubFields,
 } from "../../../../TypesStore";
 
 import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
 import { Menu, MenuItem } from "@mui/material";
-import CreateMRPData from "./(MRPActions)/_CreateMRPData";
-import CreateMRPDataWithPlant from "./(MRPActions)/_CreateMRPDataWithPlant";
-import EditMRPData from "./(MRPActions)/_EditMRPData";
-import EditMRPDataWithPlant from "./(MRPActions)/_EditMRPDataWithPlant";
-import MRPGrid from "./(MRPActions)/_MRPGrid";
+
+import CreateVendor from "./(VendorAction)/_CreateVendor";
+import EditVendor from "./(VendorAction)/_EditVendor";
+import VendorGrid from "./(VendorAction)/_VendorGrid";
 import "./style.scss";
 
-export default function MRPData() {
+export default function Vendor() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -75,7 +73,7 @@ export default function MRPData() {
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
-      setSelectedMasterDatatab("MRPType");
+      setSelectedMasterDatatab("Vendor");
     }
   }, [setSelectedMasterDatatab]);
   const auth = UseAuth();
@@ -124,9 +122,7 @@ export default function MRPData() {
     try {
       const res = await api.delete(
         `${
-          (masters[ExactPath] as mastersMRPSubFields)[
-            SelectedMasterDatatab as ValidMasterMRPDataTabs
-          ].delete
+          (masters[ExactPath] as mastersVendorSubsubFields).delete
         }/${selectedId}`
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
@@ -152,38 +148,23 @@ export default function MRPData() {
   };
   const tabRenderValuePlant: Record<string, ReactNode> = {
     table: (
-      <MRPGrid
+      <VendorGrid
         selectionIDArr={setSelectionIDArr}
         handleOpenConfirmationDeleteDialog={GetIdandOpenHandler}
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.includePlantDropdown ? (
-      <CreateMRPDataWithPlant />
-    ) : (
-      <CreateMRPData />
-    ),
-    edit: (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.includePlantDropdown ? (
-      <EditMRPDataWithPlant EditDataGet={EditDataGet} />
-    ) : (
-      <EditMRPData EditDataGet={EditDataGet} />
-    ),
+    create: <CreateVendor />,
+    edit: <EditVendor EditDataGet={EditDataGet} />,
   };
-  const getAllLinkName = (masters[ExactPath] as mastersMRPSubFields)[
-    SelectedMasterDatatab as ValidMasterMRPDataTabs
-  ]?.getAll;
+  const getAllLinkName = (masters[ExactPath] as mastersVendorSubsubFields)
+    ?.getAll;
 
   const handlePlantBulkStatusChangeAction = async () => {
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersMRPSubFields)[
-            SelectedMasterDatatab as ValidMasterMRPDataTabs
-          ]?.updateBulkStatus
+          (masters[ExactPath] as mastersVendorSubsubFields)?.updateBulkStatus
         }`,
         selectionIDArr
       );
@@ -205,11 +186,7 @@ export default function MRPData() {
   const handlePlantBulkDeleteChangeAction = async () => {
     try {
       const res = await api.delete(
-        `${
-          (masters[ExactPath] as mastersMRPSubFields)[
-            SelectedMasterDatatab as ValidMasterMRPDataTabs
-          ]?.deleteBulk
-        }`,
+        `${(masters[ExactPath] as mastersVendorSubsubFields)?.deleteBulk}`,
         { data: selectionIDArr }
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
@@ -227,21 +204,15 @@ export default function MRPData() {
     }
   };
   const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.template
+    (masters[ExactPath] as mastersVendorSubsubFields)?.template
   }`;
   const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
   const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.exportExcel
+    (masters[ExactPath] as mastersVendorSubsubFields)?.exportExcel
   }`;
   const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
   const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.exportPdf
+    (masters[ExactPath] as mastersVendorSubsubFields)?.exportPdf
   }`;
   const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;
   const handleDownload = async (DownloadUrl: string, DownloadName: string) => {
@@ -267,7 +238,7 @@ export default function MRPData() {
   };
 
   return (
-    <section className="masters-main-content-section">
+    <section className="masters-vendor-main-content-section">
       <div className="masters-main-content-header">
         <CustomTabs
           value={tabValue}

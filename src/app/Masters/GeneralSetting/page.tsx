@@ -15,22 +15,23 @@ import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
 import {
-  ValidMasterMRPDataTabs,
-  mastersMRPSubFields,
+  ValidMasterGeneralSettingabs,
+  masterGeneralSettingsSubFields,
   mastersProps,
 } from "../../../../TypesStore";
 
 import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
 import { Menu, MenuItem } from "@mui/material";
-import CreateMRPData from "./(MRPActions)/_CreateMRPData";
-import CreateMRPDataWithPlant from "./(MRPActions)/_CreateMRPDataWithPlant";
-import EditMRPData from "./(MRPActions)/_EditMRPData";
-import EditMRPDataWithPlant from "./(MRPActions)/_EditMRPDataWithPlant";
-import MRPGrid from "./(MRPActions)/_MRPGrid";
+
+import CreateSubGroupCode from "./(GeneralSettingAction)/(SubGroupCode/_CreateSubGroupCode";
+import EditSubGroupCode from "./(GeneralSettingAction)/(SubGroupCode/_EditSubGroupCode";
+import CreateGeneralSetting from "./(GeneralSettingAction)/_CreateGeneralSetting";
+import EditGeneralSetting from "./(GeneralSettingAction)/_EditGeneralSetting";
+import GeneralSettingGrid from "./(GeneralSettingAction)/_GeneralSettingGrid";
 import "./style.scss";
 
-export default function MRPData() {
+export default function GeneralSetting() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -75,7 +76,7 @@ export default function MRPData() {
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
-      setSelectedMasterDatatab("MRPType");
+      setSelectedMasterDatatab("MainGroupCodes");
     }
   }, [setSelectedMasterDatatab]);
   const auth = UseAuth();
@@ -124,9 +125,9 @@ export default function MRPData() {
     try {
       const res = await api.delete(
         `${
-          (masters[ExactPath] as mastersMRPSubFields)[
-            SelectedMasterDatatab as ValidMasterMRPDataTabs
-          ].delete
+          (masters[ExactPath] as masterGeneralSettingsSubFields)[
+            SelectedMasterDatatab as ValidMasterGeneralSettingabs
+          ]?.delete
         }/${selectedId}`
       );
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
@@ -152,37 +153,35 @@ export default function MRPData() {
   };
   const tabRenderValuePlant: Record<string, ReactNode> = {
     table: (
-      <MRPGrid
+      <GeneralSettingGrid
         selectionIDArr={setSelectionIDArr}
         handleOpenConfirmationDeleteDialog={GetIdandOpenHandler}
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.includePlantDropdown ? (
-      <CreateMRPDataWithPlant />
-    ) : (
-      <CreateMRPData />
-    ),
-    edit: (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
-    ]?.includePlantDropdown ? (
-      <EditMRPDataWithPlant EditDataGet={EditDataGet} />
-    ) : (
-      <EditMRPData EditDataGet={EditDataGet} />
-    ),
+    create:
+      SelectedMasterDatatab === "SubGroupCodes" ? (
+        <CreateSubGroupCode />
+      ) : (
+        <CreateGeneralSetting />
+      ),
+    edit:
+      SelectedMasterDatatab === "SubGroupCodes" ? (
+        <EditSubGroupCode EditDataGet={EditDataGet} />
+      ) : (
+        <EditGeneralSetting EditDataGet={EditDataGet} />
+      ),
   };
-  const getAllLinkName = (masters[ExactPath] as mastersMRPSubFields)[
-    SelectedMasterDatatab as ValidMasterMRPDataTabs
-  ]?.getAll;
+  const getAllLinkName = (
+    masters[ExactPath] as masterGeneralSettingsSubFields
+  )?.[SelectedMasterDatatab as ValidMasterGeneralSettingabs]?.getAll;
 
   const handlePlantBulkStatusChangeAction = async () => {
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersMRPSubFields)[
-            SelectedMasterDatatab as ValidMasterMRPDataTabs
+          (masters[ExactPath] as masterGeneralSettingsSubFields)[
+            SelectedMasterDatatab as ValidMasterGeneralSettingabs
           ]?.updateBulkStatus
         }`,
         selectionIDArr
@@ -206,8 +205,8 @@ export default function MRPData() {
     try {
       const res = await api.delete(
         `${
-          (masters[ExactPath] as mastersMRPSubFields)[
-            SelectedMasterDatatab as ValidMasterMRPDataTabs
+          (masters[ExactPath] as masterGeneralSettingsSubFields)[
+            SelectedMasterDatatab as ValidMasterGeneralSettingabs
           ]?.deleteBulk
         }`,
         { data: selectionIDArr }
@@ -227,20 +226,20 @@ export default function MRPData() {
     }
   };
   const templateDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    (masters[ExactPath] as masterGeneralSettingsSubFields)[
+      SelectedMasterDatatab as ValidMasterGeneralSettingabs
     ]?.template
   }`;
   const templateDownloadName = `${SelectedMasterDatatab}_template.xlsx`;
   const excelDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    (masters[ExactPath] as masterGeneralSettingsSubFields)[
+      SelectedMasterDatatab as ValidMasterGeneralSettingabs
     ]?.exportExcel
   }`;
   const excelDownloadName = `${SelectedMasterDatatab} record.xlsx`;
   const pdfDownloadUrl = `${URL_FIX_BASE_PATH}${
-    (masters[ExactPath] as mastersMRPSubFields)[
-      SelectedMasterDatatab as ValidMasterMRPDataTabs
+    (masters[ExactPath] as masterGeneralSettingsSubFields)[
+      SelectedMasterDatatab as ValidMasterGeneralSettingabs
     ]?.exportPdf
   }`;
   const pdfDownloadName = `${SelectedMasterDatatab} record.pdf`;

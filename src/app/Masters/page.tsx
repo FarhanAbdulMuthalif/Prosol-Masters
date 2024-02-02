@@ -16,7 +16,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
-import { MouseEvent, ReactNode, useContext, useState } from "react";
+import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
 import {
   ValidMasterDataTabs,
   mastersPlantSubFields,
@@ -53,14 +53,6 @@ export default function Masters() {
   const HandlerCloseCreateDrawer = () => {
     setCreateDrawerOpen(false);
   };
-  const pathName = usePathname();
-  const ExactPathArr = pathName
-    .split("/")
-    .filter((n) => n)
-    .filter((n) => n !== "Masters");
-  const ExactPath = (
-    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
-  )[0] as keyof mastersProps;
   const PlantDataCon = useContext(UseContextHook);
   const {
     setPlantData,
@@ -72,6 +64,20 @@ export default function Masters() {
 
     editTabShow,
   } = PlantDataCon;
+  useEffect(() => {
+    if (setSelectedMasterDatatab) {
+      setSelectedMasterDatatab("Plant");
+    }
+  }, [setSelectedMasterDatatab]);
+  const pathName = usePathname();
+  const ExactPathArr = pathName
+    .split("/")
+    .filter((n) => n)
+    .filter((n) => n !== "Masters");
+  const ExactPath = (
+    ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
+  )[0] as keyof mastersProps;
+
   const auth = UseAuth();
   if (!auth) {
     return null;
@@ -122,6 +128,7 @@ export default function Masters() {
     setConfirmationDeleteDialogOpen(true);
     setselectedId(val);
   };
+
   const handlePlantDeleteHandler = async () => {
     try {
       const res = await api.delete(

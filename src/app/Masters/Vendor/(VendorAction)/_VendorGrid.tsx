@@ -9,11 +9,11 @@ import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import {
-  ValidMasterDataTabs,
-  mastersPlantSubFields,
   mastersProps,
-} from "../../../TypesStore";
-export default function Plantgrid({
+  mastersVendorSubsubFields,
+} from "../../../../../TypesStore";
+
+export default function VendorGrid({
   selectionIDArr,
   handleOpenConfirmationDeleteDialog,
   EditSetRecordAndGotoAction,
@@ -33,23 +33,20 @@ export default function Plantgrid({
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  const getAllLinkName = (masters[ExactPath] as mastersPlantSubFields)[
-    SelectedMasterDatatab as ValidMasterDataTabs
-  ]?.getAll;
+  const getAllLinkName = (masters[ExactPath] as mastersVendorSubsubFields)
+    ?.getAll;
   useEffect(() => {
-    if (getAllLinkName) {
-      const fetchData = async () => {
-        try {
-          const res = await api.get(`${getAllLinkName}`);
-          if (setPlantData) {
-            setPlantData(res.data);
-          }
-        } catch (e: any) {
-          console.log(e?.response);
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`${getAllLinkName}`);
+        if (setPlantData) {
+          setPlantData(res.data);
         }
-      };
-      fetchData();
-    }
+      } catch (e: any) {
+        console.log(e?.response);
+      }
+    };
+    fetchData();
   }, [setPlantData, getAllLinkName]);
   if (!SelectedMasterDatatab || !PlantData) {
     return null;
@@ -59,9 +56,7 @@ export default function Plantgrid({
     try {
       const res = await api.patch(
         `${
-          (masters[ExactPath] as mastersPlantSubFields)[
-            SelectedMasterDatatab as ValidMasterDataTabs
-          ]?.updateStatus
+          (masters[ExactPath] as mastersVendorSubsubFields)?.updateStatus
         }/${id}`
       );
       const dataPlantUpdate = await res.data;
@@ -91,10 +86,7 @@ export default function Plantgrid({
   const filteredKeys = allKeys.filter(
     (key: string) =>
       ![
-        `${
-          SelectedMasterDatatab.charAt(0).toLowerCase() +
-          SelectedMasterDatatab.slice(1)
-        }Status`,
+        `${(masters[ExactPath] as mastersVendorSubsubFields)?.keyName}Status`,
         "createdAt",
         "updatedAt",
         "createdBy",
@@ -103,54 +95,53 @@ export default function Plantgrid({
   );
 
   // console.log(filteredKeys);
-  const masterDatagridColumns: GridColDef[] = filteredKeys?.map(
-    (data: string) => {
-      if (data === "plant") {
-        return {
-          field: "plant",
-          headerClassName: "super-app-theme--header",
-          flex: 1,
-
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
-          renderCell: (params: any) => {
-            return params.row.plant.plantName;
-          },
-        };
-      }
-      if (data === "storageLocation") {
-        return {
-          field: "storageLocation",
-          headerClassName: "super-app-theme--header",
-          flex: 1,
-
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
-          renderCell: (params: any) => {
-            return params.row.storageLocation.storageLocationName;
-          },
-        };
-      }
-      if (data === "id") {
-        return {
-          field: data,
-          headerClassName: "super-app-theme--header",
-          flex: 0.5,
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
-        };
-      }
-      return {
-        field: data,
-        headerClassName: "super-app-theme--header",
-        flex: 1,
-        headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
-      };
-    }
-  );
+  const masterDatagridColumns: GridColDef[] = [
+    {
+      field: "shortDescName",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `Short Desc`,
+    },
+    {
+      field: "name",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `Name`,
+    },
+    {
+      field: "address",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `Address`,
+    },
+    {
+      field: "city",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `City`,
+    },
+    {
+      field: "state",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `State`,
+    },
+    {
+      field: "country",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `Country`,
+    },
+    {
+      field: "email",
+      headerClassName: "super-app-theme--header",
+      flex: 1,
+      headerName: `Email`,
+    },
+  ];
   const actionColumn: GridColDef[] = [
     {
-      field: `${
-        SelectedMasterDatatab.charAt(0).toLowerCase() +
-        SelectedMasterDatatab.slice(1)
-      }Status`,
+      field: `status`,
       headerName: "Status",
       flex: 1,
       headerClassName: "super-app-theme--header",
@@ -160,14 +151,7 @@ export default function Plantgrid({
             <Switch
               color="primary"
               size="small"
-              checked={
-                params.row[
-                  `${
-                    SelectedMasterDatatab.charAt(0).toLowerCase() +
-                    SelectedMasterDatatab.slice(1)
-                  }Status`
-                ]
-              }
+              checked={params.row[`status`]}
               onChange={(e) => {
                 SinglePlantStatusHandler(params.row.id);
               }}

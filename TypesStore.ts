@@ -25,6 +25,9 @@ export type MasterNavBarDataRenderTypes = {
   Plant: subSecondNavbarType[];
   General: subSecondNavbarType[];
   MRPData: subSecondNavbarType[];
+  SalesAndOthers: subSecondNavbarType[];
+  Vendor: subSecondNavbarType[];
+  GeneralSetting: subSecondNavbarType[];
 };
 export type subSecondNavbarType = { name: string; path: string };
 
@@ -33,6 +36,34 @@ export type mastersProps = {
   General: mastersGeneralSubFields;
   MRPData: mastersMRPSubFields;
   SalesAndOthers: mastersSalesAndOthersSubFields;
+  Vendor: mastersVendorSubsubFields;
+  GeneralSetting: masterGeneralSettingsSubFields;
+};
+export type masterGeneralSettingsSubFields = {
+  MainGroupCodes: mastersGeneralSubsubFields;
+  SubGroupCodes: mastersGeneralSubsubFields;
+  SubSubGroupCodes: mastersGeneralSubsubFields;
+  SourceType: mastersGeneralSubsubFields;
+  NMUOM: mastersGeneralSubsubFields;
+  ReferenceType: mastersGeneralSubsubFields;
+  AttributeUOM: mastersGeneralSubsubFields;
+  HSN: mastersGeneralSubsubFields;
+};
+export type mastersVendorSubsubFields = {
+  getAll: string;
+  getSingle: string;
+  create: string;
+  createBulk: string;
+  updateStatus: string;
+  updateBulkStatus: string;
+  template: string;
+  exportPdf: string;
+  exportExcel: string;
+  delete: string;
+  deleteBulk: string;
+  update: string;
+  includePlantDropdown: boolean;
+  keyName: string;
 };
 
 export type mastersPlantSubFields = {
@@ -150,6 +181,15 @@ export type ValidMasterMRPDataTabs =
   | "PlanningStrgyGrp"
   | "AvailCheck"
   | "ScheduleMargin";
+export type ValidMasterGeneralSettingabs =
+  | "MainGroupCodes"
+  | "SubGroupCodes"
+  | "SubSubGroupCodes"
+  | "NMUOM"
+  | "SourceType"
+  | "AttributeUOM"
+  | "ReferenceType"
+  | "HSN";
 
 export interface PostCreateFieldData {
   id?: number;

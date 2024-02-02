@@ -31,7 +31,14 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = ({
         rows={rows}
         onRowSelectionModelChange={onRowSelectionModelChange} // Pass the correct prop
         {...props}
-        sx={{ fontSize: "12px" }}
+        sx={{
+          fontSize: "12px",
+          "&  .MuiDataGrid-virtualScroller css-qvtrhg-MuiDataGrid-virtualScroller":
+            {
+              height: "4px",
+            },
+        }}
+        scrollbarSize={0}
         classes={DataGridHeaderCustomStyles} // Apply custom styles directly
       />
     </div>

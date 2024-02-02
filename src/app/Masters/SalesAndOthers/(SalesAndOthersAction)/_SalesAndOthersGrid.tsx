@@ -38,7 +38,6 @@ export default function SalesAndOthersGrid({
     SelectedMasterDatatab as ValidMastersSalesAndOthersTabs
   ]?.getAll;
   useEffect(() => {
-    console.log(getAllLinkName);
     const fetchData = async () => {
       try {
         const res = await api.get(`${getAllLinkName}`);
