@@ -38,6 +38,7 @@ export type mastersProps = {
   SalesAndOthers: mastersSalesAndOthersSubFields;
   Vendor: mastersVendorSubsubFields;
   GeneralSetting: masterGeneralSettingsSubFields;
+  Attribute: mastersVendorSubsubFields;
 };
 export type masterGeneralSettingsSubFields = {
   MainGroupCodes: mastersGeneralSubsubFields;
@@ -254,4 +255,5 @@ export type KeysToRemoveEditMaster =
   | "updatedBy"
   | "plant"
   | "salesOrganization"
-  | "storageLocation";
+  | "storageLocation"
+  | "subGroupCodesId";

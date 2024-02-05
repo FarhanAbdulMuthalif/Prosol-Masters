@@ -72,21 +72,23 @@ const Login = () => {
       setEmptyError(false);
       // setErroeCaptcha(false);
       // setSuccesCaptcha(true);
-      console.log(email);
-      console.log(password);
-      const res = await apiLogin.post("user/auth/login", { email, password });
-      const data = await res.data;
-      console.log(data);
-      console.log(res.status);
-      if (res.status === 200) {
-        localStorage.setItem("accessToken", data?.accessToken);
-        localStorage.setItem("refreshToken", data?.refreshToken);
+      try {
+        const res = await apiLogin.post("user/auth/login", { email, password });
+        const data = await res.data;
+        console.log(data);
+        console.log(res.status);
+        if (res.status === 200) {
+          localStorage.setItem("accessToken", data?.accessToken);
+          localStorage.setItem("refreshToken", data?.refreshToken);
 
-        router.push("/Masters");
-        router.refresh();
-        setauth(true);
+          router.push("/Masters");
+          router.refresh();
+          setauth(true);
 
-        // router.refresh();
+          // router.refresh();
+        }
+      } catch (e: any) {
+        console.log(e?.response);
       }
     } else {
       setEmptyError(true);

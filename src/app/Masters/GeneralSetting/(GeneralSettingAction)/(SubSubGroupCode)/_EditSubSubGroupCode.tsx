@@ -24,7 +24,7 @@ import {
 
 // Import statements...
 
-export default function EditSubGroupCode({ EditDataGet }: any) {
+export default function EditSubSubGroupCode({ EditDataGet }: any) {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
@@ -37,7 +37,11 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     setFormData((prev: any) => {
-      return { ...prev, mainGroupCodesId: EditDataGet?.mainGroupCodesId?.id };
+      return {
+        ...prev,
+        mainGroupCodesId: EditDataGet?.mainGroupCodesId?.id,
+        subGroupId: EditDataGet?.subGroupId?.id,
+      };
     });
     const dynamicFormFieldHandler = async () => {
       try {
@@ -53,7 +57,7 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
       }
     };
     dynamicFormFieldHandler();
-  }, [SelectedMasterDatatab, EditDataGet.mainGroupCodesId]);
+  }, [SelectedMasterDatatab, EditDataGet]);
   const { data: originalArray } = useFetch("/setting/getAllMainGroupCodes") ?? {
     data: [],
   };
@@ -65,7 +69,19 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
         })
       )
     : [];
-
+  const { data: originalArraySubGroup } = useFetch(
+    "/setting/getAllSubGroupCodes"
+  ) ?? {
+    data: [],
+  };
+  const SubGroupDropDownData = originalArraySubGroup
+    ? (originalArraySubGroup as { id: number; subGroupName: string }[]).map(
+        ({ id, subGroupName }) => ({
+          value: id,
+          label: subGroupName,
+        })
+      )
+    : [];
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -74,7 +90,12 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab || !MainGroupDropDownData || !settabValue) {
+  if (
+    !SelectedMasterDatatab ||
+    !MainGroupDropDownData ||
+    !settabValue ||
+    !SubGroupDropDownData
+  ) {
     return null;
   }
   const fieldName = `${
@@ -114,7 +135,7 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
       "createdBy",
       "updatedAt",
       "updatedBy",
-      "plant",
+      "subGroupCodesId",
     ];
 
     // Create a new object by filtering out specified keys
@@ -175,6 +196,9 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   const DwnValue = MainGroupDropDownData.find(
     (data) => data.value === formData?.mainGroupCodesId
   )?.label;
+  const SubGrpDwnValue = SubGroupDropDownData.find(
+    (data) => data.value === formData?.subGroupId
+  )?.label;
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
@@ -211,6 +235,13 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
             options={MainGroupDropDownData}
             label={"Select MainGroup"}
             name="mainGroupCodesId"
+          />
+          <NameSingleSelectDropdown
+            value={SubGrpDwnValue ? SubGrpDwnValue : ""}
+            onChange={handleSelectChange}
+            options={SubGroupDropDownData}
+            label={"Select SubGroupCodes"}
+            name="subGroupId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

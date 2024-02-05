@@ -14,6 +14,11 @@
     grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
     gap: 20px;
   }
+  .create-plant-field-place-div-edit-vendor {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: 10px 20px;
+  }
   .edit-master-audit-trial-view {
     margin-top: auto;
     display: grid;

@@ -76,6 +76,22 @@ export default function GeneralSettingGrid({
       console.log(e?.response);
     }
   };
+  const SingleDuplicateStatusHandler = async (id: number) => {
+    try {
+      const res = await api.patch(`/setting/updateRefrenceDupCheckById/${id}`);
+      const dataPlantUpdate = await res.data;
+
+      const dataPlant = await getAllPlantData(`${getAllLinkName}`);
+      console.log(dataPlantUpdate);
+      if (res.status === 200) {
+        if (setPlantData) {
+          setPlantData(dataPlant);
+        }
+      }
+    } catch (e: any) {
+      console.log(e?.response);
+    }
+  };
 
   const allKeys = PlantData.reduce((keys, obj) => {
     Object.keys(obj).forEach((key) => {
@@ -105,27 +121,27 @@ export default function GeneralSettingGrid({
   // console.log(filteredKeys);
   const masterDatagridColumns: GridColDef[] = filteredKeys?.map(
     (data: string) => {
-      if (data === "plant") {
+      if (data === "mainGroupCodesId") {
         return {
-          field: "plant",
+          field: "mainGroupCodesId",
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+          headerName: `MainGroupCodes`,
           renderCell: (params: any) => {
-            return params.row.plant.plantName;
+            return params.row.mainGroupCodesId.mainGroupName;
           },
         };
       }
-      if (data === "storageLocation") {
+      if (data === "subGroupCodesId") {
         return {
-          field: "storageLocation",
+          field: "subGroupCodesId",
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+          headerName: `SubGroupCodes`,
           renderCell: (params: any) => {
-            return params.row.storageLocation.storageLocationName;
+            return params.row.subGroupCodesId.subGroupName;
           },
         };
       }
@@ -135,6 +151,28 @@ export default function GeneralSettingGrid({
           headerClassName: "super-app-theme--header",
           flex: 0.5,
           headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+        };
+      }
+      if (data === "duplicateCheck") {
+        return {
+          field: "duplicateCheck",
+          headerClassName: "super-app-theme--header",
+          flex: 1,
+          headerName: "DuplicateCheck",
+          renderCell: (params: any) => {
+            return (
+              <div className="wrapperIconAction">
+                <Switch
+                  color="primary"
+                  size="small"
+                  checked={params.row["duplicateCheck"]}
+                  onChange={(e) => {
+                    SingleDuplicateStatusHandler(params.row.id);
+                  }}
+                />
+              </div>
+            );
+          },
         };
       }
       return {

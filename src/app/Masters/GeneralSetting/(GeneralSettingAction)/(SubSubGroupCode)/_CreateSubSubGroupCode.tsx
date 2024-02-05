@@ -15,7 +15,6 @@ import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
-  KeysToRemoveEditMaster,
   PostCreateFieldData,
   ValidMasterGeneralSettingabs,
   masterGeneralSettingsSubFields,
@@ -24,21 +23,18 @@ import {
 
 // Import statements...
 
-export default function EditSubGroupCode({ EditDataGet }: any) {
+export default function CreateSubSubGroupCode() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
     code: false,
   });
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters, settabValue } = PlantDataCon;
+  const { SelectedMasterDatatab, masters } = PlantDataCon;
 
-  const [formData, setFormData] = useState<any>(EditDataGet);
+  const [formData, setFormData] = useState<any>({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
-    setFormData((prev: any) => {
-      return { ...prev, mainGroupCodesId: EditDataGet?.mainGroupCodesId?.id };
-    });
     const dynamicFormFieldHandler = async () => {
       try {
         const res = await api.get(
@@ -53,7 +49,7 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
       }
     };
     dynamicFormFieldHandler();
-  }, [SelectedMasterDatatab, EditDataGet.mainGroupCodesId]);
+  }, [SelectedMasterDatatab]);
   const { data: originalArray } = useFetch("/setting/getAllMainGroupCodes") ?? {
     data: [],
   };
@@ -62,6 +58,19 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
         ({ id, mainGroupName }) => ({
           value: id,
           label: mainGroupName,
+        })
+      )
+    : [];
+  const { data: originalArraySubGroup } = useFetch(
+    "/setting/getAllSubGroupCodes"
+  ) ?? {
+    data: [],
+  };
+  const SubGroupDropDownData = originalArraySubGroup
+    ? (originalArraySubGroup as { id: number; subGroupName: string }[]).map(
+        ({ id, subGroupName }) => ({
+          value: id,
+          label: subGroupName,
         })
       )
     : [];
@@ -74,7 +83,11 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab || !MainGroupDropDownData || !settabValue) {
+  if (
+    !SelectedMasterDatatab ||
+    !MainGroupDropDownData ||
+    !SubGroupDropDownData
+  ) {
     return null;
   }
   const fieldName = `${
@@ -106,39 +119,23 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
     } else {
       setplantFormError((prev) => ({ name: false, code: false }));
     }
-    const { id, email, ...filteredData } = formData;
-
-    // List of keys to be removed
-    const keysToRemove: KeysToRemoveEditMaster[] = [
-      "createdAt",
-      "createdBy",
-      "updatedAt",
-      "updatedBy",
-      "plant",
-    ];
-
-    // Create a new object by filtering out specified keys
-    const filteredUserData = { ...filteredData };
-
-    keysToRemove.forEach((key) => delete filteredUserData[key]);
     if (formData[fieldCode].length && formData[fieldName].length > 0) {
       try {
-        const response = await api.put(
+        const response = await api.post(
           `${
             (masters[ExactPath] as masterGeneralSettingsSubFields)[
               SelectedMasterDatatab as ValidMasterGeneralSettingabs
-            ].update
-          }/${id}`,
-          filteredUserData
+            ].create
+          }`,
+          formData
         );
         const data = await response.data;
-        if (response.status === 200) {
+        if (response.status === 201) {
           console.log(data);
           setFormData((prev: any) => {
             return { [fieldName]: "", [fieldCode]: "" };
           });
           setOpenSnackbar(true);
-          settabValue("table");
         }
       } catch (e: any) {
         console.log(e?.response);
@@ -174,6 +171,9 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   };
   const DwnValue = MainGroupDropDownData.find(
     (data) => data.value === formData?.mainGroupCodesId
+  )?.label;
+  const SubGrpDwnValue = SubGroupDropDownData.find(
+    (data) => data.value === formData?.subGroupId
   )?.label;
   return (
     <form onSubmit={PlantFormSubmitHandler}>
@@ -211,6 +211,13 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
             options={MainGroupDropDownData}
             label={"Select MainGroup"}
             name="mainGroupCodesId"
+          />
+          <NameSingleSelectDropdown
+            value={SubGrpDwnValue ? SubGrpDwnValue : ""}
+            onChange={handleSelectChange}
+            options={SubGroupDropDownData}
+            label={"Select SubGroupCodes"}
+            name="subGroupId"
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

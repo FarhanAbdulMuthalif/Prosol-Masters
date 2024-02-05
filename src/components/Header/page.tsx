@@ -6,9 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import UseAuth from "@/Hooks/useAuth";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import { Menu, MenuItem } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import api from "../api";
 import "./style.scss";
 
@@ -23,8 +23,14 @@ export default function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const auth = UseAuth();
+  // const auth = UseAuth();
+  // useEffect(() => {
+  //   if (!auth) {
+  //     // Redirect to login page if not authenticated
+  //     router.push("/Login");
+  //   }
+  // }, [auth, router]);
+  const { auth, setauth } = useContext(UseContextHook);
   if (!auth) {
     return null;
   }
@@ -34,6 +40,9 @@ export default function Header() {
       if (res.status === 200) {
         localStorage.clear();
         router.push("/Login");
+        if (setauth) {
+          setauth(false);
+        }
       }
     } catch (e: any) {
       console.log(e?.response);

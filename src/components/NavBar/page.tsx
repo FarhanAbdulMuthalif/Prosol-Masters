@@ -1,16 +1,17 @@
-import UseAuth from "@/Hooks/useAuth";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import { pathObj } from "@/utils/LinkData";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, TextField } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 import { PathObjProps } from "../../../TypesStore";
 import "./style.scss";
 
 export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
   const currentRoute = usePathname();
   // console.log(currentRoute + "from navbar");
-  const auth = UseAuth();
+  const { auth } = useContext(UseContextHook);
   if (!auth) {
     return null;
   }
@@ -23,6 +24,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     { name: "Sales&Others", path: "/Masters/SalesAndOthers" },
     { name: "Vendor", path: "/Masters/Vendor" },
     { name: "GeneralSetting", path: "/Masters/GeneralSetting" },
+    { name: "Attribute", path: "/Masters/Attribute" },
   ];
   return (
     <div className={OpenSideBar ? "full-side-bar" : "side-bar"}>

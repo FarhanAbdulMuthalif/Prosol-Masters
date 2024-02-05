@@ -15,7 +15,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { Menu, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
 import {
   ValidMasterDataTabs,
@@ -64,11 +64,14 @@ export default function Masters() {
 
     editTabShow,
   } = PlantDataCon;
+  const router = useRouter();
+
   useEffect(() => {
     if (setSelectedMasterDatatab) {
       setSelectedMasterDatatab("Plant");
     }
-  }, [setSelectedMasterDatatab]);
+    router.refresh();
+  }, [setSelectedMasterDatatab, router]);
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")

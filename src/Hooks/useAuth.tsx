@@ -1,10 +1,11 @@
+import { UseContextHook } from "@/Provides/UseContextHook";
 import apiLogin from "@/components/apiLogin";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const UseAuth = () => {
   const [auth, setAuth] = useState(false);
-
+  const { setauth: SetContextAuth } = useContext(UseContextHook);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,16 +19,22 @@ const UseAuth = () => {
           );
           if (res.status === 200) {
             setAuth(true);
+
+            if (SetContextAuth) {
+              SetContextAuth(true);
+            }
           }
         } catch (e: any) {
           router.push("/Login");
-
           setAuth(false);
+          if (SetContextAuth) {
+            SetContextAuth(false);
+          }
         }
       }
     }
     fetch();
-  }, [router]);
+  }, [router, SetContextAuth]);
 
   return auth;
 };

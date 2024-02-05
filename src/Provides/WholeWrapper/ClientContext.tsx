@@ -55,24 +55,22 @@ export default function ClientContext({ children }: { children: ReactNode }) {
         <Header />
         <div className="wrapper-parent">
           <Navbar OpenSideBar={toogleSidebar} />
-          {authHook ? (
-            <div
-              className={toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"}
-              onClick={() => {
-                settoogleSidebar(toogleSidebarHandler);
+
+          <div
+            className={toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"}
+            onClick={() => {
+              settoogleSidebar(toogleSidebarHandler);
+            }}
+          >
+            <ArrowForwardIosIcon
+              style={iconRotateHandler}
+              sx={{
+                color: "blue",
+                fontSize: "14px",
               }}
-            >
-              <ArrowForwardIosIcon
-                style={iconRotateHandler}
-                sx={{
-                  color: "blue",
-                  fontSize: "14px",
-                }}
-              />
-            </div>
-          ) : (
-            ""
-          )}
+            />
+          </div>
+
           <div className="wrapper-child">{children}</div>
         </div>
       </UseContextHook.Provider>

@@ -21,7 +21,7 @@ import {
 
 // Import statements...
 
-export default function EditVendor({ EditDataGet }: any) {
+export default function EditAttribute({ EditDataGet }: any) {
   const [VendorFormError, setVendorFormError] = useState({
     name: false,
     short: false,
@@ -65,14 +65,14 @@ export default function EditVendor({ EditDataGet }: any) {
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (formData["shortDescName"]?.length === 0) {
+    if (formData["attributeName"]?.length === 0) {
       setVendorFormError((prev) => ({ ...prev, short: true }));
     }
 
-    if (formData["name"]?.length === 0) {
+    if (formData["fieldType"]?.length === 0) {
       setVendorFormError((prev) => ({ ...prev, name: true }));
     }
-    if (formData["address"] < 1) {
+    if (formData["listUom"].length < 1) {
       setVendorFormError((prev) => ({ ...prev, address: true }));
     } else {
       setVendorFormError((prev) => ({
@@ -81,7 +81,7 @@ export default function EditVendor({ EditDataGet }: any) {
         address: false,
       }));
     }
-    const { id, email, ...filteredData } = formData;
+    const { id, ...filteredData } = formData;
 
     // List of keys to be removed
     const keysToRemove: KeysToRemoveEditMaster[] = [
@@ -144,139 +144,12 @@ export default function EditVendor({ EditDataGet }: any) {
             error={VendorFormError.short}
             name={`shortDescName`}
           />
-          <OutlineTextField
-            placeholder={`Enter Name`}
-            type="text"
-            value={formData ? formData["name"] : ""}
+          <RadioGroupComponent
+            label={`FieldType :`}
+            name="fieldType"
+            options={["NUMERIC", "AlphaNumeric"]}
+            value={formData["fieldType"]}
             onChange={handleInputChange}
-            helperText={
-              VendorFormError.name ? `Vendor Name Should not be empty` : ""
-            }
-            error={VendorFormError.name}
-            name={`name`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name2`}
-            type="text"
-            value={formData ? formData["name2"] : ""}
-            onChange={handleInputChange}
-            name={`name2`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name3`}
-            type="text"
-            value={formData ? formData["name3"] : ""}
-            onChange={handleInputChange}
-            name={`name3`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name4`}
-            type="text"
-            value={formData ? formData["name4"] : ""}
-            onChange={handleInputChange}
-            name={`name4`}
-          />
-          <OutlineTextField
-            placeholder={`Enter address`}
-            type="text"
-            value={formData ? formData["address"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              VendorFormError.address ? `Address Should not be empty` : ""
-            }
-            error={VendorFormError.address}
-            name={`address`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Address2`}
-            type="text"
-            value={formData ? formData["address2"] : ""}
-            onChange={handleInputChange}
-            name={`address2`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Address3`}
-            type="text"
-            value={formData ? formData["address3"] : ""}
-            onChange={handleInputChange}
-            name={`address3`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Address4`}
-            type="text"
-            value={formData ? formData["address4"] : ""}
-            onChange={handleInputChange}
-            name={`address4`}
-          />
-          <OutlineTextField
-            placeholder={`Enter City`}
-            type="text"
-            value={formData ? formData["city"] : ""}
-            onChange={handleInputChange}
-            name={`city`}
-          />
-          <OutlineTextField
-            placeholder={`Enter State`}
-            type="text"
-            value={formData ? formData["state"] : ""}
-            onChange={handleInputChange}
-            name={`state`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Country`}
-            type="text"
-            value={formData ? formData["country"] : ""}
-            onChange={handleInputChange}
-            name={`country`}
-          />
-          <OutlineTextField
-            placeholder={`Enter PostalCode`}
-            type="text"
-            value={formData ? formData["postalCode"] : ""}
-            onChange={handleInputChange}
-            name={`postalCode`}
-          />
-          <OutlineTextField
-            placeholder={`Enter TelephoneNo`}
-            type="text"
-            value={formData ? formData["telephoneNo"] : ""}
-            onChange={handleInputChange}
-            name={`telephoneNo`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Fax`}
-            type="text"
-            value={formData ? formData["fax"] : ""}
-            onChange={handleInputChange}
-            name={`fax`}
-          />
-          <OutlineTextField
-            placeholder={`Enter MobileNo`}
-            type="text"
-            value={formData ? formData["mobileNo"] : ""}
-            onChange={handleInputChange}
-            name={`mobileNo`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Email`}
-            type="text"
-            value={formData ? formData["email"] : ""}
-            onChange={handleInputChange}
-            name={`email`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Website`}
-            type="text"
-            value={formData ? formData["website"] : ""}
-            onChange={handleInputChange}
-            name={`website`}
-          />
-          <OutlineTextField
-            placeholder={`Enter AcquriedBy`}
-            type="text"
-            value={formData ? formData["acquriedBy"] : ""}
-            onChange={handleInputChange}
-            name={`acquriedBy`}
           />
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (

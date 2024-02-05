@@ -152,8 +152,9 @@ export default function EditSalesOrganization({ EditDataGet }: any) {
     return null;
   }
   const DwnValue = PlantDropDownData.find(
-    (data) => data.value === formData.salesOrganizationId
+    (data) => data.value === formData?.salesOrganization?.id
   )?.label;
+
   const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));

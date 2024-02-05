@@ -3,7 +3,6 @@ import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
-import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
@@ -11,34 +10,71 @@ import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
 import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
 import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
-import { SelectChangeEvent } from "@mui/material";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  RadioGroup as MuiRadioGroup,
+  Radio,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
-  KeysToRemoveEditMaster,
   PostCreateFieldData,
-  ValidMasterGeneralSettingabs,
-  masterGeneralSettingsSubFields,
   mastersProps,
-} from "../../../../../../TypesStore";
+  mastersVendorSubsubFields,
+} from "../../../../../TypesStore";
 
 // Import statements...
 
-export default function EditSubGroupCode({ EditDataGet }: any) {
+export default function CreateAttribute() {
   const [plantFormError, setplantFormError] = useState({
     name: false,
-    code: false,
+    short: false,
+    address: false,
   });
-  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
-  const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters, settabValue } = PlantDataCon;
+  const [formData, setFormData] = useState<any>({
+    attributeName: "",
+    fieldType: "NUMERIC",
+    listUom: [],
+  });
 
-  const [formData, setFormData] = useState<any>(EditDataGet);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
+
+  const PlantDataCon = useContext(UseContextHook);
+  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  const checkHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setFormData((prev: any) => ({
+        ...prev,
+        privileges: [...prev.privileges, Number(value)],
+      }));
+    }
+
+    // Case 2  : The user unchecks the box
+    else {
+      setFormData((prev: any) => ({
+        ...prev,
+        privileges: prev.privileges.filter((e: number) => e !== Number(value)),
+      }));
+    }
+  };
+  const { data: originalArray } = useFetch("/setting/getAllAttributeUom") ?? {
+    data: [],
+  };
+  const MainGroupDropDownData = originalArray
+    ? (originalArray as { id: number; attributeUomName: string }[]).map(
+        ({ id, attributeUomName }) => ({
+          value: id,
+          label: attributeUomName,
+        })
+      )
+    : [];
   useEffect(() => {
-    setFormData((prev: any) => {
-      return { ...prev, mainGroupCodesId: EditDataGet?.mainGroupCodesId?.id };
-    });
     const dynamicFormFieldHandler = async () => {
       try {
         const res = await api.get(
@@ -53,19 +89,7 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
       }
     };
     dynamicFormFieldHandler();
-  }, [SelectedMasterDatatab, EditDataGet.mainGroupCodesId]);
-  const { data: originalArray } = useFetch("/setting/getAllMainGroupCodes") ?? {
-    data: [],
-  };
-  const MainGroupDropDownData = originalArray
-    ? (originalArray as { id: number; mainGroupName: string }[]).map(
-        ({ id, mainGroupName }) => ({
-          value: id,
-          label: mainGroupName,
-        })
-      )
-    : [];
-
+  }, [SelectedMasterDatatab]);
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -74,74 +98,48 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab || !MainGroupDropDownData || !settabValue) {
+  if (!SelectedMasterDatatab) {
     return null;
   }
-  const fieldName = `${
-    (masters[ExactPath] as masterGeneralSettingsSubFields)[
-      SelectedMasterDatatab as ValidMasterGeneralSettingabs
-    ]?.keyName
-  }Name`;
-  const fieldCode = `${
-    (masters[ExactPath] as masterGeneralSettingsSubFields)[
-      SelectedMasterDatatab as ValidMasterGeneralSettingabs
-    ]?.keyName
-  }Code`;
+
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    // setFormData((prevData: any) => ({
-    //   ...prevData,
-    //   [`${
-    //     SelectedMasterDatatab.charAt(0).toLowerCase() +
-    //     SelectedMasterDatatab.slice(1)
-    //   }Status`]: true,
-    // }));
-    console.log(formData);
-    if (formData[fieldName].length === 0) {
+    if (formData["shortDescName"]?.length === 0) {
+      setplantFormError((prev) => ({ ...prev, short: true }));
+    }
+
+    if (formData["name"]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (formData[fieldCode].length === 0) {
-      setplantFormError((prev) => ({ ...prev, code: true }));
+    if (formData["address"] < 1) {
+      setplantFormError((prev) => ({ ...prev, address: true }));
     } else {
-      setplantFormError((prev) => ({ name: false, code: false }));
+      setplantFormError((prev) => ({
+        name: false,
+        short: false,
+        address: false,
+      }));
     }
-    const { id, email, ...filteredData } = formData;
-
-    // List of keys to be removed
-    const keysToRemove: KeysToRemoveEditMaster[] = [
-      "createdAt",
-      "createdBy",
-      "updatedAt",
-      "updatedBy",
-      "plant",
-    ];
-
-    // Create a new object by filtering out specified keys
-    const filteredUserData = { ...filteredData };
-
-    keysToRemove.forEach((key) => delete filteredUserData[key]);
-    if (formData[fieldCode].length && formData[fieldName].length > 0) {
+    if (formData["name"]?.length > 0 && formData["shortDescName"]?.length > 0) {
+      console.log(formData);
       try {
-        const response = await api.put(
-          `${
-            (masters[ExactPath] as masterGeneralSettingsSubFields)[
-              SelectedMasterDatatab as ValidMasterGeneralSettingabs
-            ].update
-          }/${id}`,
-          filteredUserData
+        const response = await api.post(
+          `${(masters[ExactPath] as mastersVendorSubsubFields).create}`,
+          formData
         );
         const data = await response.data;
-        if (response.status === 200) {
+        if (response.status === 201) {
           console.log(data);
           setFormData((prev: any) => {
-            return { [fieldName]: "", [fieldCode]: "" };
+            return { ["name"]: "", ["shortDescName"]: "" };
           });
           setOpenSnackbar(true);
-          settabValue("table");
         }
-      } catch (e: any) {
-        console.log(e?.response);
+      } catch (error: any) {
+        console.log(error);
+        console.log(error.response.data);
+        console.log(error.response.data.message);
       }
     }
   };
@@ -151,17 +149,15 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
     setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
-      [`${
-        (masters[ExactPath] as masterGeneralSettingsSubFields)[
-          SelectedMasterDatatab as ValidMasterGeneralSettingabs
-        ]?.keyName
-      }Status`]: true,
+      [`status`]: true,
     }));
   };
-  // const dynamicFieldRender={
-  //   textField:
-  // }
   const handleSelectChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData((prevData: any) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSelectDynChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData((prevData: any) => ({ ...prevData, [name]: value }));
   };
@@ -172,46 +168,68 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
-  const DwnValue = MainGroupDropDownData.find(
-    (data) => data.value === formData?.mainGroupCodesId
-  )?.label;
   return (
     <form onSubmit={PlantFormSubmitHandler}>
-      <div className="create-plant-wrapper-div">
+      <div className="create-Attribute-wrapper-div">
         <div className="create-plant-field-place-div">
           <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Name`}
+            placeholder={`Enter AttributeName`}
             type="text"
-            value={formData ? formData[fieldName] : ""}
+            value={formData ? formData["attributeName"] : ""}
             onChange={handleInputChange}
             helperText={
-              plantFormError.name
-                ? `${SelectedMasterDatatab}Name Should not be empty`
-                : ""
+              plantFormError.short ? `ShortDesc Should not be empty` : ""
             }
-            error={plantFormError.name}
-            name={fieldName}
+            error={plantFormError.short}
+            name={`attributeName`}
           />
-          <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Code`}
-            type="text"
-            value={formData ? formData[fieldCode] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.code
-                ? `${SelectedMasterDatatab}Code Should not be empty`
-                : ""
-            }
-            error={plantFormError.code}
-            name={fieldCode}
-          />
-          <NameSingleSelectDropdown
-            value={DwnValue ? DwnValue : ""}
-            onChange={handleSelectChange}
-            options={MainGroupDropDownData}
-            label={"Select MainGroup"}
-            name="mainGroupCodesId"
-          />
+
+          <FormControl
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+              gap: "5px",
+            }}
+          >
+            <label style={{ fontSize: "12px", color: "#6f6f6f" }}>
+              FieldType :{" "}
+            </label>
+            <MuiRadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              row
+              onChange={handleInputChange}
+              name="fieldType"
+              value={formData["fieldType"]}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                height: "100%",
+                gap: "10px",
+              }}
+            >
+              {["NUMERIC", "AlphaNumeric"].map((option) => (
+                <FormControlLabel
+                  key={option}
+                  value={option}
+                  control={<Radio size="small" />}
+                  label={
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "12px",
+                        margin: "0 ",
+                      }}
+                    >
+                      {option}
+                    </Typography>
+                  }
+                />
+              ))}
+            </MuiRadioGroup>
+          </FormControl>
+
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
               <>
@@ -248,7 +266,7 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
                   <DynamicSingleSelectDropdown
                     label={`Select ${data.fieldName}`}
                     value={formData[data.fieldName]}
-                    onChange={handleSelectChange}
+                    onChange={handleSelectDynChange}
                     options={data.dropDowns ? data.dropDowns : []}
                     name={data.fieldName}
                   />
@@ -275,6 +293,30 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
               </>
             );
           })}
+        </div>
+        <div className="master-attribute-uom-list">
+          <p className="master-attribute-uom-list-text">UOM List</p>
+          <div className="master-attribute-uom-list-grid">
+            {MainGroupDropDownData.map((data) => {
+              return (
+                <FormControlLabel
+                  key={data.value}
+                  control={
+                    <Checkbox
+                      onChange={checkHandler2}
+                      checked={formData?.listUom?.includes(data.value)}
+                      value={data.value}
+                    />
+                  }
+                  label={
+                    <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                      {data.label}
+                    </Typography>
+                  }
+                />
+              );
+            })}
+          </div>
         </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>

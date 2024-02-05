@@ -24,8 +24,16 @@ import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
 import { Menu, MenuItem } from "@mui/material";
 
+import CreateAttributeUOM from "./(GeneralSettingAction)/(AttributeUOM)/_CreateAttributeUOm";
+import EditAttributeUOM from "./(GeneralSettingAction)/(AttributeUOM)/_EditAttributeUOm";
+import CreateHSN from "./(GeneralSettingAction)/(HSN)/_CreateHSN";
+import EditHSN from "./(GeneralSettingAction)/(HSN)/_EditHSN";
+import CreateNMUOM from "./(GeneralSettingAction)/(NMUOM)/_CreateNMUOM";
+import EditNMUOM from "./(GeneralSettingAction)/(NMUOM)/_EditNMUOM";
 import CreateSubGroupCode from "./(GeneralSettingAction)/(SubGroupCode/_CreateSubGroupCode";
 import EditSubGroupCode from "./(GeneralSettingAction)/(SubGroupCode/_EditSubGroupCode";
+import CreateSubSubGroupCode from "./(GeneralSettingAction)/(SubSubGroupCode)/_CreateSubSubGroupCode";
+import EditSubSubGroupCode from "./(GeneralSettingAction)/(SubSubGroupCode)/_EditSubSubGroupCode";
 import CreateGeneralSetting from "./(GeneralSettingAction)/_CreateGeneralSetting";
 import EditGeneralSetting from "./(GeneralSettingAction)/_EditGeneralSetting";
 import GeneralSettingGrid from "./(GeneralSettingAction)/_GeneralSettingGrid";
@@ -162,12 +170,28 @@ export default function GeneralSetting() {
     create:
       SelectedMasterDatatab === "SubGroupCodes" ? (
         <CreateSubGroupCode />
+      ) : SelectedMasterDatatab === "SubSubGroupCodes" ? (
+        <CreateSubSubGroupCode />
+      ) : SelectedMasterDatatab === "NMUOM" ? (
+        <CreateNMUOM />
+      ) : SelectedMasterDatatab === "AttributeUOM" ? (
+        <CreateAttributeUOM />
+      ) : SelectedMasterDatatab === "HSN" ? (
+        <CreateHSN />
       ) : (
         <CreateGeneralSetting />
       ),
     edit:
       SelectedMasterDatatab === "SubGroupCodes" ? (
         <EditSubGroupCode EditDataGet={EditDataGet} />
+      ) : SelectedMasterDatatab === "SubSubGroupCodes" ? (
+        <EditSubSubGroupCode EditDataGet={EditDataGet} />
+      ) : SelectedMasterDatatab === "NMUOM" ? (
+        <EditNMUOM EditDataGet={EditDataGet} />
+      ) : SelectedMasterDatatab === "AttributeUOM" ? (
+        <EditAttributeUOM EditDataGet={EditDataGet} />
+      ) : SelectedMasterDatatab === "HSN" ? (
+        <EditHSN EditDataGet={EditDataGet} />
       ) : (
         <EditGeneralSetting EditDataGet={EditDataGet} />
       ),

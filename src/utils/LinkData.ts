@@ -8,6 +8,7 @@ export const pathObj: PathObjProps = {
     { name: "Sales&Others", path: "/Masters/SalesAndOthers" },
     { name: "Vendor", path: "/Masters/Vendor" },
     { name: "GeneralSetting", path: "/Masters/GeneralSetting" },
+    { name: "Attribute", path: "/Masters/Attribute" },
   ],
   UserManagement: [
     { name: "User", path: "/UserManagement" },
