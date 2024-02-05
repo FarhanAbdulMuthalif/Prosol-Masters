@@ -1,4 +1,5 @@
 "use client";
+import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
@@ -9,7 +10,15 @@ import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
 import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
 import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
-import { SelectChangeEvent } from "@mui/material";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  RadioGroup as MuiRadioGroup,
+  Radio,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
@@ -23,9 +32,9 @@ import {
 
 export default function EditAttribute({ EditDataGet }: any) {
   const [VendorFormError, setVendorFormError] = useState({
-    name: false,
-    short: false,
-    address: false,
+    attributeName: false,
+    fieldType: false,
+    listUom: false,
   });
   // const { id, updatedAt, updatedBy, createdBy, createdAt } = EditDataGet;
 
@@ -35,6 +44,14 @@ export default function EditAttribute({ EditDataGet }: any) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   useEffect(() => {
+    setFormData((prev: any) => {
+      return {
+        ...prev,
+        ...prev,
+        listUom: EditDataGet.listUom.map((data: any) => data.id),
+      };
+    });
+
     const dynamicFormFieldHandler = async () => {
       try {
         const res = await api.get(
@@ -49,7 +66,7 @@ export default function EditAttribute({ EditDataGet }: any) {
       }
     };
     dynamicFormFieldHandler();
-  }, [SelectedMasterDatatab]);
+  }, [SelectedMasterDatatab, EditDataGet.listUom]);
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -58,27 +75,54 @@ export default function EditAttribute({ EditDataGet }: any) {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
+  const { data: originalArray } = useFetch("/setting/getAllAttributeUom") ?? {
+    data: [],
+  };
   if (!SelectedMasterDatatab || !settabValue) {
     return null;
   }
+  const MainGroupDropDownData = originalArray
+    ? (originalArray as { id: number; attributeUomName: string }[]).map(
+        ({ id, attributeUomName }) => ({
+          value: id,
+          label: attributeUomName,
+        })
+      )
+    : [];
+  const checkHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setFormData((prev: any) => ({
+        ...prev,
+        listUom: [...prev?.listUom, Number(value)],
+      }));
+    }
 
+    // Case 2  : The user unchecks the box
+    else {
+      setFormData((prev: any) => ({
+        ...prev,
+        listUom: prev.listUom.filter((e: number) => e !== Number(value)),
+      }));
+    }
+  };
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (formData["attributeName"]?.length === 0) {
-      setVendorFormError((prev) => ({ ...prev, short: true }));
+      setVendorFormError((prev) => ({ ...prev, attributeName: true }));
     }
 
     if (formData["fieldType"]?.length === 0) {
-      setVendorFormError((prev) => ({ ...prev, name: true }));
+      setVendorFormError((prev) => ({ ...prev, fieldType: true }));
     }
     if (formData["listUom"].length < 1) {
-      setVendorFormError((prev) => ({ ...prev, address: true }));
+      setVendorFormError((prev) => ({ ...prev, listUom: true }));
     } else {
       setVendorFormError((prev) => ({
-        name: false,
-        short: false,
-        address: false,
+        listUom: false,
+        attributeName: false,
+        fieldType: false,
       }));
     }
     const { id, ...filteredData } = formData;
@@ -95,7 +139,10 @@ export default function EditAttribute({ EditDataGet }: any) {
     const filteredUserData = { ...filteredData };
 
     keysToRemove.forEach((key) => delete filteredUserData[key]);
-    if (formData["name"]?.length > 0 && formData["shortDescName"]?.length > 0) {
+    if (
+      formData["attributeName"]?.length > 0 &&
+      formData["fieldType"]?.length > 0
+    ) {
       try {
         const response = await api.put(
           `${(masters[ExactPath] as mastersVendorSubsubFields).update}/${id}`,
@@ -131,26 +178,67 @@ export default function EditAttribute({ EditDataGet }: any) {
   };
   return (
     <form onSubmit={PlantFormSubmitHandler}>
-      <div className="create-plant-wrapper-div">
-        <div className="create-plant-field-place-div-edit-vendor">
+      <div className="create-Attribute-wrapper-div">
+        <div className="create-plant-field-place-div">
           <OutlineTextField
-            placeholder={`Enter ShortDesc`}
+            placeholder={`Enter AttributeName`}
             type="text"
-            value={formData ? formData["shortDescName"] : ""}
+            value={formData ? formData["attributeName"] : ""}
             onChange={handleInputChange}
             helperText={
-              VendorFormError.short ? `ShortDesc Should not be empty` : ""
+              VendorFormError.attributeName
+                ? `ShortDesc Should not be empty`
+                : ""
             }
-            error={VendorFormError.short}
-            name={`shortDescName`}
+            error={VendorFormError.attributeName}
+            name={`attributeName`}
           />
-          <RadioGroupComponent
-            label={`FieldType :`}
-            name="fieldType"
-            options={["NUMERIC", "AlphaNumeric"]}
-            value={formData["fieldType"]}
-            onChange={handleInputChange}
-          />
+
+          <FormControl
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+              gap: "5px",
+            }}
+          >
+            <label style={{ fontSize: "12px", color: "#6f6f6f" }}>
+              FieldType :{" "}
+            </label>
+            <MuiRadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              row
+              onChange={handleInputChange}
+              name="fieldType"
+              value={formData["fieldType"]}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                height: "100%",
+                gap: "10px",
+              }}
+            >
+              {["NUMERIC", "AlphaNumeric"].map((option) => (
+                <FormControlLabel
+                  key={option}
+                  value={option}
+                  control={<Radio size="small" />}
+                  label={
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "12px",
+                        margin: "0 ",
+                      }}
+                    >
+                      {option}
+                    </Typography>
+                  }
+                />
+              ))}
+            </MuiRadioGroup>
+          </FormControl>
           {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
               <>
@@ -214,6 +302,30 @@ export default function EditAttribute({ EditDataGet }: any) {
               </>
             );
           })}
+        </div>
+        <div className="master-attribute-uom-list">
+          <p className="master-attribute-uom-list-text">UOM List</p>
+          <div className="master-attribute-uom-list-grid">
+            {MainGroupDropDownData.map((data) => {
+              return (
+                <FormControlLabel
+                  key={data.value}
+                  control={
+                    <Checkbox
+                      onChange={checkHandler2}
+                      checked={formData?.listUom?.includes(data.value)}
+                      value={data.value}
+                    />
+                  }
+                  label={
+                    <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                      {data.label}
+                    </Typography>
+                  }
+                />
+              );
+            })}
+          </div>
         </div>
         <div className="edit-master-audit-trial-view">
           <div className="edit-master-audit-wrpr">

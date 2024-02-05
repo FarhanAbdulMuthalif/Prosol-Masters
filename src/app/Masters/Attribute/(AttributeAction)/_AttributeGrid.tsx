@@ -83,7 +83,7 @@ export default function AttributeGrid({
         renderCell: (params: any) => {
           return params.row.listUom
             ?.map((dta: any) => dta.attributeUomName)
-            .join(",");
+            .join(", ");
         },
       };
     }

@@ -31,9 +31,9 @@ import {
 
 export default function CreateAttribute() {
   const [plantFormError, setplantFormError] = useState({
-    name: false,
-    short: false,
-    address: false,
+    attributeName: false,
+    fieldType: false,
+    listUom: false,
   });
   const [formData, setFormData] = useState<any>({
     attributeName: "",
@@ -51,7 +51,7 @@ export default function CreateAttribute() {
     if (checked) {
       setFormData((prev: any) => ({
         ...prev,
-        privileges: [...prev.privileges, Number(value)],
+        listUom: [...prev?.listUom, Number(value)],
       }));
     }
 
@@ -59,7 +59,7 @@ export default function CreateAttribute() {
     else {
       setFormData((prev: any) => ({
         ...prev,
-        privileges: prev.privileges.filter((e: number) => e !== Number(value)),
+        listUom: prev.listUom.filter((e: number) => e !== Number(value)),
       }));
     }
   };
@@ -105,23 +105,26 @@ export default function CreateAttribute() {
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (formData["shortDescName"]?.length === 0) {
-      setplantFormError((prev) => ({ ...prev, short: true }));
+    if (formData["attributeName"]?.length === 0) {
+      setplantFormError((prev) => ({ ...prev, attributeName: true }));
     }
 
-    if (formData["name"]?.length === 0) {
-      setplantFormError((prev) => ({ ...prev, name: true }));
+    if (formData["fieldType"]?.length === 0) {
+      setplantFormError((prev) => ({ ...prev, fieldType: true }));
     }
-    if (formData["address"] < 1) {
-      setplantFormError((prev) => ({ ...prev, address: true }));
+    if (formData["listUom"].length < 1) {
+      setplantFormError((prev) => ({ ...prev, listUom: true }));
     } else {
       setplantFormError((prev) => ({
-        name: false,
-        short: false,
-        address: false,
+        listUom: false,
+        attributeName: false,
+        fieldType: false,
       }));
     }
-    if (formData["name"]?.length > 0 && formData["shortDescName"]?.length > 0) {
+    if (
+      formData["attributeName"]?.length > 0 &&
+      formData["fieldType"]?.length > 0
+    ) {
       console.log(formData);
       try {
         const response = await api.post(
@@ -149,7 +152,6 @@ export default function CreateAttribute() {
     setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
-      [`status`]: true,
     }));
   };
   const handleSelectChange = (e: SelectChangeEvent) => {
@@ -178,9 +180,11 @@ export default function CreateAttribute() {
             value={formData ? formData["attributeName"] : ""}
             onChange={handleInputChange}
             helperText={
-              plantFormError.short ? `ShortDesc Should not be empty` : ""
+              plantFormError.attributeName
+                ? `ShortDesc Should not be empty`
+                : ""
             }
-            error={plantFormError.short}
+            error={plantFormError.attributeName}
             name={`attributeName`}
           />
 
