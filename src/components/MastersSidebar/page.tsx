@@ -44,7 +44,10 @@ export default function MastersSidebar() {
   }
   return (
     <>
-      {ExactPath !== "Vendor" && ExactPath !== "Attribute" ? (
+      {ExactPath !== "Vendor" &&
+      ExactPath !== "Attribute" &&
+      ExactPath !== "CreateTemplate" &&
+      ExactPath !== "Value" ? (
         <nav className="masters-sidenavbar-class">
           <p>{SelectedMasterDatatab}</p>
           <ul>

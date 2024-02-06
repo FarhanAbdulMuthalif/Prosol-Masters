@@ -25,6 +25,8 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     { name: "Vendor", path: "/Masters/Vendor" },
     { name: "GeneralSetting", path: "/Masters/GeneralSetting" },
     { name: "Attribute", path: "/Masters/Attribute" },
+    { name: "Value", path: "/Masters/Value" },
+    { name: "CreateTemplate", path: "/Masters/CreateTemplate" },
   ];
   return (
     <div className={OpenSideBar ? "full-side-bar" : "side-bar"}>

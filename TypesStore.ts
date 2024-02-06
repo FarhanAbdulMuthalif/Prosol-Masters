@@ -28,6 +28,9 @@ export type MasterNavBarDataRenderTypes = {
   SalesAndOthers: subSecondNavbarType[];
   Vendor: subSecondNavbarType[];
   GeneralSetting: subSecondNavbarType[];
+  Attribute: subSecondNavbarType[];
+  Value: subSecondNavbarType[];
+  CreateTemplate: subSecondNavbarType[];
 };
 export type subSecondNavbarType = { name: string; path: string };
 
@@ -39,6 +42,8 @@ export type mastersProps = {
   Vendor: mastersVendorSubsubFields;
   GeneralSetting: masterGeneralSettingsSubFields;
   Attribute: mastersVendorSubsubFields;
+  Value: mastersVendorSubsubFields;
+  CreateTemplate: mastersVendorSubsubFields;
 };
 export type masterGeneralSettingsSubFields = {
   MainGroupCodes: mastersGeneralSubsubFields;
@@ -51,6 +56,22 @@ export type masterGeneralSettingsSubFields = {
   HSN: mastersGeneralSubsubFields;
 };
 export type mastersVendorSubsubFields = {
+  getAll: string;
+  getSingle: string;
+  create: string;
+  createBulk: string;
+  updateStatus: string;
+  updateBulkStatus: string;
+  template: string;
+  exportPdf: string;
+  exportExcel: string;
+  delete: string;
+  deleteBulk: string;
+  update: string;
+  includePlantDropdown: boolean;
+  keyName: string;
+};
+export type mastersCreateTemplateSubsubFields = {
   getAll: string;
   getSingle: string;
   create: string;

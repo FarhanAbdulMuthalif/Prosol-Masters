@@ -9,21 +9,26 @@ import CustomTabs from "@/components/Tabs/Tabs";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
 import { getAllPlantData } from "@/utils/masters/plant";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
+
 import {
   mastersProps,
   mastersVendorSubsubFields,
 } from "../../../../TypesStore";
 
-import CreateVendor from "./(VendorAction)/_CreateVendor";
-import EditVendor from "./(VendorAction)/_EditVendor";
-import VendorGrid from "./(VendorAction)/_VendorGrid";
+import OutlinedButton from "@/components/Button/OutlineButton";
+import UploadButton from "@/components/Button/UploadButton";
+import { Menu, MenuItem } from "@mui/material";
+import CreateValue from "./(ValueAction)/_CreateValueMaster";
+import EditValueMastre from "./(ValueAction)/_EditValueMastre";
+import ValueGrid from "./(ValueAction)/_ValueGrid";
 import "./style.scss";
 
-export default function Vendor() {
+export default function Value() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -68,7 +73,7 @@ export default function Vendor() {
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
-      setSelectedMasterDatatab("Vendor");
+      setSelectedMasterDatatab("Value");
     }
   }, [setSelectedMasterDatatab]);
   const auth = UseAuth();
@@ -143,14 +148,14 @@ export default function Vendor() {
   };
   const tabRenderValuePlant: Record<string, ReactNode> = {
     table: (
-      <VendorGrid
+      <ValueGrid
         selectionIDArr={setSelectionIDArr}
         handleOpenConfirmationDeleteDialog={GetIdandOpenHandler}
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: <CreateVendor />,
-    edit: <EditVendor EditDataGet={EditDataGet} />,
+    create: <CreateValue />,
+    edit: <EditValueMastre EditDataGet={EditDataGet} />,
   };
   const getAllLinkName = (masters[ExactPath] as mastersVendorSubsubFields)
     ?.getAll;
@@ -257,7 +262,7 @@ export default function Vendor() {
           ) : (
             ""
           )}
-          {/* <UploadButton />
+          <UploadButton />
           <OutlinedButton
             startIcon={<FileDownloadIcon />}
             onClick={() => {
@@ -266,7 +271,7 @@ export default function Vendor() {
           >
             Download Template
           </OutlinedButton>
-          <FillButton onClick={handleClick}>Export Type</FillButton> */}
+          <FillButton onClick={handleClick}>Export Type</FillButton>
           <FillButton
             onClick={() => {
               setCreateDrawerOpen(true);
@@ -274,7 +279,7 @@ export default function Vendor() {
           >
             Add Fields
           </FillButton>
-          {/* <Menu
+          <Menu
             id="basic-menu"
             anchorEl={anchorEl}
             open={open}
@@ -297,7 +302,7 @@ export default function Vendor() {
             >
               Excel Format
             </MenuItem>
-          </Menu> */}
+          </Menu>
         </div>
       </div>
       <div className="masters-main-content-body">
