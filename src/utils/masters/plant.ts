@@ -1,4 +1,5 @@
 import api from "@/components/api";
+import { styled } from "@mui/material";
 import { mastersProps } from "../../../TypesStore";
 
 export const getAllPlantData = async (url: string) => {
@@ -801,19 +802,36 @@ export const MasterSubFieldWithData: mastersProps = {
     keyName: "vm",
   },
   CreateTemplate: {
-    getAll: "/value/getAllValue?attributeUom=true",
-    getSingle: "/value/getValueById",
-    create: "/value/saveValue",
-    createBulk: "/value/uploadFile",
-    updateStatus: "",
-    updateBulkStatus: "",
-    template: "/value/downloadTemplate/value",
-    exportPdf: "/value/exportPdf/AllData",
-    exportExcel: "/value/export/AllData",
-    delete: "/value/deleteValue",
+    getAllnoun: "/dictionary/noun-suggestions?noun=",
+    getAllModifier: "/dictionary/modifier-suggestions?noun=",
+    getAll: "/dictionary/getAllDictionary",
+    create: "/dictionary/saveDictionaryImage",
+    getById: "/dictionary/getDictionaryById",
+    delete: "/dictionary/deleteDictionary",
     deleteBulk: "/value/deleteBatchValue",
-    update: "/value/updateValue",
-    includePlantDropdown: false,
-    keyName: "vm",
+    update: "/dictionary/updatedDictionary/",
   },
 };
+
+export const CharacteristSingleInitialData = {
+  id: 1,
+  attributeId: 0,
+  shortPriority: 1,
+  mandatory: false,
+  definition: "",
+  valueId: [],
+  uomMandatory: false,
+  attrUomId: [],
+};
+
+export const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: "100%",
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: "100%",
+});

@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
 
-import { TextField } from "@mui/material";
+import ReusableSnackbar from "@/components/Snackbar/Snackbar";
+import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import api from "@/components/api";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import "./ForgotPassword.css";
@@ -14,9 +16,20 @@ const ForgotPassword: React.FC<{
   const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailText(event.target.value);
   };
+  const [sucesSnackBar, setSucesSnackBar] = useState(false);
 
   const BackToLoginSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    try {
+      const res = await api.post("/user/forgotPassword", { email: emailText });
+      const data = await res.data;
+      if (res.status === 200) {
+        setSucesSnackBar(true);
+        setShowForgotPassword(false);
+      }
+    } catch (e: any) {
+      console.log(e?.response);
+    }
   };
   const handleDialogSave = () => {
     setShowForgotPassword(false);
@@ -38,7 +51,7 @@ const ForgotPassword: React.FC<{
           instruction!
         </p>
         <span>Email</span>
-        <TextField
+        <OutlineTextField
           type="text"
           placeholder="Enter Email"
           id="input-email-forgot-password"
@@ -66,6 +79,12 @@ const ForgotPassword: React.FC<{
           </Button>
         </div>
       </div>
+      <ReusableSnackbar
+        message={`Password Send Sucessfully To Mentioned Email!`}
+        severity="success"
+        setOpen={setSucesSnackBar}
+        open={sucesSnackBar}
+      />
     </form>
   );
 };

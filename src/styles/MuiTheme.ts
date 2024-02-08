@@ -38,6 +38,9 @@ export const MuiCreateTheme = createTheme({
       styleOverrides: {
         root: {
           padding: 0,
+          "& .MuiInputBase-root": {
+            padding: 0, // Set padding to 0
+          },
         },
       },
     },

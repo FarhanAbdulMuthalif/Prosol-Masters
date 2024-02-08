@@ -43,7 +43,7 @@ export type mastersProps = {
   GeneralSetting: masterGeneralSettingsSubFields;
   Attribute: mastersVendorSubsubFields;
   Value: mastersVendorSubsubFields;
-  CreateTemplate: mastersVendorSubsubFields;
+  CreateTemplate: mastersCreateTemplateSubsubFields;
 };
 export type masterGeneralSettingsSubFields = {
   MainGroupCodes: mastersGeneralSubsubFields;
@@ -72,20 +72,14 @@ export type mastersVendorSubsubFields = {
   keyName: string;
 };
 export type mastersCreateTemplateSubsubFields = {
+  getAllnoun: string;
+  getAllModifier: string;
   getAll: string;
-  getSingle: string;
   create: string;
-  createBulk: string;
-  updateStatus: string;
-  updateBulkStatus: string;
-  template: string;
-  exportPdf: string;
-  exportExcel: string;
+  getById: string;
   delete: string;
   deleteBulk: string;
   update: string;
-  includePlantDropdown: boolean;
-  keyName: string;
 };
 
 export type mastersPlantSubFields = {
@@ -278,3 +272,36 @@ export type KeysToRemoveEditMaster =
   | "salesOrganization"
   | "storageLocation"
   | "subGroupCodesId";
+
+export type CharacteristicSingleProps = {
+  id: number;
+  attributeId: number;
+  shortPriority: number;
+  mandatory: boolean;
+  definition: string;
+  valueId: number[];
+  uomMandatory: boolean;
+  attrUomId: number[];
+};
+
+export interface AttributeMasterSingle {
+  id: number;
+  attributeName: string;
+  fieldType: string;
+  listUom: ListUom[];
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListUom {
+  id: number;
+  attributeUomName: string;
+  attributeUnit: string;
+  attributeUomStatus: boolean;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}

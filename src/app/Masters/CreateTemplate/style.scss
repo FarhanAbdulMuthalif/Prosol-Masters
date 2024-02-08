@@ -9,13 +9,13 @@
     padding: 0 10px;
   }
 }
-.create-plant-wrapper-div {
-  height: 70vh;
+.create-template-wrapper-div {
+  height: 85%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   padding: 0 10px;
-  .create-plant-field-place-div {
+  .create-template-field-place-div {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
     gap: 20px;
@@ -34,7 +34,95 @@
     .template-nm-uom-section-checkbox {
       width: 100%;
       border: 1px solid #c5ccd4a7;
+      border-radius: 5px;
       padding: 5px 10px;
+    }
+  }
+  .template-nm-characteristic-section {
+    min-height: 35px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #1976d2;
+    border-radius: 5px;
+    padding: 0 10px;
+    .template-nm-characteristic-section-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      display: flex;
+    }
+    .one {
+      flex: 4;
+      padding-left: 10px;
+    }
+    .two {
+      flex: 1;
+    }
+    .three,
+    .six {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .four {
+      flex: 5;
+      padding-left: 30px;
+    }
+    .eight {
+      flex: 1;
+      padding-left: 30px;
+    }
+    .five,
+    .seven {
+      flex: 2;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .template-nm-characteristic-section-input-wrp {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    // height: 200px;
+    overflow-y: auto;
+    .template-nm-characteristic-section-input-div {
+      min-height: 40px;
+      height: 40px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      align-items: center;
+      border-radius: 5px;
+      // border: 1px solid #c5ccd45d;
+
+      .one {
+        flex: 4;
+      }
+      .two {
+        flex: 1;
+      }
+      .three,
+      .six {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+      .four {
+        flex: 5;
+      }
+      .eight {
+        flex: 1;
+      }
+      .five,
+      .seven {
+        flex: 2;
+        display: flex;
+        justify-content: center;
+      }
     }
   }
   .create-plant-action-div {
