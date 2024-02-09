@@ -172,7 +172,12 @@ export default function Value() {
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFileSelect(e.target.files[0]);
+      const selectedImage = e.target.files[0];
+      console.log(selectedImage);
+      setFileSelect(selectedImage);
+      setFormData((prev: any) => {
+        return { ...prev, image: selectedImage?.name };
+      });
     }
   };
   const handleCharacteristicInputChange = (
@@ -242,7 +247,7 @@ export default function Value() {
     console.log(CleanCharacteristic);
 
     setFormData((prev: any) => {
-      return { ...prev, attributes: CleanCharacteristic, image: "NmImage" };
+      return { ...prev, attributes: CleanCharacteristic };
     });
     const dataFrm = new FormData();
     dataFrm.append("source", JSON.stringify(formData));
@@ -427,7 +432,11 @@ export default function Value() {
             rows={2}
           />
           <OutlinedButton component="label" startIcon={<CloudUploadIcon />}>
-            Upload Image
+            {formData
+              ? formData?.image
+                ? formData?.image
+                : "Upload Image"
+              : "Upload Image"}
             <input
               type="file"
               accept="image/*"

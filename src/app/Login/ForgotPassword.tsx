@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import Button from "@mui/material/Button";
@@ -10,17 +9,19 @@ import "./ForgotPassword.css";
 
 const ForgotPassword: React.FC<{
   setShowForgotPassword: (att: boolean) => void;
-}> = ({ setShowForgotPassword }) => {
+  setSucesSnackBar: (att: boolean) => void;
+}> = ({ setShowForgotPassword, setSucesSnackBar }) => {
   const [emailText, setEmailText] = useState<string>("");
+  const [loading, setloading] = useState(false);
 
   const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailText(event.target.value);
   };
-  const [sucesSnackBar, setSucesSnackBar] = useState(false);
 
   const BackToLoginSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
+      setloading(true);
       const res = await api.post("/user/forgotPassword", { email: emailText });
       const data = await res.data;
       if (res.status === 200) {
@@ -29,6 +30,8 @@ const ForgotPassword: React.FC<{
       }
     } catch (e: any) {
       console.log(e?.response);
+    } finally {
+      setloading(false);
     }
   };
   const handleDialogSave = () => {
@@ -74,17 +77,12 @@ const ForgotPassword: React.FC<{
             style={{ alignSelf: "flex-end" }}
             type="submit"
             variant="contained"
+            disabled={loading}
           >
-            Submit
+            {loading ? "Loading" : "Submit"}
           </Button>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`Password Send Sucessfully To Mentioned Email!`}
-        severity="success"
-        setOpen={setSucesSnackBar}
-        open={sucesSnackBar}
-      />
     </form>
   );
 };

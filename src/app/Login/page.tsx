@@ -1,5 +1,6 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -21,8 +22,11 @@ const Login = () => {
   // const [captchaTextInput, setCaptchaTextInput] = useState("");
   // const [errorCaptcha, setErroeCaptcha] = useState(false);
   // const [succesCaptcha, setSuccesCaptcha] = useState(false);
+  const [loading, setloading] = useState(false);
+  const [sucesSnackBar, setSucesSnackBar] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emptyError, setEmptyError] = useState(false);
+  const [InvalidUser, setInvalidUser] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const [email, setemail] = useState("");
@@ -66,13 +70,14 @@ const Login = () => {
 
   const SubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setInvalidUser(false);
     // if (captchaTextInput === captchaText) {
     if (email?.length > 0 && password?.length > 0) {
       setEmptyError(false);
       // setErroeCaptcha(false);
       // setSuccesCaptcha(true);
       try {
+        setloading(true);
         const res = await apiLogin.post("user/auth/login", { email, password });
         const data = await res.data;
         console.log(data);
@@ -89,6 +94,11 @@ const Login = () => {
         }
       } catch (e: any) {
         console.log(e?.response);
+        if (e?.response?.status === 401) {
+          setInvalidUser(true);
+        }
+      } finally {
+        setloading(false);
       }
     } else {
       setEmptyError(true);
@@ -108,7 +118,10 @@ const Login = () => {
   return (
     <div className="login-form">
       {showForgotPassword && (
-        <ForgotPassword setShowForgotPassword={setShowForgotPassword} />
+        <ForgotPassword
+          setShowForgotPassword={setShowForgotPassword}
+          setSucesSnackBar={setSucesSnackBar}
+        />
       )}
       {!showForgotPassword && (
         <div className="login-form-content">
@@ -135,6 +148,15 @@ const Login = () => {
                   Username and password cannot be empty
                 </span>
               )}
+              {InvalidUser && (
+                <span
+                  className="erroe-msg"
+                  style={{ color: "red", fontSize: ".9rem" }}
+                >
+                  Please enter the valid email and password
+                </span>
+              )}
+
               <OutlineTextField
                 type="text"
                 placeholder="Username"
@@ -261,10 +283,17 @@ const Login = () => {
               }}
               type="submit"
               variant="contained"
+              disabled={loading}
             >
-              Login
+              {loading ? "Loading...." : "Login"}
             </Button>
           </form>
+          <ReusableSnackbar
+            message={`Password Send Sucessfully To Mentioned Email!`}
+            severity="success"
+            setOpen={setSucesSnackBar}
+            open={sucesSnackBar}
+          />
         </div>
       )}
     </div>
