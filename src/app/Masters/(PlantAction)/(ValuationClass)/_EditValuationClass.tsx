@@ -1,6 +1,7 @@
 "use client";
 import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTrial";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
@@ -281,36 +282,7 @@ export default function EditValuationClass({ EditDataGet }: any) {
             );
           })}
         </div>
-        <div className="edit-master-audit-trial-view">
-          <div className="edit-master-audit-wrpr">
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Created By :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData?.createdBy}
-              </p>
-            </div>
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Created At :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData?.createdAt}
-              </p>
-            </div>
-          </div>
-          <div className="edit-master-audit-wrpr">
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Updated By :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData?.updatedBy}
-              </p>
-            </div>
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Updated At :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData?.updatedAt}
-              </p>
-            </div>
-          </div>
-        </div>
+        <MasterAuditTrial formData={formData}></MasterAuditTrial>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>

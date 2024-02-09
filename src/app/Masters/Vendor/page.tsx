@@ -65,14 +65,15 @@ export default function Vendor() {
     tabValue,
     settabValue,
     editTabShow,
+    auth,
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
       setSelectedMasterDatatab("Vendor");
     }
   }, [setSelectedMasterDatatab]);
-  const auth = UseAuth();
-  if (!auth) {
+  const authHook = UseAuth();
+  if (!authHook && !auth) {
     return null;
   }
 

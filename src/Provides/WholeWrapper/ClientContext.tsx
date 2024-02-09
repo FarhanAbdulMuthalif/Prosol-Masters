@@ -8,12 +8,25 @@ import { toogleSidebarHandler } from "@/utils/sideBarFunc";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ThemeProvider } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
-import { UseContextHookTypes } from "../../../TypesStore";
+import { SingleUserInfoProps, UseContextHookTypes } from "../../../TypesStore";
 import { UseContextHook } from "../UseContextHook";
 import "./ClientContext.scss";
 
 export default function ClientContext({ children }: { children: ReactNode }) {
   const [toogleSidebar, settoogleSidebar] = useState(true);
+  const [userId, setuserId] = useState(0);
+  const [UserInfo, setUserInfo] = useState<SingleUserInfoProps>({
+    id: 0,
+    email: "",
+    firstName: "",
+    lastName: "",
+    phone: 0,
+    business: "",
+    departmentId: 0,
+    plantId: [],
+    status: true,
+    roles: [],
+  });
   const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
@@ -30,6 +43,10 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   }, []);
 
   const ContextVal: UseContextHookTypes = {
+    UserInfo,
+    setUserInfo,
+    setuserId,
+    userId,
     toogleSidebar,
     auth,
     setPlantData,
@@ -55,21 +72,24 @@ export default function ClientContext({ children }: { children: ReactNode }) {
         <Header />
         <div className="wrapper-parent">
           <Navbar OpenSideBar={toogleSidebar} />
-
-          <div
-            className={toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"}
-            onClick={() => {
-              settoogleSidebar(toogleSidebarHandler);
-            }}
-          >
-            <ArrowForwardIosIcon
-              style={iconRotateHandler}
-              sx={{
-                color: "blue",
-                fontSize: "14px",
+          {auth ? (
+            <div
+              className={toogleSidebar ? "icon-wrapper" : "close-icon-wrapper"}
+              onClick={() => {
+                settoogleSidebar(toogleSidebarHandler);
               }}
-            />
-          </div>
+            >
+              <ArrowForwardIosIcon
+                style={iconRotateHandler}
+                sx={{
+                  color: "blue",
+                  fontSize: "14px",
+                }}
+              />
+            </div>
+          ) : (
+            ""
+          )}
 
           <div className="wrapper-child">{children}</div>
         </div>

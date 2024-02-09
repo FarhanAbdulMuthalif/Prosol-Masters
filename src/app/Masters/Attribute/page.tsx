@@ -70,14 +70,15 @@ export default function VendoAttributer() {
     tabValue,
     settabValue,
     editTabShow,
+    auth,
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
       setSelectedMasterDatatab("Attribute");
     }
   }, [setSelectedMasterDatatab]);
-  const auth = UseAuth();
-  if (!auth) {
+  const authHook = UseAuth();
+  if (!authHook && !auth) {
     return null;
   }
 

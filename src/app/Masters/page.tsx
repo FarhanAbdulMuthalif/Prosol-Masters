@@ -61,7 +61,7 @@ export default function Masters() {
     setSelectedMasterDatatab,
     tabValue,
     settabValue,
-
+    auth,
     editTabShow,
   } = PlantDataCon;
   const router = useRouter();
@@ -81,8 +81,8 @@ export default function Masters() {
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
 
-  const auth = UseAuth();
-  if (!auth) {
+  const authHook = UseAuth();
+  if (!authHook && !auth) {
     return null;
   }
 

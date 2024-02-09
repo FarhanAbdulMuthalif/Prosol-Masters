@@ -1,14 +1,15 @@
 "use client";
+import { UseContextHook } from "@/Provides/UseContextHook";
+import { getAllPlantData } from "@/utils/masters/plant";
 import HelpIcon from "@mui/icons-material/Help";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { Menu, MenuItem } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
-import { UseContextHook } from "@/Provides/UseContextHook";
-import { Menu, MenuItem } from "@mui/material";
-import { MouseEvent, useContext, useState } from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 import api from "../api";
 import "./style.scss";
 
@@ -20,17 +21,21 @@ export default function Header() {
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // const auth = UseAuth();
-  // useEffect(() => {
-  //   if (!auth) {
-  //     // Redirect to login page if not authenticated
-  //     router.push("/Login");
-  //   }
-  // }, [auth, router]);
-  const { auth, setauth } = useContext(UseContextHook);
+
+  const { auth, setauth, UserInfo, setUserInfo } = useContext(UseContextHook);
+  useEffect(() => {
+    const fetchData = async () => {
+      const dataUser = await getAllPlantData(`/user/me`);
+      if (setUserInfo) {
+        setUserInfo(dataUser);
+      }
+    };
+    fetchData();
+  }, [setUserInfo]);
   if (!auth) {
     return null;
   }
@@ -38,6 +43,7 @@ export default function Header() {
     try {
       const res = await api.post("/user/auth/logout");
       if (res.status === 200) {
+        setAnchorEl(null);
         localStorage.clear();
         router.push("/Login");
         if (setauth) {
@@ -106,7 +112,9 @@ export default function Header() {
             handleClick(e);
           }}
         >
-          <span>Super Admin</span>
+          <span>
+            {UserInfo?.firstName} {UserInfo?.lastName}
+          </span>
 
           <Image src="/Images/AdminSvg.svg" height={40} width={40} alt="Img" />
         </div>
@@ -119,7 +127,13 @@ export default function Header() {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem
+            sx={{ display: "flex", gap: "10px" }}
+            onClick={handleLogout}
+          >
+            <LogoutOutlinedIcon />
+            Logout
+          </MenuItem>
         </Menu>
       </div>
     </header>

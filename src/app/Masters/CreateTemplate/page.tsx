@@ -79,7 +79,7 @@ export default function Value() {
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
   const PlantDataCon = useContext(UseContextHook);
-  const { masters, SelectedMasterDatatab, setSelectedMasterDatatab } =
+  const { masters, SelectedMasterDatatab, setSelectedMasterDatatab, auth } =
     PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
@@ -146,13 +146,11 @@ export default function Value() {
     : [];
   // const SingleAttributeMasterUom= attributeMasterOriginalArray ? attributeMasterOriginalArray.find((Data)=>Data.id=== ): []
 
-  const auth = UseAuth();
-  if (
-    !auth ||
-    !nmUomDropDownData ||
-    !SelectedMasterDatatab ||
-    !attributeMasterDwnData
-  ) {
+  const authHook = UseAuth();
+  if (!authHook && !auth) {
+    return null;
+  }
+  if (!nmUomDropDownData || !SelectedMasterDatatab || !attributeMasterDwnData) {
     return null;
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

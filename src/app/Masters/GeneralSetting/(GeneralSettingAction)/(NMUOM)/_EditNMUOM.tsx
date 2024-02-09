@@ -1,14 +1,12 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTrial";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
-import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
+import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
-import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
-import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
-import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -145,100 +143,15 @@ export default function EditNMUOM({ EditDataGet }: any) {
             name={fieldName}
           />
 
-          {dynamicFields?.map((data: PostCreateFieldData) => {
-            return (
-              <>
-                {data.dataType === "textField" ? (
-                  <OutlineTextField
-                    placeholder={`Enter ${data.fieldName}`}
-                    key={data.id}
-                    type={data.identity}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                    name={data.fieldName}
-                    inputProps={{
-                      autoComplete: "new-password",
-                      maxLength: data.max,
-                      minLength: data.min,
-                    }}
-                  />
-                ) : data.dataType === "textArea" ? (
-                  <TextareaOutline
-                    placeholder={`Enter ${data.fieldName}`}
-                    key={data.id}
-                    rows={typeof Number(data.identity) ? data.identity : 2}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                    name={data.fieldName}
-                    inputProps={{
-                      autoComplete: "new-password",
-                      maxLength: data.max,
-                      minLength: data.min,
-                    }}
-                  />
-                ) : data.dataType === "dropDown" &&
-                  data.identity === "single" ? (
-                  <DynamicSingleSelectDropdown
-                    label={`Select ${data.fieldName}`}
-                    value={formData[data.fieldName]}
-                    onChange={handleSelectChange}
-                    options={data.dropDowns ? data.dropDowns : []}
-                    name={data.fieldName}
-                  />
-                ) : data.dataType === "dropDown" &&
-                  data.identity === "multiple" ? (
-                  <MultipleDynamicSelectDropdown
-                    label={`Select ${data.fieldName}`}
-                    value={formData[data.fieldName]}
-                    onChange={handleMultiSelectChange}
-                    options={data.dropDowns ? data.dropDowns : []}
-                    name={data.fieldName}
-                  />
-                ) : data.dataType === "radioButton" ? (
-                  <RadioGroupComponent
-                    label={`${data.fieldName} :`}
-                    name={data.fieldName}
-                    options={data.enums ? data?.enums : []}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                  />
-                ) : (
-                  ""
-                )}
-              </>
-            );
-          })}
+          <MasterDynamicFieldRender
+            formData={formData}
+            dynamicFields={dynamicFields}
+            handleInputChange={handleInputChange}
+            handleMultiSelectChange={handleMultiSelectChange}
+            handleSelectChange={handleSelectChange}
+          />
         </div>
-        <div className="edit-master-audit-trial-view">
-          <div className="edit-master-audit-wrpr">
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Created By :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData.createdBy}
-              </p>
-            </div>
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Created At :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData.createdAt}
-              </p>
-            </div>
-          </div>
-          <div className="edit-master-audit-wrpr">
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Updated By :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData.updatedBy}
-              </p>
-            </div>
-            <div className="edit-master-audit-trial-single-view">
-              <p className="edit-master-audit-trial-label">Updated At :</p>
-              <p className="edit-master-audit-trial-label-value">
-                {formData.updatedAt}
-              </p>
-            </div>
-          </div>
-        </div>
+        <MasterAuditTrial formData={formData}></MasterAuditTrial>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>

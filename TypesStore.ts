@@ -1,8 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 
 export type UseContextHookTypes = {
+  userId: number;
   toogleSidebar: boolean;
   auth: boolean;
+  setUserInfo?: Dispatch<SetStateAction<SingleUserInfoProps>>;
+  UserInfo?: SingleUserInfoProps;
+  setuserId?: (val: number) => void;
   setPlantData?: Dispatch<SetStateAction<any[] | undefined>>; // Adjust the type here
   PlantData?: any[] | undefined; // Adjust the type here
   masters: mastersProps;
@@ -305,3 +309,15 @@ export interface ListUom {
   createdAt: string;
   updatedAt: string;
 }
+export type SingleUserInfoProps = {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: number;
+  business: string;
+  departmentId: number;
+  plantId: number[];
+  status: boolean;
+  roles: number[];
+};

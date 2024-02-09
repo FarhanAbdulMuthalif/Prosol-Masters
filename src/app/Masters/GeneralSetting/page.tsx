@@ -81,14 +81,15 @@ export default function GeneralSetting() {
     tabValue,
     settabValue,
     editTabShow,
+    auth,
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
       setSelectedMasterDatatab("MainGroupCodes");
     }
   }, [setSelectedMasterDatatab]);
-  const auth = UseAuth();
-  if (!auth) {
+  const authHook = UseAuth();
+  if (!authHook && !auth) {
     return null;
   }
 
