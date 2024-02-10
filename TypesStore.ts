@@ -17,6 +17,7 @@ export type UseContextHookTypes = {
   setauth?: (val: boolean) => void;
   seteditTabShow?: (val: boolean) => void;
   editTabShow?: boolean;
+  setReusableSnackBar?: Dispatch<SetStateAction<SnackBarReusableProps>>;
 };
 export type NavKeyType = {
   [key in string]: NavSinData[];
@@ -320,4 +321,9 @@ export type SingleUserInfoProps = {
   plantId: number[];
   status: boolean;
   roles: number[];
+};
+export type SnackBarReusableProps = {
+  open: boolean;
+  message: string;
+  severity: "success" | "info" | "error" | "warning";
 };

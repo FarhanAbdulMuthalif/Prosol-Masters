@@ -5,7 +5,6 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { SelectChangeEvent } from "@mui/material";
@@ -27,10 +26,9 @@ export default function CreateSubSubGroupCode() {
   });
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  const { SelectedMasterDatatab, masters, setReusableSnackBar } = PlantDataCon;
 
   const [formData, setFormData] = useState<any>({});
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -83,7 +81,8 @@ export default function CreateSubSubGroupCode() {
   if (
     !SelectedMasterDatatab ||
     !MainGroupDropDownData ||
-    !SubGroupDropDownData
+    !SubGroupDropDownData ||
+    !setReusableSnackBar
   ) {
     return null;
   }
@@ -132,7 +131,11 @@ export default function CreateSubSubGroupCode() {
           setFormData((prev: any) => {
             return { [fieldName]: "", [fieldCode]: "" };
           });
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} Created Sucessfully!`,
+            open: true,
+          }));
         }
       } catch (e: any) {
         console.log(e?.response);
@@ -229,12 +232,6 @@ export default function CreateSubSubGroupCode() {
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

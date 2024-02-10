@@ -2,7 +2,6 @@
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api from "@/components/api";
 import { UserInitialState } from "@/utils/UserDataExport";
@@ -16,18 +15,18 @@ import EditUser from "./_EditUser";
 import UserGrid from "./_UserGrid";
 import "./style.scss";
 export default function UserManagement() {
-  const mastersData = useContext(UseContextHook);
+  const UserDataCon = useContext(UseContextHook);
+  const { setReusableSnackBar } = UserDataCon;
   const [tabValue, settabValue] = useState("table");
   const [selectionIDArr, setSelectionIDArr] = useState<GridRowId[]>([]);
   const [UserData, setUserData] = useState<UserInitialStateProps[]>([]);
   const [bulkStatusDialog, setbulkStatusDialog] = useState(false);
   const [bulkDeleteDialog, setbulkDeleteDialog] = useState(false);
-  const [blkdltSucess, setblkdltSucess] = useState(false);
-  const [blkstatusSucess, setblkstatusSucess] = useState(false);
+
   const [EditDataGet, setEditDataGet] =
     useState<UserInitialStateProps>(UserInitialState);
   const auth = UseAuth();
-  if (!auth) {
+  if (!auth || !setReusableSnackBar) {
     return null;
   }
   const tabs = [
@@ -78,7 +77,11 @@ export default function UserManagement() {
       });
       const Users = await api.get(`/user/getAllUsers`);
       if (res.status === 200) {
-        setblkdltSucess(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `User updated Sucessfully!`,
+          open: true,
+        }));
         setUserData(Users.data);
         setbulkDeleteDialog(false);
       }
@@ -96,7 +99,11 @@ export default function UserManagement() {
       if (res.status === 200) {
         setUserData(Users.data);
         setbulkStatusDialog(false);
-        setblkstatusSucess(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `User s updated Sucessfully!`,
+          open: true,
+        }));
       }
     } catch (e: any) {
       console.log(e?.response);
@@ -147,18 +154,6 @@ export default function UserManagement() {
         content="you may not log the account on inactive"
         onConfirm={bulkStatusConformation}
         onCancel={handleOpenBulkStatusDialog}
-      />
-      <ReusableSnackbar
-        message={`User Status Changed Sucessfully!`}
-        severity="success"
-        setOpen={setblkstatusSucess}
-        open={blkstatusSucess}
-      />
-      <ReusableSnackbar
-        message={`User Deleted Sucessfully!`}
-        severity="success"
-        setOpen={setblkdltSucess}
-        open={blkdltSucess}
       />
     </div>
   );

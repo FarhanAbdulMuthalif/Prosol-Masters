@@ -1,6 +1,5 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
-import { getAllPlantData } from "@/utils/masters/plant";
 import HelpIcon from "@mui/icons-material/Help";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -9,7 +8,7 @@ import { Menu, MenuItem } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import api from "../api";
 import "./style.scss";
 
@@ -26,16 +25,16 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const { auth, setauth, UserInfo, setUserInfo } = useContext(UseContextHook);
-  useEffect(() => {
-    const fetchData = async () => {
-      const dataUser = await getAllPlantData(`/user/me`);
-      if (setUserInfo) {
-        setUserInfo(dataUser);
-      }
-    };
-    fetchData();
-  }, [setUserInfo]);
+  const { auth, setauth, UserInfo } = useContext(UseContextHook);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const dataUser = await getAllPlantData(`/user/me`);
+  //     if (setUserInfo) {
+  //       setUserInfo(dataUser);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [setUserInfo]);
   if (!auth) {
     return null;
   }

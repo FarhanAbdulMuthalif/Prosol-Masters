@@ -1,13 +1,19 @@
+import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import api from "@/components/api";
 import { UserTableColumns } from "@/utils/TableSources";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Switch } from "@mui/material";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { UserInitialStateProps } from "../../../TypesStore";
 
 export default function UserGrid({
@@ -22,7 +28,8 @@ export default function UserGrid({
   EditSetRecordAndGotoAction: (val: UserInitialStateProps) => void;
 }) {
   const [SlectedId, setSlectedId] = useState(0);
-  const [OpenDeleteSnackBar, setOpenDeleteSnackBar] = useState(false);
+  const UserDataCon = useContext(UseContextHook);
+  const { setReusableSnackBar } = UserDataCon;
   const [DeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +42,9 @@ export default function UserGrid({
     };
     fetchData();
   }, [setUserData]);
+  if (!setReusableSnackBar) {
+    return null;
+  }
   const SingleUserStatusHandler = async (id: number) => {
     try {
       const res = await api.patch(`/user/updateStatusById/${id}`);
@@ -58,7 +68,11 @@ export default function UserGrid({
       const data = await res.data;
       const Users = await api.get(`/user/getAllUsers`);
       if (res.status === 204) {
-        setOpenDeleteSnackBar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `User Deleted Sucessfully!`,
+          open: true,
+        }));
         setDeleteDialogOpen(false);
         setUserData(Users.data);
       }
@@ -130,12 +144,6 @@ export default function UserGrid({
         content="you may lose your record"
         onConfirm={handleUserDeleteHandler}
         onCancel={handleDeleteCloseDialog}
-      />
-      <ReusableSnackbar
-        message={`User Deleted Sucessfully!`}
-        severity="success"
-        setOpen={setOpenDeleteSnackBar}
-        open={OpenDeleteSnackBar}
       />
     </div>
   );

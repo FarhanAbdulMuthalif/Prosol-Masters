@@ -3,7 +3,6 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { SelectChangeEvent } from "@mui/material";
@@ -25,10 +24,9 @@ export default function CreateNMUOM() {
   });
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  const { SelectedMasterDatatab, masters, setReusableSnackBar } = PlantDataCon;
 
   const [formData, setFormData] = useState<any>({});
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
       try {
@@ -53,7 +51,7 @@ export default function CreateNMUOM() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
+  if (!SelectedMasterDatatab || !setReusableSnackBar) {
     return null;
   }
   const fieldName = `${
@@ -93,7 +91,11 @@ export default function CreateNMUOM() {
           setFormData((prev: any) => {
             return { [fieldName]: "" };
           });
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} Created Sucessfully!`,
+            open: true,
+          }));
         }
       } catch (e: any) {
         console.log(e?.response);
@@ -158,12 +160,6 @@ export default function CreateNMUOM() {
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

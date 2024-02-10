@@ -4,7 +4,6 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
 import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api from "@/components/api";
 import { getAllPlantData } from "@/utils/masters/plant";
@@ -26,7 +25,6 @@ import Generalgrid from "./(GeneralAction)/_GeneralGrid";
 import "./style.scss";
 
 export default function General() {
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [
@@ -59,6 +57,7 @@ export default function General() {
     settabValue,
     editTabShow,
     auth,
+    setReusableSnackBar,
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
@@ -70,7 +69,7 @@ export default function General() {
     return null;
   }
 
-  if (!tabValue || !settabValue) {
+  if (!tabValue || !settabValue || !setReusableSnackBar) {
     return null;
   }
   const handleChange = (
@@ -119,7 +118,11 @@ export default function General() {
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
       const data = await res.data;
       if (res.status === 204) {
-        setOpenSnackbar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `${SelectedMasterDatatab} Deleted Sucessfully!`,
+          open: true,
+        }));
         setConfirmationDeleteDialogOpen(false);
         if (setPlantData) {
           setPlantData(dataPlant);
@@ -191,7 +194,11 @@ export default function General() {
 
       if (res.status === 204) {
         setConfirmationBulkDeleteDialogOpen(false);
-        setOpenSnackbar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `${SelectedMasterDatatab} Deleted Sucessfully!`,
+          open: true,
+        }));
         if (setPlantData) {
           setPlantData(dataPlant);
           setConfirmationDeleteDialogOpen(false);
@@ -260,12 +267,7 @@ export default function General() {
         onConfirm={handlePlantDeleteHandler}
         onCancel={handleOpenConfirmationDeleteDialog}
       />
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} Deleted Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
+
       <CreateDreawer
         OpenDrawer={CreateDrawerOpen}
         HandlerCloseDrawer={HandlerCloseCreateDrawer}

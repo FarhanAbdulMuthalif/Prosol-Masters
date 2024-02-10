@@ -6,7 +6,6 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { SelectChangeEvent } from "@mui/material";
@@ -29,9 +28,9 @@ export default function EditValueMastre({ EditDataGet }: any) {
   // const { id, updatedAt, updatedBy, createdBy, createdAt } = EditDataGet;
 
   const PlantDataCon = useContext(UseContextHook);
-  const { masters, SelectedMasterDatatab, settabValue } = PlantDataCon;
+  const { masters, SelectedMasterDatatab, settabValue, setReusableSnackBar } =
+    PlantDataCon;
   const [formData, setFormData] = useState<any>(EditDataGet);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   useEffect(() => {
     setFormData((data: any) => {
@@ -76,7 +75,12 @@ export default function EditValueMastre({ EditDataGet }: any) {
       )
     : [];
 
-  if (!SelectedMasterDatatab || !attUomDropDownData || !settabValue) {
+  if (
+    !SelectedMasterDatatab ||
+    !attUomDropDownData ||
+    !settabValue ||
+    !setReusableSnackBar
+  ) {
     return null;
   }
 
@@ -119,7 +123,11 @@ export default function EditValueMastre({ EditDataGet }: any) {
         if (response.status === 200) {
           console.log(data);
           setFormData({});
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} updated Sucessfully!`,
+            open: true,
+          }));
           settabValue("table");
         }
       } catch (e: any) {
@@ -217,12 +225,6 @@ export default function EditValueMastre({ EditDataGet }: any) {
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} updated Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

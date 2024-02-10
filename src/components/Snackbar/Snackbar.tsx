@@ -1,10 +1,12 @@
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import { Dispatch, SetStateAction } from "react";
+import { SnackBarReusableProps } from "../../../TypesStore";
 interface ReusableSnackbarProps {
   message: string;
   severity: "success" | "info" | "warning" | "error";
   open: boolean;
-  setOpen: (val: boolean) => void;
+  setOpen: Dispatch<SetStateAction<SnackBarReusableProps>>;
 }
 
 const ReusableSnackbar = ({
@@ -14,7 +16,7 @@ const ReusableSnackbar = ({
   severity = "success",
 }: ReusableSnackbarProps) => {
   const handleClose = () => {
-    setOpen(false);
+    setOpen((prev) => ({ ...prev, open: false }));
   };
 
   return (

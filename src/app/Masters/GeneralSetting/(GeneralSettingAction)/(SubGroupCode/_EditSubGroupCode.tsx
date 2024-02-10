@@ -6,7 +6,6 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { SelectChangeEvent } from "@mui/material";
@@ -29,10 +28,10 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   });
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters, settabValue } = PlantDataCon;
+  const { SelectedMasterDatatab, masters, settabValue, setReusableSnackBar } =
+    PlantDataCon;
 
   const [formData, setFormData] = useState<any>(EditDataGet);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     setFormData((prev: any) => {
       return { ...prev, mainGroupCodesId: EditDataGet?.mainGroupCodesId?.id };
@@ -72,7 +71,12 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab || !MainGroupDropDownData || !settabValue) {
+  if (
+    !SelectedMasterDatatab ||
+    !MainGroupDropDownData ||
+    !settabValue ||
+    !setReusableSnackBar
+  ) {
     return null;
   }
   const fieldName = `${
@@ -135,7 +139,11 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
           setFormData((prev: any) => {
             return { [fieldName]: "", [fieldCode]: "" };
           });
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} updated Sucessfully!`,
+            open: true,
+          }));
           settabValue("table");
         }
       } catch (e: any) {
@@ -224,12 +232,6 @@ export default function EditSubGroupCode({ EditDataGet }: any) {
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

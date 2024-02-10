@@ -4,13 +4,12 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { usePathname } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   ValidMasterDataTabs,
   mastersPlantSubFields,
   mastersProps,
 } from "../../../TypesStore";
-import ReusableSnackbar from "../Snackbar/Snackbar";
 import api from "../api";
 
 const VisuallyHiddenInput = styled("input")({
@@ -26,9 +25,9 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function UploadButton() {
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const PlantDataCon = useContext(UseContextHook);
-  const { setPlantData, masters, SelectedMasterDatatab } = PlantDataCon;
+  const { setPlantData, masters, SelectedMasterDatatab, setReusableSnackBar } =
+    PlantDataCon;
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -37,6 +36,9 @@ export default function UploadButton() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
+  if (!setReusableSnackBar) {
+    return null;
+  }
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -60,7 +62,11 @@ export default function UploadButton() {
           ].getAll
         );
         if (res.status === 200 || res.status === 201) {
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} Bulk Created Sucessfully!`,
+            open: true,
+          }));
           if (setPlantData) {
             setPlantData(dataPlant);
           }
@@ -82,12 +88,6 @@ export default function UploadButton() {
         Bulk Upload file
         <VisuallyHiddenInput onChange={handleFileUpload} type="file" />
       </Button>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} Bulk created Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </>
   );
 }

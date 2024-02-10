@@ -6,7 +6,6 @@ import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
 import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
 import { getAllPlantData } from "@/utils/masters/plant";
@@ -37,7 +36,6 @@ import "./style.scss";
 
 export default function Masters() {
   // const [tabValue, settabValue] = useState("table");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [EditDataGet, setEditDataGet] = useState<any>({});
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [
@@ -63,6 +61,7 @@ export default function Masters() {
     settabValue,
     auth,
     editTabShow,
+    setReusableSnackBar,
   } = PlantDataCon;
   const router = useRouter();
 
@@ -86,7 +85,7 @@ export default function Masters() {
     return null;
   }
 
-  if (!tabValue || !settabValue) {
+  if (!tabValue || !settabValue || !setReusableSnackBar) {
     return null;
   }
   const handleChange = (
@@ -144,7 +143,11 @@ export default function Masters() {
       const dataPlant = await getAllPlantData(`${getAllLinkName}`);
       const data = await res.data;
       if (res.status === 204) {
-        setOpenSnackbar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `${SelectedMasterDatatab} Deleted Sucessfully!`,
+          open: true,
+        }));
         setConfirmationDeleteDialogOpen(false);
         if (setPlantData) {
           setPlantData(dataPlant);
@@ -240,7 +243,11 @@ export default function Masters() {
 
       if (res.status === 204) {
         setConfirmationBulkDeleteDialogOpen(false);
-        setOpenSnackbar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `${SelectedMasterDatatab} Deleted Sucessfully!`,
+          open: true,
+        }));
         if (setPlantData) {
           setPlantData(dataPlant);
           setConfirmationDeleteDialogOpen(false);
@@ -382,12 +389,7 @@ export default function Masters() {
         onConfirm={handlePlantDeleteHandler}
         onCancel={handleOpenConfirmationDeleteDialog}
       />
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} Deleted Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
+
       <CreateDreawer
         OpenDrawer={CreateDrawerOpen}
         HandlerCloseDrawer={HandlerCloseCreateDrawer}

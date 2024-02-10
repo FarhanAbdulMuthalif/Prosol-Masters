@@ -1,15 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
-import api from "@/components/api";
+import apiLogin from "@/components/apiLogin";
 import Button from "@mui/material/Button";
 import Image from "next/image";
+import { SnackBarReusableProps } from "../../../TypesStore";
 import "./ForgotPassword.css";
 
 const ForgotPassword: React.FC<{
   setShowForgotPassword: (att: boolean) => void;
-  setSucesSnackBar: (att: boolean) => void;
+  setSucesSnackBar: Dispatch<SetStateAction<SnackBarReusableProps>>;
 }> = ({ setShowForgotPassword, setSucesSnackBar }) => {
   const [emailText, setEmailText] = useState<string>("");
   const [loading, setloading] = useState(false);
@@ -22,14 +23,27 @@ const ForgotPassword: React.FC<{
     event.preventDefault();
     try {
       setloading(true);
-      const res = await api.post("/user/forgotPassword", { email: emailText });
+      const res = await apiLogin.post("/user/forgotPassword", {
+        email: emailText,
+      });
       const data = await res.data;
       if (res.status === 200) {
-        setSucesSnackBar(true);
+        setSucesSnackBar((prev) => ({
+          severity: "success",
+          message: "reset password link successfully sent to mention mail",
+          open: true,
+        }));
         setShowForgotPassword(false);
       }
     } catch (e: any) {
-      console.log(e?.response);
+      console.log(e?.message);
+      if (e?.message === "Network Error") {
+        setSucesSnackBar((prev) => ({
+          severity: "error",
+          message: "Failed connection",
+          open: true,
+        }));
+      }
     } finally {
       setloading(false);
     }

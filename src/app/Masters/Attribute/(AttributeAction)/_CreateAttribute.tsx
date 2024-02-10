@@ -4,7 +4,6 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
@@ -41,11 +40,10 @@ export default function CreateAttribute() {
     listUom: [],
   });
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
 
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  const { SelectedMasterDatatab, masters, setReusableSnackBar } = PlantDataCon;
   const checkHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -98,7 +96,7 @@ export default function CreateAttribute() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
+  if (!SelectedMasterDatatab || !setReusableSnackBar) {
     return null;
   }
 
@@ -137,7 +135,11 @@ export default function CreateAttribute() {
           setFormData((prev: any) => {
             return { ["name"]: "", ["shortDescName"]: "" };
           });
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} Created Sucessfully!`,
+            open: true,
+          }));
         }
       } catch (error: any) {
         console.log(error);
@@ -327,12 +329,6 @@ export default function CreateAttribute() {
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api from "@/components/api";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -16,17 +15,20 @@ import EditRole from "./_EditRole";
 import RoleGrid from "./_RoleGrid";
 import "./style.scss";
 export default function Role() {
-  const mastersData = useContext(UseContextHook);
+  const ROleDataCon = useContext(UseContextHook);
+  const { setReusableSnackBar } = ROleDataCon;
   const [tabValue, settabValue] = useState("table");
   const [selectionIDArr, setSelectionIDArr] = useState<GridRowId[]>([]);
   const [RoleData, setRoleData] = useState<RoleInitialStateProps[]>([]);
   const [bulkStatusDialog, setbulkStatusDialog] = useState(false);
   const [bulkDeleteDialog, setbulkDeleteDialog] = useState(false);
-  const [blkdltSucess, setblkdltSucess] = useState(false);
-  const [blkstatusSucess, setblkstatusSucess] = useState(false);
+
   const [EditDataGet, setEditDataGet] =
     useState<RoleInitialStateProps>(RoleInitialState);
 
+  if (!setReusableSnackBar) {
+    return null;
+  }
   const tabs = [
     { label: `Role View`, value: "table" },
     { label: `Create Role`, value: "create" },
@@ -75,7 +77,11 @@ export default function Role() {
       });
       const Users = await api.get(`/user/getAllRoles?show=false`);
       if (res.status === 200) {
-        setblkdltSucess(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `Role Deleted Sucessfully!`,
+          open: true,
+        }));
         setRoleData(Users.data);
         setbulkDeleteDialog(false);
       }
@@ -93,7 +99,11 @@ export default function Role() {
       if (res.status === 200) {
         setRoleData(Roles.data);
         setbulkStatusDialog(false);
-        setblkstatusSucess(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `Role updated Sucessfully!`,
+          open: true,
+        }));
       }
     } catch (e: any) {
       console.log(e?.response);
@@ -144,18 +154,6 @@ export default function Role() {
         content="you may not log the account on inactive"
         onConfirm={bulkStatusConformation}
         onCancel={handleOpenBulkStatusDialog}
-      />
-      <ReusableSnackbar
-        message={`Role Status Changed Sucessfully!`}
-        severity="success"
-        setOpen={setblkstatusSucess}
-        open={blkstatusSucess}
-      />
-      <ReusableSnackbar
-        message={`Role Deleted Sucessfully!`}
-        severity="success"
-        setOpen={setblkdltSucess}
-        open={blkdltSucess}
       />
     </div>
   );

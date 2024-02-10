@@ -1,6 +1,5 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -23,7 +22,13 @@ const Login = () => {
   // const [errorCaptcha, setErroeCaptcha] = useState(false);
   // const [succesCaptcha, setSuccesCaptcha] = useState(false);
   const [loading, setloading] = useState(false);
-  const [sucesSnackBar, setSucesSnackBar] = useState(false);
+  // const [sucesSnackBar, setSucesSnackBar] = useState(false);
+  // const [ReusableSnackBar, setReusableSnackBar] =
+  //   useState<SnackBarReusableProps>({
+  //     open: false,
+  //     message: "",
+  //     severity: "success",
+  //   });
   const [showPassword, setShowPassword] = useState(false);
   const [emptyError, setEmptyError] = useState(false);
   const [InvalidUser, setInvalidUser] = useState(false);
@@ -62,9 +67,9 @@ const Login = () => {
   // };
   const router = useRouter();
   const MasterDetails = useContext(UseContextHook);
-  const { setauth } = MasterDetails;
+  const { setauth, setUserInfo, setReusableSnackBar } = MasterDetails;
 
-  if (!setauth) {
+  if (!setauth || !setUserInfo || !setReusableSnackBar) {
     return null;
   }
 
@@ -81,21 +86,44 @@ const Login = () => {
         const res = await apiLogin.post("user/auth/login", { email, password });
         const data = await res.data;
         console.log(data);
-        console.log(res.status);
         if (res.status === 200) {
-          localStorage.setItem("accessToken", data?.accessToken);
-          localStorage.setItem("refreshToken", data?.refreshToken);
+          const resMe = await apiLogin.get("/user/me", {
+            headers: {
+              Authorization: `Bearer ${data.accessToken}`,
+            },
+          });
 
-          router.push("/Masters");
-          router.refresh();
-          setauth(true);
+          const resData = await resMe?.data; // Extract data from response
+          if (resMe.status === 200) {
+            setUserInfo(resData);
 
+            localStorage.setItem("accessToken", data?.accessToken);
+            localStorage.setItem("refreshToken", data?.refreshToken);
+
+            router.push("/Masters");
+            router.refresh();
+            setauth(true);
+          }
           // router.refresh();
         }
       } catch (e: any) {
         console.log(e?.response);
         if (e?.response?.status === 401) {
           setInvalidUser(true);
+        }
+        if (e?.response?.status === 500 || e?.response?.status === 503) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: "Server Error check server",
+            open: true,
+          }));
+        }
+        if (e?.message === "Network Error") {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: "Failed connection check server",
+            open: true,
+          }));
         }
       } finally {
         setloading(false);
@@ -120,7 +148,7 @@ const Login = () => {
       {showForgotPassword && (
         <ForgotPassword
           setShowForgotPassword={setShowForgotPassword}
-          setSucesSnackBar={setSucesSnackBar}
+          setSucesSnackBar={setReusableSnackBar}
         />
       )}
       {!showForgotPassword && (
@@ -288,12 +316,6 @@ const Login = () => {
               {loading ? "Loading...." : "Login"}
             </Button>
           </form>
-          <ReusableSnackbar
-            message={`Password Send Sucessfully To Mentioned Email!`}
-            severity="success"
-            setOpen={setSucesSnackBar}
-            open={sucesSnackBar}
-          />
         </div>
       )}
     </div>

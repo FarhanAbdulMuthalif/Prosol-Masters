@@ -1,19 +1,20 @@
 import useFetch from "@/Hooks/useFetch";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableMultipleSelect from "@/components/Dropdown/MultipleDropdown";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { UserInitialState } from "@/utils/UserDataExport";
 import { SelectChangeEvent, Switch } from "@mui/material";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 
 export default function CreateUser() {
   const [formData, setFormData] = useState(UserInitialState);
   const [FormErrorMessage, setFormErrorMessage] = useState("");
-  const [openSnackbar, setopenSnackbar] = useState(false);
+  const UserDataCon = useContext(UseContextHook);
+  const { setReusableSnackBar } = UserDataCon;
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
     data: [],
   };
@@ -66,6 +67,9 @@ export default function CreateUser() {
       [name]: Array.isArray(selectedValues) ? selectedValues : [],
     }));
   };
+  if (!setReusableSnackBar) {
+    return null;
+  }
   const UserFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
     const requiredFields: (keyof typeof formData)[] = [
@@ -125,7 +129,11 @@ export default function CreateUser() {
       const res = await api.post("/user/saveUser", formData);
       const data = res.data;
       if (res.status === 201) {
-        setopenSnackbar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `User Created Sucessfully!`,
+          open: true,
+        }));
         setFormData(UserInitialState);
       }
     } catch (e: any) {
@@ -238,12 +246,6 @@ export default function CreateUser() {
         <OutlinedButton>Cancel</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
-      <ReusableSnackbar
-        message={`User Created Sucessfully!`}
-        severity="success"
-        setOpen={setopenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

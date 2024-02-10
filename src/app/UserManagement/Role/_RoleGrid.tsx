@@ -1,14 +1,20 @@
 import useFetch from "@/Hooks/useFetch";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import api from "@/components/api";
 import { RoleTableColumns } from "@/utils/TableSources";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Switch } from "@mui/material";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { RoleInitialStateProps } from "../../../../TypesStore";
 
 export default function RoleGrid({
@@ -22,8 +28,9 @@ export default function RoleGrid({
   setRoleData: Dispatch<SetStateAction<RoleInitialStateProps[]>>;
   EditSetRecordAndGotoAction: (val: RoleInitialStateProps) => void;
 }) {
+  const ROleDataCon = useContext(UseContextHook);
+  const { setReusableSnackBar } = ROleDataCon;
   const [SlectedId, setSlectedId] = useState(0);
-  const [OpenDeleteSnackBar, setOpenDeleteSnackBar] = useState(false);
   const [DeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { data: PlantData } = useFetch("/plant/getAllPlant") ?? {
     data: [],
@@ -49,6 +56,9 @@ export default function RoleGrid({
       console.log(e?.response);
     }
   };
+  if (!setReusableSnackBar) {
+    return null;
+  }
   const handleDeleteCloseDialog = () => {
     setDeleteDialogOpen(false);
   };
@@ -62,7 +72,11 @@ export default function RoleGrid({
       const data = await res.data;
       const Roles = await api.get(`/user/getAllRoles?show=false`);
       if (res.status === 204) {
-        setOpenDeleteSnackBar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `Role Deleted Sucessfully!`,
+          open: true,
+        }));
         setDeleteDialogOpen(false);
         setRoleData(Roles.data);
       }
@@ -158,12 +172,6 @@ export default function RoleGrid({
         content="you may lose your record"
         onConfirm={handleUserDeleteHandler}
         onCancel={handleDeleteCloseDialog}
-      />
-      <ReusableSnackbar
-        message={`Role Deleted Sucessfully!`}
-        severity="success"
-        setOpen={setOpenDeleteSnackBar}
-        open={OpenDeleteSnackBar}
       />
     </div>
   );

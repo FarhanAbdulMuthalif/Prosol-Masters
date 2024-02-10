@@ -1,10 +1,10 @@
+import { UseContextHook } from "@/Provides/UseContextHook";
 import { RoleInitialStateProps } from "../../../../TypesStore";
 
 import useFetch from "@/Hooks/useFetch";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { RoleInitialState } from "@/utils/UserDataExport";
@@ -15,7 +15,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 
 export default function EditRole({
   settabValue,
@@ -41,11 +41,11 @@ export default function EditRole({
   ];
   // Create a new object by filtering out specified keys
   const filteredUserData = { ...filteredData };
-
+  const RoleDataCon = useContext(UseContextHook);
+  const { setReusableSnackBar } = RoleDataCon;
   keysToRemove.forEach((key) => delete filteredUserData[key]);
   const [formData, setFormData] = useState(filteredUserData);
   const [FormErrorMessage, setFormErrorMessage] = useState("");
-  const [openSnackbar, setopenSnackbar] = useState(false);
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
     data: [],
   };
@@ -80,6 +80,9 @@ export default function EditRole({
       [name]: Array.isArray(selectedValues) ? selectedValues : [],
     }));
   };
+  if (!setReusableSnackBar) {
+    return null;
+  }
   const UserFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
     const requiredFields: (keyof typeof formData)[] = [
@@ -111,7 +114,11 @@ export default function EditRole({
       const res = await api.put(`/user/updateRole/${id}`, formData);
       const data = res.data;
       if (res.status === 200) {
-        setopenSnackbar(true);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `Role updated Sucessfully!`,
+          open: true,
+        }));
         setFormData(RoleInitialState);
         settabValue("table");
       }
@@ -255,12 +262,6 @@ export default function EditRole({
         <OutlinedButton>Cancel</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
-      <ReusableSnackbar
-        message={`Role Updated Sucessfully!`}
-        severity="success"
-        setOpen={setopenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

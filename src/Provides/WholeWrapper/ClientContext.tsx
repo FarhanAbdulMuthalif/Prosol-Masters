@@ -2,13 +2,18 @@
 import UseAuth from "@/Hooks/useAuth";
 import Header from "@/components/Header/page";
 import Navbar from "@/components/NavBar/page";
+import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import { MuiCreateTheme } from "@/styles/MuiTheme";
 import { MasterSubFieldWithData, getAllPlantData } from "@/utils/masters/plant";
 import { toogleSidebarHandler } from "@/utils/sideBarFunc";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ThemeProvider } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
-import { SingleUserInfoProps, UseContextHookTypes } from "../../../TypesStore";
+import {
+  SingleUserInfoProps,
+  SnackBarReusableProps,
+  UseContextHookTypes,
+} from "../../../TypesStore";
 import { UseContextHook } from "../UseContextHook";
 import "./ClientContext.scss";
 
@@ -34,6 +39,12 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
+  const [ReusableSnackBar, setReusableSnackBar] =
+    useState<SnackBarReusableProps>({
+      open: false,
+      message: "",
+      severity: "success",
+    });
   useEffect(() => {
     const fetchData = async () => {
       const dataPlant = await getAllPlantData(`/plant/getAllPlant`);
@@ -59,6 +70,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     setauth,
     seteditTabShow,
     editTabShow,
+    setReusableSnackBar,
   };
 
   const iconRotateHandler = {
@@ -93,6 +105,12 @@ export default function ClientContext({ children }: { children: ReactNode }) {
 
           <div className="wrapper-child">{children}</div>
         </div>
+        <ReusableSnackbar
+          message={ReusableSnackBar.message}
+          severity={ReusableSnackBar.severity}
+          setOpen={setReusableSnackBar}
+          open={ReusableSnackBar.open}
+        />
       </UseContextHook.Provider>
     </ThemeProvider>
   );

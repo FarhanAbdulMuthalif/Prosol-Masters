@@ -3,7 +3,6 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
@@ -32,11 +31,10 @@ export default function CreateVendor() {
     address: "",
   });
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
 
   const PlantDataCon = useContext(UseContextHook);
-  const { SelectedMasterDatatab, masters } = PlantDataCon;
+  const { SelectedMasterDatatab, masters, setReusableSnackBar } = PlantDataCon;
 
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
@@ -62,7 +60,7 @@ export default function CreateVendor() {
   const ExactPath = (
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
-  if (!SelectedMasterDatatab) {
+  if (!SelectedMasterDatatab || !setReusableSnackBar) {
     return null;
   }
 
@@ -98,7 +96,11 @@ export default function CreateVendor() {
           setFormData((prev: any) => {
             return { ["name"]: "", ["shortDescName"]: "" };
           });
-          setOpenSnackbar(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `${SelectedMasterDatatab} Created Sucessfully!`,
+            open: true,
+          }));
         }
       } catch (error: any) {
         console.log(error);
@@ -351,12 +353,6 @@ export default function CreateVendor() {
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>
-      <ReusableSnackbar
-        message={`${SelectedMasterDatatab} created Sucessfully!`}
-        severity="success"
-        setOpen={setOpenSnackbar}
-        open={openSnackbar}
-      />
     </form>
   );
 }

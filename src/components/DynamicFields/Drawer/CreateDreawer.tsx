@@ -2,7 +2,6 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
-import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import api from "@/components/api";
 import { initialDynamicStateField } from "@/utils/DynamicFields/DynamicFieldsData";
 import CloseIcon from "@mui/icons-material/Close";
@@ -38,7 +37,6 @@ export default function CreateDreawer({
   const [ChipArrayList, setChipArrayList] = useState<string[]>([]);
   const [CreateFieldSetObj, setCreateFieldSetObj] =
     useState<PostCreateFieldData>(initialDynamicStateField);
-  const [SnackBarSucess, setSnackBarSucess] = useState(false);
   const [DropDownChipArrayList, setDropDownChipArrayList] = useState<Option[]>(
     []
   );
@@ -46,8 +44,9 @@ export default function CreateDreawer({
     setChipTextIndiual(e.target.value);
   };
   const router = useRouter();
-  const { SelectedMasterDatatab, settabValue } = useContext(UseContextHook);
-  if (!SelectedMasterDatatab || !settabValue) {
+  const { SelectedMasterDatatab, settabValue, setReusableSnackBar } =
+    useContext(UseContextHook);
+  if (!SelectedMasterDatatab || !settabValue || !setReusableSnackBar) {
     return null;
   }
   const handleFieldTypeChangeSelect = (e: SelectChangeEvent) => {
@@ -178,7 +177,11 @@ export default function CreateDreawer({
           CreateFieldSetObj
         );
         if (res.status === 201) {
-          setSnackBarSucess(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `Field Created Sucessfully!`,
+            open: true,
+          }));
           HandlerCloseDrawer();
           settabValue("table");
         }
@@ -224,7 +227,11 @@ export default function CreateDreawer({
           dataSet
         );
         if (res.status === 201) {
-          setSnackBarSucess(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `Field Created Sucessfully!`,
+            open: true,
+          }));
           HandlerCloseDrawer();
           settabValue("table");
         }
@@ -267,7 +274,11 @@ export default function CreateDreawer({
           dataSet
         );
         if (res.status === 201) {
-          setSnackBarSucess(true);
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `Field Created Sucessfully!`,
+            open: true,
+          }));
           HandlerCloseDrawer();
           settabValue("table");
         }
@@ -322,12 +333,6 @@ export default function CreateDreawer({
             Save
           </FillButton>
         </footer>
-        <ReusableSnackbar
-          message={`Field Created Sucessfully!`}
-          severity="success"
-          setOpen={setSnackBarSucess}
-          open={SnackBarSucess}
-        />
       </form>
     </Drawer>
   );
