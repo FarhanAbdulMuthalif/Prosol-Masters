@@ -100,7 +100,7 @@ const Login = () => {
             localStorage.setItem("accessToken", data?.accessToken);
             localStorage.setItem("refreshToken", data?.refreshToken);
 
-            router.push("/Masters");
+            router.push("/");
             router.refresh();
             setauth(true);
           }

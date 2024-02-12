@@ -1,4 +1,3 @@
-import useFetch from "@/Hooks/useFetch";
 import {
   Checkbox,
   Dialog,
@@ -8,10 +7,11 @@ import {
   FormControlLabel,
   Typography,
 } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CharacteristicSingleProps } from "../../../TypesStore";
 import FillButton from "../Button/FillButton";
 import OutlinedButton from "../Button/OutlineButton";
+import api from "../api";
 type ViewDialogProps = {
   open: boolean;
   handleClose: () => void;
@@ -26,18 +26,31 @@ export default function CreateTemplateValuesDialog({
   handleClose,
   id,
 }: ViewDialogProps) {
-  const { data: ValueMasteArray } = useFetch(
-    "/value/getAllValue?attributeUom=false"
-  ) ?? {
-    data: [],
-  };
-  const ValueMasterDropDownData = ValueMasteArray
-    ? (ValueMasteArray as { id: number; value: string }[]).map(
-        ({ id, value }) => ({
-          value: id,
-          label: value,
-        })
-      )
+  // const { data: ValueMasteArray } = useFetch(
+  //   "/value/getAllValue?attributeUom=false"
+  // ) ?? {
+  //   data: [],
+  // };
+  const [ValueData, setValueData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get("/value/getAllValue?attributeUom=false");
+        const data = await res.data;
+        if (res.status === 200) {
+          setValueData(data);
+        }
+      } catch (e: any) {
+        console.log(e.response);
+      }
+    };
+    fetchData();
+  }, []);
+  const ValueMasterDropDownData = ValueData
+    ? (ValueData as { id: number; value: string }[]).map(({ id, value }) => ({
+        value: id,
+        label: value,
+      }))
     : [];
   const checkHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;

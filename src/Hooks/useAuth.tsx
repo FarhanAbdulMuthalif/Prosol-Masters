@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 
 const UseAuth = () => {
   const [auth, setAuth] = useState(false);
-  const { setauth: SetContextAuth } = useContext(UseContextHook);
+  const { setauth: SetContextAuth, setUserInfo } = useContext(UseContextHook);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +24,18 @@ const UseAuth = () => {
 
             if (SetContextAuth) {
               SetContextAuth(true);
+            }
+            const resMe = await apiLogin.get("/user/me", {
+              headers: {
+                Authorization: `Bearer ${storedAccessToken}`,
+              },
+            });
+
+            const resData = await resMe?.data; // Extract data from response
+            if (resMe.status === 200) {
+              if (setUserInfo) {
+                setUserInfo(resData);
+              }
             }
           }
         } catch (e: any) {
@@ -71,7 +83,7 @@ const UseAuth = () => {
       }
     }
     fetch();
-  }, [router, SetContextAuth]);
+  }, [router, SetContextAuth, setUserInfo]);
 
   return auth;
 };

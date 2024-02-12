@@ -59,12 +59,16 @@
     }
     .two {
       flex: 1;
+      white-space: nowrap;
+      padding: 0 5px;
     }
     .three,
     .six {
       flex: 1;
       display: flex;
       justify-content: center;
+      white-space: nowrap;
+      padding: 0 5px;
     }
     .four {
       flex: 5;

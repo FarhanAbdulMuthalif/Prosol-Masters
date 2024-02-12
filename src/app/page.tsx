@@ -1,8 +1,15 @@
 "use client";
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import WarehouseIcon from "@mui/icons-material/Warehouse";
+import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import "./style.scss";
 
 export default function Home() {
   const router = useRouter();
@@ -11,5 +18,65 @@ export default function Home() {
   if (!auth) {
     return null;
   }
-  return <main>Hello</main>;
+
+  return (
+    <main className="dashboard-page-wrapper">
+      <h3>Dashboard</h3>
+      <div className="dashboard-page-content-view">
+        <div className="dashboard-modules">
+          <PersonIcon sx={{ fontSize: "2rem" }} />
+          <p className="dashboard-modules-text">User Mannagement</p>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            className="dashboard-modules-icon-btn"
+            onClick={() => {
+              router.push("/UserManagement");
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+        <div className="dashboard-modules">
+          <SettingsSuggestIcon sx={{ fontSize: "2rem" }} />
+          <p className="dashboard-modules-text">Material Master</p>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            className="dashboard-modules-icon-btn"
+            onClick={() => {
+              router.push("/Masters");
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+        <div className="dashboard-modules">
+          <WarehouseIcon sx={{ fontSize: "2rem" }} />
+
+          <p className="dashboard-modules-text">Asset Master</p>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            className="dashboard-modules-icon-btn"
+            onClick={() => {}}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+        <div className="dashboard-modules">
+          <ManageAccountsIcon sx={{ fontSize: "2rem" }} />
+          <p className="dashboard-modules-text">Service Master</p>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            className="dashboard-modules-icon-btn"
+            onClick={() => {}}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+      </div>
+    </main>
+  );
 }

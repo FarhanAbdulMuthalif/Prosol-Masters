@@ -15,19 +15,18 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
   if (!auth) {
     return null;
   }
-  const CurrentView = pathObj[
-    currentRoute.split("/").filter((n) => n)[0] as keyof PathObjProps
-  ] ?? [
-    { name: "Plant", path: "/Masters" },
-    { name: "General", path: "/Masters/General" },
-    { name: "MRPData", path: "/Masters/MRPData" },
-    { name: "Sales&Others", path: "/Masters/SalesAndOthers" },
-    { name: "Vendor", path: "/Masters/Vendor" },
-    { name: "GeneralSetting", path: "/Masters/GeneralSetting" },
-    { name: "Attribute", path: "/Masters/Attribute" },
-    { name: "Value", path: "/Masters/Value" },
-    { name: "CreateTemplate", path: "/Masters/CreateTemplate" },
-  ];
+  const CurrentView =
+    pathObj[
+      currentRoute.split("/").filter((n) => n)[0] as keyof PathObjProps
+    ] ?? [];
+  const NamewithMatch = (
+    currentRoute.split("/").filter((n) => n).length === 0
+      ? "Dashbord"
+      : currentRoute.split("/").filter((n) => n)[0]
+  )
+    ?.replace(/([a-z])([A-Z])/g, "$1 $2") // Insert space between lowercase and uppercase letters
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2") // Insert space between consecutive uppercase letters and lowercase letters
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
   return (
     <div className={OpenSideBar ? "full-side-bar" : "side-bar"}>
       {OpenSideBar ? (
@@ -49,7 +48,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
             />
           </div>
           <nav>
-            <h2>Master</h2>
+            <h2>{NamewithMatch}</h2>
             <ul>
               {CurrentView.map((data: Record<string, string>) => (
                 <li

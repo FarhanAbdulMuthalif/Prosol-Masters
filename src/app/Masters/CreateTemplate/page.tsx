@@ -30,6 +30,7 @@ import CustomRadioGroupComponent from "@/components/RadioButton/CustomRadioGroup
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
+import { URL_FIX_LOGIN_PATH } from "@/components/apiLogin";
 import { CharacteristSingleInitialData } from "@/utils/masters/plant";
 import {
   Autocomplete,
@@ -39,6 +40,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
 import "./style.scss";
 
 export default function Value() {
@@ -79,8 +81,13 @@ export default function Value() {
     ExactPathArr.length > 0 ? ExactPathArr : ["Plant"]
   )[0] as keyof mastersProps;
   const PlantDataCon = useContext(UseContextHook);
-  const { masters, SelectedMasterDatatab, setSelectedMasterDatatab, auth } =
-    PlantDataCon;
+  const {
+    masters,
+    SelectedMasterDatatab,
+    setSelectedMasterDatatab,
+    auth,
+    setReusableSnackBar,
+  } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
       setSelectedMasterDatatab("CreateTemplate");
@@ -136,6 +143,23 @@ export default function Value() {
     },
     [ExactPath, masters]
   );
+  const getDicyionaryNM = useCallback(
+    async (modifier: string) => {
+      try {
+        const res = await api.get(
+          `/dictionary/findByNounAndModifier?noun=${formData["noun"]}&modifier=${modifier}`
+        );
+        const data = await res.data;
+        if (res.status === 200) {
+          setFormData(data);
+          setCharacteristic(data.attributes);
+        }
+      } catch (e: any) {
+        console.log(e?.response);
+      }
+    },
+    [formData]
+  );
   const attributeMasterDwnData = attributeMasterOriginalArray
     ? (
         attributeMasterOriginalArray as { id: number; attributeName: string }[]
@@ -150,19 +174,28 @@ export default function Value() {
   if (!authHook && !auth) {
     return null;
   }
-  if (!nmUomDropDownData || !SelectedMasterDatatab || !attributeMasterDwnData) {
+  if (
+    !nmUomDropDownData ||
+    !SelectedMasterDatatab ||
+    !attributeMasterDwnData ||
+    !setReusableSnackBar
+  ) {
     return null;
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    if (name === "noun") {
+    const isNoun = name === "noun";
+    if (isNoun) {
       NounHandler(value);
       ModifierHandler(value);
     }
-    if (name === "modifier") {
+
+    if (!isNoun && name === "modifier") {
+      getDicyionaryNM(value);
       ModifierHandler(nounFrmData);
     }
+
     setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
@@ -222,6 +255,9 @@ export default function Value() {
   ) => {
     if (!value) return;
     NounHandler(value);
+    if (name === "modifier") {
+      getDicyionaryNM(value);
+    }
     ModifierHandler(value);
     setFormData((prevData: any) => ({
       ...prevData,
@@ -244,12 +280,14 @@ export default function Value() {
     const CleanCharacteristic = Characteristic.map(({ id, ...rest }) => rest);
     console.log(CleanCharacteristic);
 
-    setFormData((prev: any) => {
-      return { ...prev, attributes: CleanCharacteristic };
-    });
+    // setFormData((prev: any) => {
+    //   return { ...prev, attributes: CleanCharacteristic };
+    // });
+    const FormDataWthChar = { ...formData, attributes: CleanCharacteristic };
     const dataFrm = new FormData();
-    dataFrm.append("source", JSON.stringify(formData));
+    dataFrm.append("source", JSON.stringify(FormDataWthChar));
     dataFrm.append("file", FileSelect as File);
+
     try {
       const response = await api.post(
         `${(masters[ExactPath] as mastersCreateTemplateSubsubFields).create}`,
@@ -263,6 +301,12 @@ export default function Value() {
       const data = await response.data;
       if (response.status === 201) {
         console.log(data);
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `Noun Modifier Template Created Sucessfully!`,
+          open: true,
+        }));
+
         setFormData((prev: any) => {
           return {
             noun: "",
@@ -285,6 +329,7 @@ export default function Value() {
       console.log(error.response.data.message);
     }
   };
+
   const HandleValueMasterDialog = () => {
     setOpenValueMasterDialog(false);
   };
@@ -301,6 +346,22 @@ export default function Value() {
       (data) => data.value === id
     )?.label;
     return valueGet ? valueGet : "";
+  };
+  const handleClear = () => {
+    setFormData((prev: any) => {
+      return {
+        noun: "",
+        modifier: "",
+        modifierSynonyms: "",
+        nounSynonyms: "",
+        nmDefinition: "",
+        type: "",
+        similarSearchItems: "",
+        nmUoms: [],
+      };
+    });
+
+    setCharacteristic([CharacteristSingleInitialData]);
   };
 
   return (
@@ -331,6 +392,7 @@ export default function Value() {
             freeSolo
             getOptionLabel={(option) => option} // Specify how the value should be displayed
             fullWidth
+            value={formData ? formData["noun"] : ""}
             onChange={(event, value) =>
               handleAutoCompleteInputChange("noun", value)
             } // Update formData when an option is selected
@@ -342,7 +404,7 @@ export default function Value() {
                 }}
                 {...props}
               >
-                {option}
+                {option.charAt(0).toUpperCase() + option.slice(1)}
               </li>
             )}
             renderInput={(params) => (
@@ -356,6 +418,7 @@ export default function Value() {
                 size="small"
               />
             )}
+            clearIcon={null} // Set clearIcon to null to remove the "x" icon
           />
           <Autocomplete
             options={ModifierSuggestData}
@@ -367,6 +430,7 @@ export default function Value() {
             onChange={(event, value) =>
               handleAutoCompleteInputChange("modifier", value)
             } // Update formData when an option is selected
+            value={formData ? formData["modifier"] : ""}
             renderOption={(props, option: string) => (
               <li
                 style={{
@@ -375,7 +439,7 @@ export default function Value() {
                 }}
                 {...props}
               >
-                {option}
+                {option.charAt(0).toUpperCase() + option.slice(1)}
               </li>
             )}
             renderInput={(params) => (
@@ -389,6 +453,7 @@ export default function Value() {
                 size="small"
               />
             )}
+            clearIcon={null} // Set clearIcon to null to remove the "x" icon
           />
 
           <OutlineTextField
@@ -447,6 +512,18 @@ export default function Value() {
               onChange={handleImageChange}
             />
           </OutlinedButton>
+          {formData && formData["image"] && formData["id"] ? (
+            <Image
+              src={`${URL_FIX_LOGIN_PATH}/dictionary/downloadFile/${
+                formData ? formData["id"] : ""
+              }/${formData ? formData["image"] : ""}`}
+              alt="loading..."
+              height={50}
+              width={100}
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="template-nm-uom-section">
           <p className="template-nm-uom-section-text">Select UOM</p>
@@ -623,8 +700,10 @@ export default function Value() {
           })}
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
-          <FillButton type="submit">SUBMIT</FillButton>
+          <OutlinedButton type="button" onClick={handleClear}>
+            CLEAR
+          </OutlinedButton>
+          <FillButton type="submit">Create Template</FillButton>
         </div>
       </form>
 

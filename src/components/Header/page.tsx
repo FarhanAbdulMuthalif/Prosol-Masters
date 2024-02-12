@@ -61,6 +61,9 @@ export default function Header() {
         alt="Loading...."
         width={120}
         height={45}
+        onClick={() => {
+          router.push("/");
+        }}
       />
       <Image
         src="/Images/Group.png"
