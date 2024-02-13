@@ -63,13 +63,15 @@
       letter-spacing: 0.5px;
       transition: all 200ms ease;
 
-      li {
+      .normal-sidebar-link {
         width: 180px;
         padding: 5px 30px;
         margin: 0;
-
         letter-spacing: 0.5px;
         transition: all 500ms ease;
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
         cursor: pointer;
         &:hover {
           color: #0000ff;
@@ -84,6 +86,10 @@
         background-color: #e6effc;
         border-left: 4px solid #0000ff;
         padding: 8px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
         margin: 0;
         font-weight: 600;
         letter-spacing: 0.5px;
@@ -91,4 +97,53 @@
       }
     }
   }
+}
+.masters-sidenavbar-class {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px;
+  background-color: white;
+  border-radius: 3px;
+  padding: 5px 0;
+  box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+    rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+  p {
+    margin: 20px 0;
+    color: #6f6f6f;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  ul {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6f6f6f;
+    letter-spacing: 0.3px;
+    li {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      padding-left: 30px;
+      border-bottom: 1px solid #bdbdbd24;
+      &:hover {
+        // border-left: 3px solid blue;
+        background-color: #ebf0f7;
+        color: blue;
+      }
+    }
+    .active-second-bar-li-class {
+      background-color: #1976d2;
+      color: white;
+      &:hover {
+        background-color: #1976d2;
+        color: white;
+      }
+    }
+  }
+}
+.customPopoverShadow {
+  box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.853); // Adjust the shadow as per your preference
 }

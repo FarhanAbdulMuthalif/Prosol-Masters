@@ -1,0 +1,143 @@
+"use client";
+import { UseContextHook } from "@/Provides/UseContextHook";
+import FillButton from "@/components/Button/FillButton";
+import OutlinedButton from "@/components/Button/OutlineButton";
+import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import api from "@/components/api";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
+
+interface ChangePasswordDialogProps {
+  open: boolean;
+  handleClose: Dispatch<SetStateAction<boolean>>;
+}
+export default function ChangePasswordDialog({
+  open,
+  handleClose,
+}: ChangePasswordDialogProps) {
+  const [ChangePasswordState, setChangePasswordState] = useState({
+    currentPassword: "",
+    newPassword: "",
+  });
+  const [ChangePasswordError, setChangePasswordError] = useState({
+    currentPassword: false,
+    newPassword: false,
+  });
+  const ContextDataHub = useContext(UseContextHook);
+  const { setReusableSnackBar, UserInfo } = ContextDataHub;
+  if (!setReusableSnackBar || !UserInfo) return null;
+  const closeHandler = () => {
+    handleClose(false);
+  };
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setChangePasswordState((prev) => ({ ...prev, [name]: value }));
+  };
+  const ChangePasswordSubmitHandler = async (e: FormEvent) => {
+    e.preventDefault();
+    console.log(ChangePasswordState);
+
+    if (ChangePasswordState.currentPassword.length < 1) {
+      setChangePasswordError((prev) => ({ ...prev, currentPassword: true }));
+      return null;
+    }
+    if (ChangePasswordState.newPassword.length < 1) {
+      setChangePasswordError((prev) => ({ ...prev, newPassword: true }));
+      return null;
+    }
+    setChangePasswordError((prev) => ({
+      currentPassword: false,
+      newPassword: false,
+    }));
+    try {
+      const res = await api.put(
+        `/user/${UserInfo.id}/changePassword`,
+        ChangePasswordState
+      );
+      const data = await res.data;
+      if (res.status === 200) {
+        closeHandler();
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `The password updated successfully!`,
+          open: true,
+        }));
+        setChangePasswordState((prev) => ({
+          currentPassword: "",
+          newPassword: "",
+        }));
+      }
+    } catch (e: any) {
+      console.log(e?.response);
+    }
+  };
+  return (
+    <Dialog
+      open={open}
+      onClose={closeHandler}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      maxWidth="sm"
+      fullWidth
+    >
+      <DialogTitle
+        id="alert-dialog-title"
+        sx={{ borderBottom: "1px solid #bdbdbda2", padding: "10px 16px" }}
+      >
+        <p style={{ color: "#6f6f6f" }}>Change Password</p>
+      </DialogTitle>
+      <form onSubmit={ChangePasswordSubmitHandler}>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            padding: " 10px ",
+            marginTop: "10px",
+          }}
+        >
+          <OutlineTextField
+            placeholder="Enter Currect Password"
+            onChange={handleInputChange}
+            value={ChangePasswordState.currentPassword}
+            name="currentPassword"
+            error={ChangePasswordError.currentPassword}
+            helperText={
+              ChangePasswordError.currentPassword
+                ? " Current password should not be empty"
+                : ""
+            }
+          />
+          <OutlineTextField
+            placeholder="Enter New Password"
+            name="newPassword"
+            value={ChangePasswordState.newPassword}
+            onChange={handleInputChange}
+            error={ChangePasswordError.newPassword}
+            helperText={
+              ChangePasswordError.newPassword
+                ? " New password should not be empty"
+                : ""
+            }
+          />
+        </DialogContent>
+        <DialogActions sx={{ borderTop: "1px solid #bdbdbda2" }}>
+          <OutlinedButton onClick={closeHandler}>CANCEL</OutlinedButton>
+          <FillButton type="submit">OK</FillButton>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+}

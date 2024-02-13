@@ -12,7 +12,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
-import { MouseEvent, ReactNode, useContext, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useContext, useState } from "react";
 import {
   ValidMasterMRPDataTabs,
   mastersMRPSubFields,
@@ -66,18 +66,14 @@ export default function MRPData() {
     setPlantData,
     masters,
     SelectedMasterDatatab,
-    setSelectedMasterDatatab,
+
     tabValue,
     settabValue,
     editTabShow,
     auth,
     setReusableSnackBar,
   } = PlantDataCon;
-  useEffect(() => {
-    if (setSelectedMasterDatatab) {
-      setSelectedMasterDatatab("MRPType");
-    }
-  }, [setSelectedMasterDatatab]);
+
   const authHook = UseAuth();
   if (!authHook && !auth) {
     return null;

@@ -1,6 +1,7 @@
 "use client";
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import OutlinedButton from "@/components/Button/OutlineButton";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PersonIcon from "@mui/icons-material/Person";
@@ -26,6 +27,9 @@ export default function Home() {
         <div className="dashboard-modules">
           <PersonIcon sx={{ fontSize: "2rem" }} />
           <p className="dashboard-modules-text">User Mannagement</p>
+          <OutlinedButton className="dashboard-modules-sub-text">
+            Click here
+          </OutlinedButton>
           <IconButton
             aria-label="delete"
             size="small"
@@ -40,6 +44,15 @@ export default function Home() {
         <div className="dashboard-modules">
           <SettingsSuggestIcon sx={{ fontSize: "2rem" }} />
           <p className="dashboard-modules-text">Material Master</p>
+          <OutlinedButton
+            onClick={() => {
+              router.push("/Masters");
+            }}
+            className="dashboard-modules-sub-text"
+          >
+            Click here
+          </OutlinedButton>
+
           <IconButton
             aria-label="delete"
             size="small"
@@ -55,6 +68,10 @@ export default function Home() {
           <WarehouseIcon sx={{ fontSize: "2rem" }} />
 
           <p className="dashboard-modules-text">Asset Master</p>
+
+          <OutlinedButton className="dashboard-modules-sub-text">
+            Click here
+          </OutlinedButton>
           <IconButton
             aria-label="delete"
             size="small"
@@ -67,6 +84,10 @@ export default function Home() {
         <div className="dashboard-modules">
           <ManageAccountsIcon sx={{ fontSize: "2rem" }} />
           <p className="dashboard-modules-text">Service Master</p>
+          <OutlinedButton className="dashboard-modules-sub-text">
+            Click here
+          </OutlinedButton>
+
           <IconButton
             aria-label="delete"
             size="small"

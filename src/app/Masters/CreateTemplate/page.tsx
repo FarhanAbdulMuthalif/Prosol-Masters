@@ -119,6 +119,10 @@ export default function Value() {
         );
         const data = await res.data;
         setNounSuggestData(data);
+        setFormData((prevData: any) => ({
+          ...prevData,
+          ["image"]: "",
+        }));
       } catch (e: any) {
         console.log(e?.response);
       }

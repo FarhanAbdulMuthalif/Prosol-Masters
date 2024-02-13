@@ -1,6 +1,7 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import HelpIcon from "@mui/icons-material/Help";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -9,14 +10,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { MouseEvent, useContext, useState } from "react";
+import ChangePasswordDialog from "../Dialog/userDialog/ChangePasswordDialog";
 import api from "../api";
 import "./style.scss";
 
 export default function Header() {
   const currentRoute = usePathname();
   const router = useRouter();
+  const [ChangePasswordDialogOpen, setChangePasswordDialogOpen] =
+    useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const myPrfStyle = { display: "flex", gap: "10px" };
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -129,14 +134,24 @@ export default function Header() {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem
-            sx={{ display: "flex", gap: "10px" }}
-            onClick={handleLogout}
-          >
-            <LogoutOutlinedIcon />
+          <MenuItem sx={myPrfStyle} onClick={handleLogout}>
+            <LogoutOutlinedIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
             Logout
           </MenuItem>
+          <MenuItem
+            sx={myPrfStyle}
+            onClick={() => {
+              setChangePasswordDialogOpen(true);
+            }}
+          >
+            <LockResetIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
+            Change Password
+          </MenuItem>
         </Menu>
+        <ChangePasswordDialog
+          open={ChangePasswordDialogOpen}
+          handleClose={setChangePasswordDialogOpen}
+        />
       </div>
     </header>
   );

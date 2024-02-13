@@ -11,7 +11,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
 import {
   ValidMasterDataTabs,
   ValidMasterGeneralDataTabs,
@@ -52,18 +52,13 @@ export default function General() {
     setPlantData,
     masters,
     SelectedMasterDatatab,
-    setSelectedMasterDatatab,
     tabValue,
     settabValue,
     editTabShow,
     auth,
     setReusableSnackBar,
   } = PlantDataCon;
-  useEffect(() => {
-    if (setSelectedMasterDatatab) {
-      setSelectedMasterDatatab("IndustrySector");
-    }
-  }, [setSelectedMasterDatatab]);
+
   const authHook = UseAuth();
   if (!authHook && !auth) {
     return null;

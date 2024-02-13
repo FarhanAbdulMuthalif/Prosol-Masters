@@ -19,6 +19,14 @@ export const MuiCreateTheme = createTheme({
         },
       },
     },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          boxShadow:
+            "rgb(9 30 66 / 8%) 0px 0px 0px 1px,rgb(9 30 66 / 8%) 0px 2px 4px 1px",
+        },
+      },
+    },
     MuiFormControlLabel: {
       styleOverrides: {
         label: {
