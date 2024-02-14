@@ -13,12 +13,14 @@ export default function MasterDynamicFieldRender({
   handleInputChange,
   handleMultiSelectChange,
   handleSelectChange,
+  dynFldErrValidation,
 }: {
   formData: any;
   dynamicFields: PostCreateFieldData[];
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleSelectChange: (event: SelectChangeEvent) => void;
   handleMultiSelectChange: (event: SelectChangeEvent) => void;
+  dynFldErrValidation: Record<string, string>;
 }) {
   return (
     <>
@@ -33,11 +35,15 @@ export default function MasterDynamicFieldRender({
                 value={formData[data.fieldName]}
                 onChange={handleInputChange}
                 name={data.fieldName}
-                inputProps={{
-                  autoComplete: "new-password",
-                  maxLength: data.max,
-                  minLength: data.min,
-                }}
+                // inputProps={{
+                //   autoComplete: "new-password",
+                //   maxLength: data.max,
+                //   minLength: data.min,
+                // }}
+                error={
+                  dynFldErrValidation[data.fieldName]?.length > 0 ? true : false
+                }
+                helperText={dynFldErrValidation[data.fieldName]}
               />
             ) : data.dataType === "textArea" ? (
               <TextareaOutline
@@ -47,11 +53,15 @@ export default function MasterDynamicFieldRender({
                 value={formData[data.fieldName]}
                 onChange={handleInputChange}
                 name={data.fieldName}
-                inputProps={{
-                  autoComplete: "new-password",
-                  maxLength: data.max,
-                  minLength: data.min,
-                }}
+                // inputProps={{
+                //   autoComplete: "new-password",
+                //   maxLength: data.max,
+                //   minLength: data.min,
+                // }}
+                error={
+                  dynFldErrValidation[data.fieldName]?.length > 0 ? true : false
+                }
+                helperText={dynFldErrValidation[data.fieldName]}
               />
             ) : data.dataType === "dropDown" && data.identity === "single" ? (
               <DynamicSingleSelectDropdown

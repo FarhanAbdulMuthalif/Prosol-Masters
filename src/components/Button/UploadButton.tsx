@@ -26,8 +26,13 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function UploadButton() {
   const PlantDataCon = useContext(UseContextHook);
-  const { setPlantData, masters, SelectedMasterDatatab, setReusableSnackBar } =
-    PlantDataCon;
+  const {
+    setPlantData,
+    masters,
+    SelectedMasterDatatab,
+    setReusableSnackBar,
+    ThemeColor,
+  } = PlantDataCon;
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -83,7 +88,16 @@ export default function UploadButton() {
         variant="contained"
         startIcon={<CloudUploadIcon />}
         size="small"
-        sx={{ whiteSpace: "nowrap" }}
+        sx={{
+          whiteSpace: "nowrap",
+          backgroundColor: ThemeColor,
+          "&:hover": {
+            backgroundColor: ThemeColor, // Set the hover color to the same as the background color
+
+            // or use the following line to clear the hover color
+            // backgroundColor: "transparent",
+          },
+        }}
       >
         Bulk Upload file
         <VisuallyHiddenInput onChange={handleFileUpload} type="file" />

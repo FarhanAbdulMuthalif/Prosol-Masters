@@ -34,6 +34,7 @@ export default function ChangePasswordDialog({
   const [ChangePasswordError, setChangePasswordError] = useState({
     currentPassword: false,
     newPassword: false,
+    equal: false,
   });
   const ContextDataHub = useContext(UseContextHook);
   const { setReusableSnackBar, UserInfo } = ContextDataHub;
@@ -48,7 +49,12 @@ export default function ChangePasswordDialog({
   const ChangePasswordSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
     console.log(ChangePasswordState);
-
+    if (
+      ChangePasswordState.currentPassword === ChangePasswordState.newPassword
+    ) {
+      setChangePasswordError((prev) => ({ ...prev, equal: true }));
+      return null;
+    }
     if (ChangePasswordState.currentPassword.length < 1) {
       setChangePasswordError((prev) => ({ ...prev, currentPassword: true }));
       return null;
@@ -60,6 +66,7 @@ export default function ChangePasswordDialog({
     setChangePasswordError((prev) => ({
       currentPassword: false,
       newPassword: false,
+      equal: false,
     }));
     try {
       const res = await api.put(
@@ -89,7 +96,7 @@ export default function ChangePasswordDialog({
       onClose={closeHandler}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      maxWidth="sm"
+      maxWidth="xs"
       fullWidth
     >
       <DialogTitle
@@ -132,6 +139,20 @@ export default function ChangePasswordDialog({
                 : ""
             }
           />
+          {ChangePasswordError.equal ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "12px",
+                fontWeight: "600",
+                padding: "0 3px",
+              }}
+            >
+              Current password and New Password Should be different
+            </p>
+          ) : (
+            ""
+          )}
         </DialogContent>
         <DialogActions sx={{ borderTop: "1px solid #bdbdbda2" }}>
           <OutlinedButton onClick={closeHandler}>CANCEL</OutlinedButton>

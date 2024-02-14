@@ -67,7 +67,7 @@ const Login = () => {
   // };
   const router = useRouter();
   const MasterDetails = useContext(UseContextHook);
-  const { setauth, setUserInfo, setReusableSnackBar } = MasterDetails;
+  const { setauth, setUserInfo, setReusableSnackBar, auth } = MasterDetails;
 
   if (!setauth || !setUserInfo || !setReusableSnackBar) {
     return null;
@@ -118,7 +118,7 @@ const Login = () => {
             open: true,
           }));
         }
-        if (e?.message === "Network Error") {
+        if (e?.message === "Network Error" || e?.response === "undefined") {
           setReusableSnackBar((prev) => ({
             severity: "error",
             message: "Failed connection check server",
@@ -137,6 +137,9 @@ const Login = () => {
     //   setCaptchaTextInput("");
     // }
   };
+  if (auth) {
+    return null;
+  }
   const usernameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setemail(event.target.value);
   };

@@ -7,6 +7,7 @@ import OutlinedButton from "@/components/Button/OutlineButton";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { validateField } from "@/utils/DynamicFields/DynamicFunction";
 import {
   Checkbox,
   FormControl,
@@ -64,6 +65,9 @@ export default function EditAttribute({ EditDataGet }: any) {
     };
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab, EditDataGet.listUom]);
+  const [dynFldErrValidation, setdynFldErrValidation] = useState<
+    Record<string, string>
+  >({});
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -136,6 +140,19 @@ export default function EditAttribute({ EditDataGet }: any) {
     const filteredUserData = { ...filteredData };
 
     keysToRemove.forEach((key) => delete filteredUserData[key]);
+    const validationErrors: Record<string, string> = {};
+    for (const field of dynamicFields) {
+      const value = formData[field.fieldName];
+      const error = validateField(field, value);
+      if (error) {
+        validationErrors[field.fieldName] = error;
+      }
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setdynFldErrValidation(validationErrors);
+      return; // Prevent form submission if there are errors
+    }
     if (
       formData["attributeName"]?.length > 0 &&
       formData["fieldType"]?.length > 0
@@ -148,7 +165,14 @@ export default function EditAttribute({ EditDataGet }: any) {
         const data = await response.data;
         if (response.status === 200) {
           console.log(data);
-          setFormData({});
+          const objKey = dynamicFields.reduce((acc, item) => {
+            acc[item.fieldName] = "";
+            return acc;
+          }, {} as Record<string, string>);
+
+          setFormData((prev: any) => {
+            return { ["attributeName"]: "", ["fieldType"]: "", ...objKey };
+          });
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `${SelectedMasterDatatab} updated Sucessfully!`,
@@ -246,6 +270,7 @@ export default function EditAttribute({ EditDataGet }: any) {
             handleInputChange={handleInputChange}
             handleMultiSelectChange={handleMultiSelectChange}
             handleSelectChange={handleSelectChange}
+            dynFldErrValidation={dynFldErrValidation}
           />
         </div>
         <div className="master-attribute-uom-list">

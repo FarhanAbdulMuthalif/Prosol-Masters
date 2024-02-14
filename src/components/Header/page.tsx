@@ -1,5 +1,6 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
 import HelpIcon from "@mui/icons-material/Help";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -10,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { MouseEvent, useContext, useState } from "react";
+import ThemedDialog from "../Dialog/ThemeDialog";
 import ChangePasswordDialog from "../Dialog/userDialog/ChangePasswordDialog";
 import api from "../api";
 import "./style.scss";
@@ -19,8 +21,12 @@ export default function Header() {
   const router = useRouter();
   const [ChangePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
+  const [ThemeDialogOpen, setThemeDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [anchorElSettings, setAnchorElSettings] =
+    useState<null | SVGSVGElement>(null);
+  const openSetting = Boolean(anchorElSettings);
   const myPrfStyle = { display: "flex", gap: "10px" };
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,6 +34,13 @@ export default function Header() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleSettingClick = (event: MouseEvent<SVGSVGElement>) => {
+    setAnchorElSettings(event.currentTarget);
+  };
+
+  const handleSettingClose = () => {
+    setAnchorElSettings(null);
   };
 
   const { auth, setauth, UserInfo } = useContext(UseContextHook);
@@ -107,7 +120,10 @@ export default function Header() {
       <div className="Header-Last-Side">
         <div className="Header-Last-Side-icons">
           <NotificationsIcon sx={{ fontSize: "18px", color: "#535353" }} />
-          <SettingsIcon sx={{ fontSize: "18px", color: "#535353" }} />
+          <SettingsIcon
+            onClick={handleSettingClick}
+            sx={{ fontSize: "18px", color: "#535353" }}
+          />
           <HelpIcon sx={{ fontSize: "18px", color: "#535353" }} />
         </div>
         <div
@@ -148,10 +164,30 @@ export default function Header() {
             Change Password
           </MenuItem>
         </Menu>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorElSettings}
+          open={openSetting}
+          onClose={handleSettingClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem
+            sx={myPrfStyle}
+            onClick={() => {
+              setThemeDialogOpen(true);
+            }}
+          >
+            <ColorLensIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
+            Themes
+          </MenuItem>
+        </Menu>
         <ChangePasswordDialog
           open={ChangePasswordDialogOpen}
           handleClose={setChangePasswordDialogOpen}
         />
+        <ThemedDialog open={ThemeDialogOpen} handleClose={setThemeDialogOpen} />
       </div>
     </header>
   );

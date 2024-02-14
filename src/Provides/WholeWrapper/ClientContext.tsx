@@ -36,9 +36,17 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
+  const [ThemeColor, setThemeColor] = useState("#1976d2");
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
+  const colorThemesArr = [
+    "#739072",
+    "#B47B84",
+    "#535C91",
+    "#F4BF96",
+    "#1976d2",
+  ];
   const [ReusableSnackBar, setReusableSnackBar] =
     useState<SnackBarReusableProps>({
       open: false,
@@ -71,6 +79,9 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     seteditTabShow,
     editTabShow,
     setReusableSnackBar,
+    colorThemesArr,
+    ThemeColor,
+    setThemeColor,
   };
 
   const iconRotateHandler = {

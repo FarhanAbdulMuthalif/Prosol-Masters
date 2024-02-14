@@ -52,6 +52,10 @@ export default function CreateVendor() {
     };
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab]);
+
+  const [dynFldErrValidation, setdynFldErrValidation] = useState<
+    Record<string, string>
+  >({});
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")

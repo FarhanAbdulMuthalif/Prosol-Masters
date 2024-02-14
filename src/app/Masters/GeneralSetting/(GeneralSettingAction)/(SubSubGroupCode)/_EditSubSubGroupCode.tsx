@@ -8,6 +8,7 @@ import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { validateField } from "@/utils/DynamicFields/DynamicFunction";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -55,6 +56,9 @@ export default function EditSubSubGroupCode({ EditDataGet }: any) {
     };
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab, EditDataGet]);
+  const [dynFldErrValidation, setdynFldErrValidation] = useState<
+    Record<string, string>
+  >({});
   const { data: originalArray } = useFetch("/setting/getAllMainGroupCodes") ?? {
     data: [],
   };
@@ -140,6 +144,19 @@ export default function EditSubSubGroupCode({ EditDataGet }: any) {
     const filteredUserData = { ...filteredData };
 
     keysToRemove.forEach((key) => delete filteredUserData[key]);
+    const validationErrors: Record<string, string> = {};
+    for (const field of dynamicFields) {
+      const value = formData[field.fieldName];
+      const error = validateField(field, value);
+      if (error) {
+        validationErrors[field.fieldName] = error;
+      }
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setdynFldErrValidation(validationErrors);
+      return; // Prevent form submission if there are errors
+    }
     if (formData[fieldCode].length && formData[fieldName].length > 0) {
       try {
         const response = await api.put(
@@ -153,8 +170,13 @@ export default function EditSubSubGroupCode({ EditDataGet }: any) {
         const data = await response.data;
         if (response.status === 200) {
           console.log(data);
+          const objKey = dynamicFields.reduce((acc, item) => {
+            acc[item.fieldName] = "";
+            return acc;
+          }, {} as Record<string, string>);
+
           setFormData((prev: any) => {
-            return { [fieldName]: "", [fieldCode]: "" };
+            return { [fieldName]: "", [fieldCode]: "", ...objKey };
           });
           setReusableSnackBar((prev) => ({
             severity: "success",
@@ -251,6 +273,7 @@ export default function EditSubSubGroupCode({ EditDataGet }: any) {
             handleInputChange={handleInputChange}
             handleMultiSelectChange={handleMultiSelectChange}
             handleSelectChange={handleSelectChange}
+            dynFldErrValidation={dynFldErrValidation}
           />
         </div>
         <MasterAuditTrial formData={formData}></MasterAuditTrial>

@@ -56,6 +56,10 @@ export default function EditValuationClass({ EditDataGet }: any) {
     };
     dynamicFormFieldHandler();
   }, [SelectedMasterDatatab]);
+
+  const [dynFldErrValidation, setdynFldErrValidation] = useState<
+    Record<string, string>
+  >({});
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
