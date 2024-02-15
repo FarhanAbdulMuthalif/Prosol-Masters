@@ -10,6 +10,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ThemeProvider } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import {
+  SingleThemeObjProps,
   SingleUserInfoProps,
   SnackBarReusableProps,
   UseContextHookTypes,
@@ -36,16 +37,57 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
-  const [ThemeColor, setThemeColor] = useState("#1976d2");
+  const [ThemeColor, setThemeColor] = useState<SingleThemeObjProps>({
+    name: "default",
+    primaryColor: "#1976d2",
+    secondaryColor: "#614cff",
+    tertiaryColor: "#e6effc",
+  });
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
   const colorThemesArr = [
-    "#739072",
-    "#B47B84",
-    "#535C91",
-    "#F4BF96",
-    "#1976d2",
+    {
+      name: "default",
+      primaryColor: "#1976d2",
+      secondaryColor: "#614cff",
+      tertiaryColor: "#e6effc",
+    },
+    {
+      name: "light",
+      primaryColor: "#CE5A67",
+      secondaryColor: "#F4BF96",
+      tertiaryColor: "#FCF5ED",
+    },
+    {
+      name: "dark",
+      primaryColor: "#4F6F52",
+      secondaryColor: "#86A789",
+      tertiaryColor: "#D2E3C8",
+    },
+    {
+      name: "shinePupule",
+      primaryColor: "#070F2B",
+      secondaryColor: "#535C91",
+      tertiaryColor: "#9290C3",
+    },
+    {
+      name: "shineOrange",
+      primaryColor: "#454545",
+      secondaryColor: "#FF6000",
+      tertiaryColor: "#FFE6C7",
+    },
+    {
+      name: "lotusTheme",
+      primaryColor: "black",
+      secondaryColor: "#fad757",
+      tertiaryColor: "white",
+    },
+    // "#739072",
+    // "#B47B84",
+    // "#535C91",
+    // "#F4BF96",
+    // "#1976d2",
   ];
   const [ReusableSnackBar, setReusableSnackBar] =
     useState<SnackBarReusableProps>({
@@ -105,7 +147,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
               <ArrowForwardIosIcon
                 style={iconRotateHandler}
                 sx={{
-                  color: "blue",
+                  color: ThemeColor.primaryColor,
                   fontSize: "14px",
                 }}
               />

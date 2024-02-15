@@ -26,6 +26,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     SelectedMasterDatatab,
     setSelectedMasterDatatab,
     settabValue,
+    ThemeColor,
   } = useContext(UseContextHook);
   const open = Boolean(SecondSideBar);
   if (
@@ -78,6 +79,20 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     router.push(SelectedData.path);
     setSecondSideBar(null); // need to check
   };
+  const listStyles = {
+    // color: ThemeColor.primaryColor,
+    borderLeft: `4px solid ${ThemeColor.primaryColor}`,
+    backgroundColor: ThemeColor.tertiaryColor,
+    color: ThemeColor.primaryColor,
+  };
+  const subListStyles = {
+    // color: ThemeColor.primaryColor,
+    backgroundColor: ThemeColor.primaryColor,
+    // "&:hover": {
+    //   backgroundColor: ThemeColor.primaryColor,
+    // },
+  };
+
   return (
     <div className={OpenSideBar ? "full-side-bar" : "side-bar"}>
       {OpenSideBar ? (
@@ -128,6 +143,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                             ? "activ-sidebar-link"
                             : "normal-sidebar-link"
                         }
+                        style={pathName === data.path ? listStyles : {}}
                       >
                         {data.name}
                       </Link>
@@ -141,6 +157,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                           ? "activ-sidebar-link"
                           : "normal-sidebar-link"
                       }
+                      style={pathName === data.path ? listStyles : {}}
                       onClick={(e) => {
                         handleSecondBarClick(e, data);
                       }}
@@ -166,6 +183,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         ? "activ-sidebar-link"
                         : "normal-sidebar-link"
                     }
+                    style={pathName === data.path ? listStyles : {}}
                   >
                     {data.name}
                   </Link>
@@ -199,6 +217,9 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         SelectedMasterDatatab === data
                           ? "active-second-bar-li-class"
                           : ""
+                      }
+                      style={
+                        SelectedMasterDatatab === data ? subListStyles : {}
                       }
                       onClick={() => {
                         subListHandlerClick(data);

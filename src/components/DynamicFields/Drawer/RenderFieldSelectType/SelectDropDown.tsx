@@ -1,11 +1,7 @@
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
-import {
-  Chip,
-  FormControlLabel,
-  SelectChangeEvent,
-  Switch,
-} from "@mui/material";
+import { Chip, FormControlLabel, SelectChangeEvent } from "@mui/material";
 import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction } from "react";
 import { Option, PostCreateFieldData } from "../../../../../TypesStore";
 
@@ -83,9 +79,7 @@ export default function SelectDropDown({
       </div>
       <FormControlLabel
         control={
-          <Switch
-            color="primary"
-            size="medium"
+          <ReusableSwitch
             checked={valueData.required}
             onChange={handleInput}
             name="required"

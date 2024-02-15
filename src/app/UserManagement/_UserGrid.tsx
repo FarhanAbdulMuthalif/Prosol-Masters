@@ -1,11 +1,11 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import api from "@/components/api";
 import { UserTableColumns } from "@/utils/TableSources";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Switch } from "@mui/material";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import {
   Dispatch,
@@ -89,9 +89,7 @@ export default function UserGrid({
       renderCell: (params) => {
         return (
           <div className="wrapperIconAction">
-            <Switch
-              color="primary"
-              size="small"
+            <ReusableSwitch
               checked={params.row.status}
               onChange={(e) => {
                 SingleUserStatusHandler(params.row.id);

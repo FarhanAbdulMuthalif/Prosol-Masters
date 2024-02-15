@@ -1,10 +1,10 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import api from "@/components/api";
 import { getAllPlantData } from "@/utils/masters/plant";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Switch } from "@mui/material";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
@@ -158,9 +158,7 @@ export default function MRPGrid({
       renderCell: (params) => {
         return (
           <div className="wrapperIconAction">
-            <Switch
-              color="primary"
-              size="small"
+            <ReusableSwitch
               checked={
                 params.row[
                   `${

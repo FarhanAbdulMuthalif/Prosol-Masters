@@ -56,23 +56,53 @@ export default function ThemedDialog({ open, handleClose }: ThemeDialogProps) {
           <div className="containers-themes">
             {colorThemesArr.map((data) => {
               return (
-                <div
-                  className="container-theme-box"
-                  style={{
-                    backgroundColor: data,
-                    border: ThemeColor === data ? "2px solid black" : "none",
-                  }}
-                  onClick={() => {
-                    setThemeColor(data);
-                  }}
-                  key={data}
-                >
-                  {ThemeColor === data ? (
-                    <CheckIcon sx={{ color: "white" }} />
-                  ) : (
-                    ""
-                  )}
-                </div>
+                <>
+                  <div
+                    className={
+                      ThemeColor.name === data.name
+                        ? "container-theme-box withBorder-container-theme-box"
+                        : "container-theme-box"
+                    }
+                    onClick={() => {
+                      setThemeColor(data);
+                    }}
+                  >
+                    <div
+                      className={"container-theme-single-box"}
+                      style={{
+                        backgroundColor: data.primaryColor,
+                        // border: ThemeColor.name === data.name ? "2px solid black" : "none",
+                      }}
+                    ></div>
+                    <div
+                      className={"container-theme-single-box"}
+                      style={{
+                        backgroundColor: data.secondaryColor,
+                        // border: ThemeColor.name === data.name ? "2px solid black" : "none",
+                      }}
+                    ></div>
+                    <div
+                      className={"container-theme-single-box"}
+                      style={{
+                        backgroundColor: data.tertiaryColor,
+                        // border: ThemeColor.name === data.name ? "2px solid black" : "none",
+                      }}
+                    ></div>
+                    {ThemeColor.name === data.name ? (
+                      <CheckIcon
+                        sx={{
+                          color: "white",
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </>
               );
             })}
           </div>

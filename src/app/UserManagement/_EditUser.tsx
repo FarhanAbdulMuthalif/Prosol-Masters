@@ -4,10 +4,11 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableMultipleSelect from "@/components/Dropdown/MultipleDropdown";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { UserInitialState } from "@/utils/UserDataExport";
-import { SelectChangeEvent, Switch } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import { FormEvent, useContext, useState } from "react";
 import { UserInitialStateProps } from "../../../TypesStore";
 
@@ -215,9 +216,8 @@ export default function EditUser({
             User Status {`(Active / Inactive)`}
           </p>
           <span>:</span>
-          <Switch
-            color="primary"
-            size="small"
+
+          <ReusableSwitch
             checked={formData.status}
             onChange={handleInputChange}
             name="status"

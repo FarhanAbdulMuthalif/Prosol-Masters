@@ -156,15 +156,27 @@ textarea {
   padding: 5px 0 0 8px !important;
 }
 .containers-themes {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  width: 100%;
+  justify-content: space-around;
+  flex-wrap: wrap;
   gap: 10px;
 }
 .container-theme-box {
+  display: flex;
+  position: relative;
+  border-radius: 5px;
+  height: 50px;
+  width: 150px;
+  overflow: hidden;
+  box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+    rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+}
+.container-theme-single-box {
   height: 50px;
   width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+.withBorder-container-theme-box {
+  border: 3px solid rgb(107, 103, 103);
 }

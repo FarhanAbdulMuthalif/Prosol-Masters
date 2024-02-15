@@ -18,9 +18,15 @@ export type UseContextHookTypes = {
   seteditTabShow?: (val: boolean) => void;
   editTabShow?: boolean;
   setReusableSnackBar?: Dispatch<SetStateAction<SnackBarReusableProps>>;
-  colorThemesArr: string[];
-  ThemeColor: string;
-  setThemeColor?: Dispatch<SetStateAction<string>>;
+  colorThemesArr: SingleThemeObjProps[];
+  ThemeColor: SingleThemeObjProps;
+  setThemeColor?: Dispatch<SetStateAction<SingleThemeObjProps>>;
+};
+export type SingleThemeObjProps = {
+  name: string;
+  primaryColor: string;
+  secondaryColor: string;
+  tertiaryColor: string;
 };
 export type NavKeyType = {
   [key in string]: NavSinData[];

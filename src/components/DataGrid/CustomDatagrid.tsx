@@ -1,12 +1,12 @@
 // components/DataGrid.tsx
-import { DataGridHeaderCustomStyles } from "@/utils/sideBarFunc";
+import { UseContextHook } from "@/Provides/UseContextHook";
 import {
   DataGrid,
   GridColDef,
   GridRowId,
   GridRowsProp,
 } from "@mui/x-data-grid";
-import React from "react";
+import React, { useContext } from "react";
 
 interface CustomDataGridProps {
   columns: GridColDef[];
@@ -22,24 +22,35 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = ({
   onRowSelectionModelChange,
   ...props
 }) => {
+  const ContextDataHub = useContext(UseContextHook);
+
+  const { ThemeColor } = ContextDataHub;
   return (
     <div style={{ height: "73vh", backgroundColor: "white" }}>
       <DataGrid
         checkboxSelection
         disableRowSelectionOnClick
-        columns={columns}
+        columns={columns.map((col) => ({
+          ...col,
+          headerClassName: "custom-header",
+        }))}
         rows={rows}
         onRowSelectionModelChange={onRowSelectionModelChange} // Pass the correct prop
         {...props}
         sx={{
           fontSize: "12px",
-          "&  .MuiDataGrid-virtualScroller css-qvtrhg-MuiDataGrid-virtualScroller":
-            {
-              height: "4px",
-            },
+          "& .custom-header": {
+            backgroundColor: `${ThemeColor.tertiaryColor}`, // Set your desired header color here
+            color: ThemeColor.primaryColor,
+          },
+          "& .MuiDataGrid-columnHeaderCheckbox": {
+            // Target checkbox header specifically
+            backgroundColor: `${ThemeColor.tertiaryColor}`,
+            color: ThemeColor.primaryColor,
+          },
         }}
         scrollbarSize={0}
-        classes={DataGridHeaderCustomStyles} // Apply custom styles directly
+        // classes={DataGridHeaderCustomStyles} // Apply custom styles directly
       />
     </div>
   );

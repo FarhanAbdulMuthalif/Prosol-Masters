@@ -27,17 +27,16 @@ import CreateTemplateAttributeUOMDialog from "@/components/Dialog/CreateTemplate
 import CreateTemplateValuesDialog from "@/components/Dialog/CreateTemplateValuesDialog";
 import CharacteristicSingleSelectDropdown from "@/components/Dropdown/CharacteristicDropdown";
 import CustomRadioGroupComponent from "@/components/RadioButton/CustomRadioGroup";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
-import api from "@/components/api";
-import { URL_FIX_LOGIN_PATH } from "@/components/apiLogin";
+import api, { URL_FIX_BASE_PATH } from "@/components/api";
 import { CharacteristSingleInitialData } from "@/utils/masters/plant";
 import {
   Autocomplete,
   Checkbox,
   FormControlLabel,
   SelectChangeEvent,
-  Switch,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
@@ -87,6 +86,7 @@ export default function Value() {
     setSelectedMasterDatatab,
     auth,
     setReusableSnackBar,
+    ThemeColor,
   } = PlantDataCon;
   useEffect(() => {
     if (setSelectedMasterDatatab) {
@@ -518,7 +518,7 @@ export default function Value() {
           </OutlinedButton>
           {formData && formData["image"] && formData["id"] ? (
             <Image
-              src={`${URL_FIX_LOGIN_PATH}/dictionary/downloadFile/${
+              src={`${URL_FIX_BASE_PATH}/dictionary/downloadFile/${
                 formData ? formData["id"] : ""
               }/${formData ? formData["image"] : ""}`}
               alt="loading..."
@@ -557,7 +557,10 @@ export default function Value() {
             ))}
           </div>
         </div>
-        <div className="template-nm-characteristic-section">
+        <div
+          className="template-nm-characteristic-section"
+          style={{ backgroundColor: ThemeColor.primaryColor }}
+        >
           <p className="template-nm-characteristic-section-text one">
             Characteristic
           </p>
@@ -610,9 +613,7 @@ export default function Value() {
                   />
                 </div>
                 <div className="template-nm-characteristic-section-input-div-inside three">
-                  <Switch
-                    color="primary"
-                    size="small"
+                  <ReusableSwitch
                     checked={cData["mandatory"]}
                     onChange={(e) => {
                       handleCharacteristicInputChange(e, cData.id);
@@ -643,9 +644,7 @@ export default function Value() {
                   </OutlinedButton>
                 </div>
                 <div className="template-nm-characteristic-section-input-div-inside six">
-                  <Switch
-                    color="primary"
-                    size="small"
+                  <ReusableSwitch
                     checked={cData["uomMandatory"]}
                     onChange={(e) => {
                       handleCharacteristicInputChange(e, cData.id);
@@ -676,7 +675,7 @@ export default function Value() {
                       }}
                       sx={{
                         fontSize: "1.1rem",
-                        color: "#1976d2",
+                        color: ThemeColor.primaryColor,
                         cursor: "pointer",
                       }}
                     />
@@ -693,7 +692,7 @@ export default function Value() {
                       }}
                       sx={{
                         fontSize: "1.1rem",
-                        color: "#1976d2",
+                        color: ThemeColor.primaryColor,
                         cursor: "pointer",
                       }}
                     />

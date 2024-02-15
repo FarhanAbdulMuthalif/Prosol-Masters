@@ -1,7 +1,6 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import { getAllPlantData } from "@/utils/masters/plant";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
@@ -11,6 +10,7 @@ import {
   mastersProps,
 } from "../../../TypesStore";
 import api from "../api";
+import FillButton from "./FillButton";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -83,25 +83,18 @@ export default function UploadButton() {
   };
   return (
     <>
-      <Button
+      <FillButton
         component="label"
-        variant="contained"
+        // variant="contained"
         startIcon={<CloudUploadIcon />}
-        size="small"
+        // size="small"
         sx={{
           whiteSpace: "nowrap",
-          backgroundColor: ThemeColor,
-          "&:hover": {
-            backgroundColor: ThemeColor, // Set the hover color to the same as the background color
-
-            // or use the following line to clear the hover color
-            // backgroundColor: "transparent",
-          },
         }}
       >
         Bulk Upload file
         <VisuallyHiddenInput onChange={handleFileUpload} type="file" />
-      </Button>
+      </FillButton>
     </>
   );
 }

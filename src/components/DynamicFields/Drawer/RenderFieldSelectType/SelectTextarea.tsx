@@ -1,6 +1,7 @@
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
-import { FormControlLabel, SelectChangeEvent, Switch } from "@mui/material";
+import { FormControlLabel, SelectChangeEvent } from "@mui/material";
 import { ChangeEvent } from "react";
 import { PostCreateFieldData } from "../../../../../TypesStore";
 
@@ -67,9 +68,7 @@ Select Required
 </label> */}
       <FormControlLabel
         control={
-          <Switch
-            color="primary"
-            size="small"
+          <ReusableSwitch
             checked={valueData.required}
             onChange={handleInput}
             name="required"

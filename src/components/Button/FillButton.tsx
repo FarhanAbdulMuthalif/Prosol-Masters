@@ -20,9 +20,9 @@ const FillButton: React.FC<FillButtonProps> = ({ children, ...props }) => {
         fontSize: "12px",
         padding: "4px 8px",
         whiteSpace: "nowrap",
-        backgroundColor: ThemeColor,
+        backgroundColor: ThemeColor.primaryColor,
         "&:hover": {
-          backgroundColor: ThemeColor, // Set the hover color to the same as the background color
+          backgroundColor: ThemeColor.secondaryColor, // Set the hover color to the same as the background color
 
           // or use the following line to clear the hover color
           // backgroundColor: "transparent",

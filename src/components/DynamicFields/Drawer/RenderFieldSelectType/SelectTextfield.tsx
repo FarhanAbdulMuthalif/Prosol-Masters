@@ -1,11 +1,11 @@
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import {
   Checkbox,
   FormControlLabel,
   FormGroup,
   SelectChangeEvent,
-  Switch,
   Typography,
 } from "@mui/material";
 import { ChangeEvent } from "react";
@@ -124,9 +124,7 @@ export default function SelectTextfield({
       </label> */}
       <FormControlLabel
         control={
-          <Switch
-            color="primary"
-            size="small"
+          <ReusableSwitch
             checked={valueData.required}
             onChange={handleInput}
             name="required"

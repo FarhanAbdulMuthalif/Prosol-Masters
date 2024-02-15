@@ -43,7 +43,8 @@ export default function Header() {
     setAnchorElSettings(null);
   };
 
-  const { auth, setauth, UserInfo } = useContext(UseContextHook);
+  const { auth, setauth, UserInfo, setSelectedMasterDatatab, ThemeColor } =
+    useContext(UseContextHook);
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const dataUser = await getAllPlantData(`/user/me`);
@@ -53,7 +54,13 @@ export default function Header() {
   //   };
   //   fetchData();
   // }, [setUserInfo]);
-  if (!auth) {
+  const listStyles = {
+    borderBottom: `3px solid ${ThemeColor.primaryColor}`,
+    color: ThemeColor.primaryColor,
+  };
+  console.log(listStyles);
+
+  if (!auth || !setSelectedMasterDatatab) {
     return null;
   }
   const handleLogout = async () => {
@@ -65,6 +72,7 @@ export default function Header() {
         router.push("/Login");
         if (setauth) {
           setauth(false);
+          handleClose();
         }
       }
     } catch (e: any) {
@@ -93,22 +101,28 @@ export default function Header() {
       <ul>
         <li>
           <Link
-            className={
+            className="active"
+            style={
               currentRoute.split("/").includes("UserManagement")
-                ? "active"
-                : "in-active"
+                ? listStyles
+                : { height: "100%" }
             }
             href="/UserManagement"
           >
             UserManagement
           </Link>
         </li>
-        <li>
+        <li
+          onClick={() => {
+            setSelectedMasterDatatab("Plant");
+          }}
+        >
           <Link
-            className={
+            className="active"
+            style={
               currentRoute.split("/").includes("Masters")
-                ? "active"
-                : "in-active"
+                ? listStyles
+                : { height: "100%" }
             }
             href="/Masters"
           >
@@ -158,6 +172,7 @@ export default function Header() {
             sx={myPrfStyle}
             onClick={() => {
               setChangePasswordDialogOpen(true);
+              handleClose();
             }}
           >
             <LockResetIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
@@ -177,6 +192,7 @@ export default function Header() {
             sx={myPrfStyle}
             onClick={() => {
               setThemeDialogOpen(true);
+              handleSettingClose();
             }}
           >
             <ColorLensIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />

@@ -1,9 +1,9 @@
 "use client";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
+import FillButton from "@/components/Button/FillButton";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
-import Button from "@mui/material/Button";
 import Image from "next/image";
 import { SnackBarReusableProps } from "../../../TypesStore";
 import "./ForgotPassword.css";
@@ -84,7 +84,7 @@ const ForgotPassword: React.FC<{
           >
             Back to Login
           </p>
-          <Button
+          <FillButton
             sx={{
               height: "2rem",
             }}
@@ -94,7 +94,7 @@ const ForgotPassword: React.FC<{
             disabled={loading}
           >
             {loading ? "Loading" : "Submit"}
-          </Button>
+          </FillButton>
         </div>
       </div>
     </form>

@@ -5,6 +5,7 @@ import useFetch from "@/Hooks/useFetch";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
+import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { RoleInitialState } from "@/utils/UserDataExport";
@@ -12,7 +13,6 @@ import {
   Checkbox,
   FormControlLabel,
   SelectChangeEvent,
-  Switch,
   Typography,
 } from "@mui/material";
 import { FormEvent, useContext, useState } from "react";
@@ -180,9 +180,8 @@ export default function EditRole({
           </p>
 
           <span>:</span>
-          <Switch
-            color="primary"
-            size="small"
+
+          <ReusableSwitch
             checked={formData.status}
             onChange={handleInputChange}
             name="status"
