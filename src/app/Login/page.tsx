@@ -14,21 +14,8 @@ import ForgotPassword from "./ForgotPassword";
 import "./style.scss";
 
 const Login = () => {
-  // let captcha;
-  // let alphabets = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-
-  // const [captchaText, setCaptchaText] = useState("");
-  // const [captchaTextInput, setCaptchaTextInput] = useState("");
-  // const [errorCaptcha, setErroeCaptcha] = useState(false);
-  // const [succesCaptcha, setSuccesCaptcha] = useState(false);
   const [loading, setloading] = useState(false);
-  // const [sucesSnackBar, setSucesSnackBar] = useState(false);
-  // const [ReusableSnackBar, setReusableSnackBar] =
-  //   useState<SnackBarReusableProps>({
-  //     open: false,
-  //     message: "",
-  //     severity: "success",
-  //   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [emptyError, setEmptyError] = useState(false);
   const [InvalidUser, setInvalidUser] = useState(false);
@@ -38,33 +25,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
 
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
-  // const generate = () => {
-  //   // console.log(status)
-  //   let first = alphabets[Math.floor(Math.random() * alphabets.length)];
-  //   let second = Math.floor(Math.random() * 10);
-  //   let third = Math.floor(Math.random() * 10);
-  //   let fourth = alphabets[Math.floor(Math.random() * alphabets.length)];
-  //   let fifth = alphabets[Math.floor(Math.random() * alphabets.length)];
-  //   let sixth = Math.floor(Math.random() * 10);
-  //   captcha =
-  //     first.toString() +
-  //     second.toString() +
-  //     third.toString() +
-  //     fourth.toString() +
-  //     fifth.toString() +
-  //     sixth.toString();
 
-  //   setCaptchaText(captcha);
-  //   setCaptchaTextInput("");
-  // };
-  // const CaptchaHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   event.preventDefault();
-  //   setCaptchaText(event.target.value);
-  // };
-  // const CaptchaInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   event.preventDefault();
-  //   setCaptchaTextInput(event.target.value);
-  // };
   const router = useRouter();
   const MasterDetails = useContext(UseContextHook);
   const { setauth, setUserInfo, setReusableSnackBar, auth } = MasterDetails;
@@ -108,20 +69,20 @@ const Login = () => {
         }
       } catch (e: any) {
         console.log(e?.response);
-        if (e?.response?.status === 401) {
-          setInvalidUser(true);
-        }
-        if (e?.response?.status === 500 || e?.response?.status === 503) {
+        if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",
-            message: "Server Error check server",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
             open: true,
           }));
-        }
-        if (e?.message === "Network Error" || e?.response === "undefined") {
+        } else {
           setReusableSnackBar((prev) => ({
             severity: "error",
-            message: "Failed connection check server",
+            message: `Error: ${e?.message}`,
             open: true,
           }));
         }
@@ -131,11 +92,6 @@ const Login = () => {
     } else {
       setEmptyError(true);
     }
-    // } else {
-    //   setErroeCaptcha(true);
-    //   setSuccesCaptcha(false);
-    //   setCaptchaTextInput("");
-    // }
   };
   if (auth) {
     return null;
@@ -238,77 +194,9 @@ const Login = () => {
               </span>
             </div>
 
-            {/* <div className="div_capt" style={{}}>
-              <p
-                style={{
-                  textAlign: "left",
-                  marginBottom: ".5rem",
-                  marginTop: 0,
-                  color: "#515151",
-                  fontSize: ".9rem",
-                }}
-              >
-                Captcha Verification *
-              </p>
-              <div className="form-group">
-                <TextField
-                  type="text"
-                  id="captchaInputPlace"
-                  value={captchaTextInput}
-                  placeholder="Enter Captcha"
-                  onChange={CaptchaInputHandler}
-                />
-                <TextField
-                  type="text"
-                  id="captchaPlace"
-                  disabled
-                  value={captchaText}
-                  onChange={CaptchaHandler}
-                  onPaste={(e) => {
-                    e.preventDefault();
-                    return false;
-                  }}
-                  onDragStart={(e) => {
-                    e.preventDefault();
-                    return false;
-                  }}
-                  onCopy={(e) => {
-                    e.preventDefault();
-                    return false;
-                  }}
-                />
-                <AutorenewIcon
-                  onClick={generate}
-                  sx={{ marginRight: ".8rem", color: "blue" }}
-                />
-              </div>
-              {!errorCaptcha && (
-                <span style={{ fontSize: ".8rem", color: "#939393" }}>
-                  Type the character you see in the picture above
-                </span>
-              )}
-              {errorCaptcha && !succesCaptcha && (
-                <p
-                  style={{
-                    fontSize: ".8rem",
-                    color: "red",
-                    textAlign: "left",
-                    margin: 0,
-                  }}
-                >
-                  Invalid Captcha Try Again!!
-                </p>
-              )}
-              {succesCaptcha && !errorCaptcha && (
-                <p style={{ color: "green", textAlign: "left" }}>
-                  Captcha Matched
-                </p>
-              )}
-              
-            </div> */}
             <Button
               sx={{
-                marginTop: "2rem",
+                marginTop: "1rem",
                 height: "2rem",
                 width: "100%",
               }}

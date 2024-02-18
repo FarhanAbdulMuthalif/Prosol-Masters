@@ -37,57 +37,67 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
-  const [ThemeColor, setThemeColor] = useState<SingleThemeObjProps>({
-    name: "default",
-    primaryColor: "#1976d2",
-    secondaryColor: "#614cff",
-    tertiaryColor: "#e6effc",
+  const lcsValu =
+    typeof localStorage !== "undefined" ? localStorage.getItem("theme") : null;
+  const [ThemeColor, setThemeColor] = useState<SingleThemeObjProps>(() => {
+    if (lcsValu) {
+      return JSON.parse(lcsValu);
+    } else {
+      return {
+        id: 1,
+        name: "default",
+        primaryColor: "#1976d2",
+        secondaryColor: "#614cff",
+        tertiaryColor: "#e6effc",
+      };
+    }
   });
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
   const colorThemesArr = [
     {
+      id: 1,
       name: "default",
       primaryColor: "#1976d2",
       secondaryColor: "#614cff",
       tertiaryColor: "#e6effc",
     },
     {
+      id: 2,
       name: "light",
       primaryColor: "#CE5A67",
       secondaryColor: "#F4BF96",
       tertiaryColor: "#FCF5ED",
     },
     {
+      id: 3,
       name: "dark",
       primaryColor: "#4F6F52",
       secondaryColor: "#86A789",
       tertiaryColor: "#D2E3C8",
     },
     {
+      id: 4,
       name: "shinePupule",
       primaryColor: "#070F2B",
       secondaryColor: "#535C91",
       tertiaryColor: "#9290C3",
     },
     {
+      id: 5,
       name: "shineOrange",
       primaryColor: "#454545",
       secondaryColor: "#FF6000",
       tertiaryColor: "#FFE6C7",
     },
     {
+      id: 6,
       name: "lotusTheme",
       primaryColor: "black",
-      secondaryColor: "#fad757",
-      tertiaryColor: "white",
+      secondaryColor: "white",
+      tertiaryColor: "#fad757",
     },
-    // "#739072",
-    // "#B47B84",
-    // "#535C91",
-    // "#F4BF96",
-    // "#1976d2",
   ];
   const [ReusableSnackBar, setReusableSnackBar] =
     useState<SnackBarReusableProps>({

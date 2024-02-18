@@ -123,8 +123,26 @@ export default function General() {
           setPlantData(dataPlant);
         }
       }
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
       // console.log(e.ma)
     }
   };
@@ -173,6 +191,24 @@ export default function General() {
       }
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   const handlePlantBulkDeleteChangeAction = async () => {
@@ -201,6 +237,24 @@ export default function General() {
       }
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
 

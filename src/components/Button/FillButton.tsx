@@ -18,9 +18,10 @@ const FillButton: React.FC<FillButtonProps> = ({ children, ...props }) => {
       variant="contained"
       sx={{
         fontSize: "12px",
-        padding: "4px 8px",
+        // padding: "4px 8px",
         whiteSpace: "nowrap",
         backgroundColor: ThemeColor.primaryColor,
+
         "&:hover": {
           backgroundColor: ThemeColor.secondaryColor, // Set the hover color to the same as the background color
 

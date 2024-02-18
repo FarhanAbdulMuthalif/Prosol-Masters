@@ -29,7 +29,7 @@ export default function UserGrid({
 }) {
   const [SlectedId, setSlectedId] = useState(0);
   const UserDataCon = useContext(UseContextHook);
-  const { setReusableSnackBar } = UserDataCon;
+  const { setReusableSnackBar, ThemeColor } = UserDataCon;
   const [DeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -38,10 +38,28 @@ export default function UserGrid({
         setUserData(Users.data);
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     };
     fetchData();
-  }, [setUserData]);
+  }, [setUserData, setReusableSnackBar]);
   if (!setReusableSnackBar) {
     return null;
   }
@@ -53,6 +71,24 @@ export default function UserGrid({
       setUserData(Users.data);
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   const handleDeleteCloseDialog = () => {
@@ -78,6 +114,24 @@ export default function UserGrid({
       }
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   const actionColumn: GridColDef[] = [
@@ -112,7 +166,11 @@ export default function UserGrid({
                 console.log(params.row);
                 EditSetRecordAndGotoAction(params.row);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
 
             <DeleteForeverOutlinedIcon
@@ -120,7 +178,11 @@ export default function UserGrid({
                 console.log(params.row);
                 handleUserDeleteConformationDialog(params.row.id);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
           </div>
         );

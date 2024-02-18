@@ -1,5 +1,4 @@
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -7,6 +6,8 @@ import {
   Typography,
 } from "@mui/material";
 import { FC } from "react";
+import FillButton from "../Button/FillButton";
+import OutlinedButton from "../Button/OutlineButton";
 
 interface ReusableConfirmationDialogProps {
   open: boolean;
@@ -37,12 +38,12 @@ const ReusableConfirmationDialog: FC<ReusableConfirmationDialogProps> = ({
         <Typography sx={{ padding: "10px" }}>{content}</Typography>
       </DialogContent>
       <DialogActions sx={{ borderTop: " 0.5px solid #e3e6ea", padding: "5px" }}>
-        <Button onClick={onCancel} variant="outlined">
+        <OutlinedButton onClick={onCancel} variant="outlined">
           No
-        </Button>
-        <Button onClick={onConfirm} variant="contained">
+        </OutlinedButton>
+        <FillButton onClick={onConfirm} variant="contained">
           Yes
-        </Button>
+        </FillButton>
       </DialogActions>
     </Dialog>
   );

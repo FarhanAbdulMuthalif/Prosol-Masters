@@ -31,6 +31,7 @@ import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
+import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { CharacteristSingleInitialData } from "@/utils/masters/plant";
 import {
   Autocomplete,
@@ -125,9 +126,27 @@ export default function Value() {
         }));
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     },
-    [ExactPath, masters]
+    [ExactPath, masters, setReusableSnackBar]
   );
   const nounFrmData = formData ? formData.noun : "";
   const ModifierHandler = useCallback(
@@ -143,9 +162,27 @@ export default function Value() {
         setModifierSuggestData(data);
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     },
-    [ExactPath, masters]
+    [ExactPath, masters, setReusableSnackBar]
   );
   const getDicyionaryNM = useCallback(
     async (modifier: string) => {
@@ -160,9 +197,27 @@ export default function Value() {
         }
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     },
-    [formData]
+    [formData, setReusableSnackBar]
   );
   const attributeMasterDwnData = attributeMasterOriginalArray
     ? (
@@ -327,10 +382,26 @@ export default function Value() {
         setCharacteristic([CharacteristSingleInitialData]);
         setOpenSnackbar(true);
       }
-    } catch (error: any) {
-      console.log(error);
-      console.log(error.response.data);
-      console.log(error.response.data.message);
+    } catch (e: any) {
+      console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
 
@@ -408,7 +479,7 @@ export default function Value() {
                 }}
                 {...props}
               >
-                {option.charAt(0).toUpperCase() + option.slice(1)}
+                {capitalizeFunc(option)}
               </li>
             )}
             renderInput={(params) => (
@@ -443,7 +514,7 @@ export default function Value() {
                 }}
                 {...props}
               >
-                {option.charAt(0).toUpperCase() + option.slice(1)}
+                {capitalizeFunc(option)}
               </li>
             )}
             renderInput={(params) => (

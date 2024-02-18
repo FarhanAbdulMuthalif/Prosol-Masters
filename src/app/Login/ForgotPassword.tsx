@@ -36,11 +36,21 @@ const ForgotPassword: React.FC<{
         setShowForgotPassword(false);
       }
     } catch (e: any) {
-      console.log(e?.message);
-      if (e?.message === "Network Error") {
+      console.log(e?.response);
+      if (e?.response) {
         setSucesSnackBar((prev) => ({
           severity: "error",
-          message: "Failed connection",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setSucesSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
           open: true,
         }));
       }

@@ -29,7 +29,7 @@ export default function RoleGrid({
   EditSetRecordAndGotoAction: (val: RoleInitialStateProps) => void;
 }) {
   const ROleDataCon = useContext(UseContextHook);
-  const { setReusableSnackBar } = ROleDataCon;
+  const { setReusableSnackBar, ThemeColor } = ROleDataCon;
   const [SlectedId, setSlectedId] = useState(0);
   const [DeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { data: PlantData } = useFetch("/plant/getAllPlant") ?? {
@@ -42,10 +42,28 @@ export default function RoleGrid({
         setRoleData(Roles.data);
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     };
     fetchData();
-  }, [setRoleData]);
+  }, [setRoleData, setReusableSnackBar]);
   const SingleRoleStatusHandler = async (id: number) => {
     try {
       const res = await api.patch(`/user/updateRoleStatusById/${id}`);
@@ -54,6 +72,24 @@ export default function RoleGrid({
       setRoleData(Roles.data);
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   if (!setReusableSnackBar) {
@@ -82,6 +118,24 @@ export default function RoleGrid({
       }
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   const actionColumn: GridColDef[] = [
@@ -140,7 +194,11 @@ export default function RoleGrid({
                 console.log(params.row);
                 EditSetRecordAndGotoAction(params.row);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
 
             <DeleteForeverOutlinedIcon
@@ -148,7 +206,11 @@ export default function RoleGrid({
                 console.log(params.row);
                 handleUserDeleteConformationDialog(params.row.id);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
           </div>
         );

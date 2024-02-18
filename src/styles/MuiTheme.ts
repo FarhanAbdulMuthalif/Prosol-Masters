@@ -60,6 +60,13 @@ export const MuiCreateTheme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          padding: "5px 16px", // Set default padding
+        },
+      },
+    },
     MuiBadge: {
       styleOverrides: {
         badge: {

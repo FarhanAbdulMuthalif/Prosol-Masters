@@ -43,8 +43,14 @@ export default function Header() {
     setAnchorElSettings(null);
   };
 
-  const { auth, setauth, UserInfo, setSelectedMasterDatatab, ThemeColor } =
-    useContext(UseContextHook);
+  const {
+    auth,
+    setauth,
+    UserInfo,
+    setSelectedMasterDatatab,
+    ThemeColor,
+    setReusableSnackBar,
+  } = useContext(UseContextHook);
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const dataUser = await getAllPlantData(`/user/me`);
@@ -58,7 +64,6 @@ export default function Header() {
     borderBottom: `3px solid ${ThemeColor.primaryColor}`,
     color: ThemeColor.primaryColor,
   };
-  console.log(listStyles);
 
   if (!auth || !setSelectedMasterDatatab) {
     return null;
@@ -68,7 +73,8 @@ export default function Header() {
       const res = await api.post("/user/auth/logout");
       if (res.status === 200) {
         setAnchorEl(null);
-        localStorage.clear();
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         router.push("/Login");
         if (setauth) {
           setauth(false);
@@ -77,6 +83,24 @@ export default function Header() {
       }
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   return (

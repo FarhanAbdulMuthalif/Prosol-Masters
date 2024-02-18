@@ -5,7 +5,11 @@ import { useContext, useEffect, useState } from "react";
 
 const UseAuth = () => {
   const [auth, setAuth] = useState(false);
-  const { setauth: SetContextAuth, setUserInfo } = useContext(UseContextHook);
+  const {
+    setauth: SetContextAuth,
+    setUserInfo,
+    setReusableSnackBar,
+  } = useContext(UseContextHook);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,11 +67,45 @@ const UseAuth = () => {
                 }
                 return;
               }
-            } catch (refreshError) {
+            } catch (refreshError: any) {
+              console.log(refreshError?.response);
+              if (!setReusableSnackBar) return;
+              if (refreshError?.response) {
+                setReusableSnackBar((prev) => ({
+                  severity: "error",
+                  message: String(refreshError?.response?.data?.message),
+                  open: true,
+                }));
+              } else {
+                setReusableSnackBar((prev) => ({
+                  severity: "error",
+                  message: `Error: ${refreshError?.message}`,
+                  open: true,
+                }));
+              }
               router.push("/Login");
               setAuth(false);
               if (SetContextAuth) {
                 SetContextAuth(false);
+              }
+              console.log(e?.response);
+              if (!setReusableSnackBar) return;
+              if (e?.response) {
+                setReusableSnackBar((prev) => ({
+                  severity: "error",
+                  message: String(
+                    e?.response?.data?.message
+                      ? e?.response?.data?.message
+                      : e?.response?.data?.error
+                  ),
+                  open: true,
+                }));
+              } else {
+                setReusableSnackBar((prev) => ({
+                  severity: "error",
+                  message: `Error: ${e?.message}`,
+                  open: true,
+                }));
               }
               console.error("Error refreshing token:", refreshError);
             }
@@ -83,7 +121,7 @@ const UseAuth = () => {
       }
     }
     fetch();
-  }, [router, SetContextAuth, setUserInfo]);
+  }, [router, SetContextAuth, setUserInfo, setReusableSnackBar]);
 
   return auth;
 };

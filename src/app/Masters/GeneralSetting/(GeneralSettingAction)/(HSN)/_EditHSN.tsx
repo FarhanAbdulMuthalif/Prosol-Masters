@@ -43,11 +43,29 @@ export default function EditHSN({ EditDataGet }: any) {
           setdynamicFields(data);
         }
       } catch (e: any) {
-        console.log(e?.data?.message);
+        if (!setReusableSnackBar) return;
+        if (e?.response?.status === 404) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     };
     dynamicFormFieldHandler();
-  }, [SelectedMasterDatatab]);
+  }, [SelectedMasterDatatab, setReusableSnackBar]);
 
   const [dynFldErrValidation, setdynFldErrValidation] = useState<
     Record<string, string>
@@ -142,6 +160,24 @@ export default function EditHSN({ EditDataGet }: any) {
         }
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     }
   };

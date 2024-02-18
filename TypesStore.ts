@@ -23,6 +23,7 @@ export type UseContextHookTypes = {
   setThemeColor?: Dispatch<SetStateAction<SingleThemeObjProps>>;
 };
 export type SingleThemeObjProps = {
+  id: number;
   name: string;
   primaryColor: string;
   secondaryColor: string;

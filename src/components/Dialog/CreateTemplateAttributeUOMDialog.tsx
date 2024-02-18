@@ -1,3 +1,4 @@
+import { UseContextHook } from "@/Provides/UseContextHook";
 import {
   Checkbox,
   Dialog,
@@ -7,7 +8,13 @@ import {
   FormControlLabel,
   Typography,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   AttributeMasterSingle,
   CharacteristicSingleProps,
@@ -52,6 +59,8 @@ export default function CreateTemplateAttributeUOMDialog({
     createdAt: "",
     updatedAt: "",
   });
+  const ContextDataHub = useContext(UseContextHook);
+  const { setReusableSnackBar } = ContextDataHub;
 
   useEffect(() => {
     async function asyncCall() {
@@ -65,10 +74,28 @@ export default function CreateTemplateAttributeUOMDialog({
         }
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     }
     asyncCall();
-  }, [CharacteristicDwnValueId]);
+  }, [CharacteristicDwnValueId, setReusableSnackBar]);
   const ValueMasterDropDownData = CheckBoxData.listUom
     ? (CheckBoxData.listUom as { id: number; attributeUomName: string }[]).map(
         ({ id, attributeUomName }) => ({

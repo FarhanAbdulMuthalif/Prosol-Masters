@@ -2,6 +2,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import api from "@/components/api";
+import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -24,8 +25,14 @@ export default function MRPGrid({
   EditSetRecordAndGotoAction: (val: any) => void;
 }) {
   const PlantDataCon = useContext(UseContextHook);
-  const { PlantData, setPlantData, masters, SelectedMasterDatatab } =
-    PlantDataCon;
+  const {
+    PlantData,
+    setPlantData,
+    masters,
+    SelectedMasterDatatab,
+    ThemeColor,
+    setReusableSnackBar,
+  } = PlantDataCon;
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -46,10 +53,28 @@ export default function MRPGrid({
         }
       } catch (e: any) {
         console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     };
     fetchData();
-  }, [setPlantData, getAllLinkName]);
+  }, [setPlantData, getAllLinkName, setReusableSnackBar]);
   if (!SelectedMasterDatatab || !PlantData) {
     return null;
   }
@@ -74,6 +99,24 @@ export default function MRPGrid({
       }
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
 
@@ -111,7 +154,7 @@ export default function MRPGrid({
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+          headerName: `${capitalizeFunc(data)}`,
           renderCell: (params: any) => {
             return params.row.plant.plantName;
           },
@@ -123,7 +166,7 @@ export default function MRPGrid({
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+          headerName: `${capitalizeFunc(data)}`,
           renderCell: (params: any) => {
             return params.row.storageLocation.storageLocationName;
           },
@@ -134,14 +177,14 @@ export default function MRPGrid({
           field: data,
           headerClassName: "super-app-theme--header",
           flex: 0.5,
-          headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+          headerName: `${capitalizeFunc(data)}`,
         };
       }
       return {
         field: data,
         headerClassName: "super-app-theme--header",
         flex: 1,
-        headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+        headerName: `${capitalizeFunc(data)}`,
       };
     }
   );
@@ -189,7 +232,11 @@ export default function MRPGrid({
                 console.log(params.row);
                 EditSetRecordAndGotoAction(params.row);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
 
             <DeleteForeverOutlinedIcon
@@ -197,7 +244,11 @@ export default function MRPGrid({
                 console.log(params.row);
                 handleOpenConfirmationDeleteDialog(params.row.id);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
           </div>
         );

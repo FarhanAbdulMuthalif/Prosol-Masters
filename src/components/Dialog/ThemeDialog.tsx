@@ -17,7 +17,8 @@ interface ThemeDialogProps {
 export default function ThemedDialog({ open, handleClose }: ThemeDialogProps) {
   const ContextDataHub = useContext(UseContextHook);
 
-  const { setThemeColor, ThemeColor, colorThemesArr } = ContextDataHub;
+  const { setThemeColor, ThemeColor, colorThemesArr, setReusableSnackBar } =
+    ContextDataHub;
   if (!setThemeColor) return null;
   const closeHandler = () => {
     handleClose(false);
@@ -29,6 +30,24 @@ export default function ThemedDialog({ open, handleClose }: ThemeDialogProps) {
     try {
     } catch (e: any) {
       console.log(e?.response);
+      if (!setReusableSnackBar) return;
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
     }
   };
   return (
@@ -65,6 +84,7 @@ export default function ThemedDialog({ open, handleClose }: ThemeDialogProps) {
                     }
                     onClick={() => {
                       setThemeColor(data);
+                      localStorage.setItem("theme", JSON.stringify(data));
                     }}
                   >
                     <div

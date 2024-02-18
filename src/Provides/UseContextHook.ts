@@ -9,8 +9,9 @@ export const UseContextHook = createContext<UseContextHookTypes>({
   masters: MasterSubFieldWithData,
   colorThemesArr: [],
   ThemeColor: {
+    id: 1,
     name: "default",
-    primaryColor: "1976d2",
+    primaryColor: "#1976d2",
     secondaryColor: "#614cff",
     tertiaryColor: "#e6effc",
   },

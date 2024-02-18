@@ -1,6 +1,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import api from "@/components/api";
+import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
@@ -21,8 +22,13 @@ export default function AttributeGrid({
   EditSetRecordAndGotoAction: (val: any) => void;
 }) {
   const PlantDataCon = useContext(UseContextHook);
-  const { PlantData, setPlantData, masters, SelectedMasterDatatab } =
-    PlantDataCon;
+  const {
+    PlantData,
+    setPlantData,
+    masters,
+    SelectedMasterDatatab,
+    ThemeColor,
+  } = PlantDataCon;
   const pathName = usePathname();
   const ExactPathArr = pathName
     .split("/")
@@ -91,7 +97,7 @@ export default function AttributeGrid({
       field: data,
       headerClassName: "super-app-theme--header",
       flex: 1,
-      headerName: `${data.charAt(0).toUpperCase() + data.slice(1)}`,
+      headerName: `${capitalizeFunc(data)}`,
     };
   });
 
@@ -109,7 +115,11 @@ export default function AttributeGrid({
                 console.log(params.row);
                 EditSetRecordAndGotoAction(params.row);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
 
             <DeleteForeverOutlinedIcon
@@ -117,7 +127,11 @@ export default function AttributeGrid({
                 console.log(params.row);
                 handleOpenConfirmationDeleteDialog(params.row.id);
               }}
-              sx={{ fontSize: "1rem", color: "black", cursor: "pointer" }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
             />
           </div>
         );

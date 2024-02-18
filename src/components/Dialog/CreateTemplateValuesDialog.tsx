@@ -1,3 +1,4 @@
+import { UseContextHook } from "@/Provides/UseContextHook";
 import {
   Checkbox,
   Dialog,
@@ -7,7 +8,13 @@ import {
   FormControlLabel,
   Typography,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CharacteristicSingleProps } from "../../../TypesStore";
 import FillButton from "../Button/FillButton";
 import OutlinedButton from "../Button/OutlineButton";
@@ -32,6 +39,8 @@ export default function CreateTemplateValuesDialog({
   //   data: [],
   // };
   const [ValueData, setValueData] = useState([]);
+  const ContextDataHub = useContext(UseContextHook);
+  const { setReusableSnackBar } = ContextDataHub;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,11 +50,29 @@ export default function CreateTemplateValuesDialog({
           setValueData(data);
         }
       } catch (e: any) {
-        console.log(e.response);
+        console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     };
     fetchData();
-  }, []);
+  }, [setReusableSnackBar]);
   const ValueMasterDropDownData = ValueData
     ? (ValueData as { id: number; value: string }[]).map(({ id, value }) => ({
         value: id,
