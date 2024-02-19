@@ -139,9 +139,8 @@ export default function SalesAndOthersGrid({
           ]?.keyName
         }Status`,
         "createdAt",
-        "updatedAt",
         "createdBy",
-        "updatedBy",
+        "updateAuditHistories",
       ].includes(key)
   );
 
@@ -260,7 +259,11 @@ export default function SalesAndOthersGrid({
     <div>
       <CustomDataGrid
         rows={PlantData || []}
-        columns={masterDatagridColumns.concat(actionColumn)}
+        columns={
+          masterDatagridColumns.length > 0
+            ? masterDatagridColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           selectionIDArr(item);
         }}

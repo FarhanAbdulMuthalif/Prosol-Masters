@@ -42,7 +42,7 @@ export default function CreateMastert() {
       } catch (e: any) {
         console.log(e?.response);
         if (!setReusableSnackBar) return;
-        if (e?.response?.status === 404) return;
+        if (e?.response?.status === 404 || e?.response?.status === 400) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",

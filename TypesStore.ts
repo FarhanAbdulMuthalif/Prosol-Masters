@@ -281,8 +281,7 @@ export type RoleInitialStateProps = {
 export type KeysToRemoveEditMaster =
   | "createdAt"
   | "createdBy"
-  | "updatedAt"
-  | "updatedBy"
+  | "updateAuditHistories"
   | "plant"
   | "salesOrganization"
   | "storageLocation"

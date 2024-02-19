@@ -28,7 +28,7 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = ({
   return (
     <div style={{ height: "73vh", backgroundColor: "white" }}>
       <DataGrid
-        checkboxSelection
+        checkboxSelection={columns.length > 0 ? true : false}
         disableRowSelectionOnClick
         columns={columns.map((col) => ({
           ...col,

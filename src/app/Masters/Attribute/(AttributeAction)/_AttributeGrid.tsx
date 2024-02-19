@@ -28,6 +28,7 @@ export default function AttributeGrid({
     masters,
     SelectedMasterDatatab,
     ThemeColor,
+    setReusableSnackBar,
   } = PlantDataCon;
   const pathName = usePathname();
   const ExactPathArr = pathName
@@ -47,11 +48,28 @@ export default function AttributeGrid({
           setPlantData(res.data);
         }
       } catch (e: any) {
-        console.log(e?.response);
+        if (!setReusableSnackBar) return;
+        if (e?.response) {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: String(
+              e?.response?.data?.message
+                ? e?.response?.data?.message
+                : e?.response?.data?.error
+            ),
+            open: true,
+          }));
+        } else {
+          setReusableSnackBar((prev) => ({
+            severity: "error",
+            message: `Error: ${e?.message}`,
+            open: true,
+          }));
+        }
       }
     };
     fetchData();
-  }, [setPlantData, getAllLinkName]);
+  }, [setPlantData, getAllLinkName, setReusableSnackBar]);
   if (!SelectedMasterDatatab || !PlantData) {
     return null;
   }
@@ -71,9 +89,8 @@ export default function AttributeGrid({
       ![
         `${(masters[ExactPath] as mastersVendorSubsubFields)?.keyName}Status`,
         "createdAt",
-        "updatedAt",
         "createdBy",
-        "updatedBy",
+        "updateAuditHistories",
       ].includes(key)
   );
   const ArrColumns = ["id", "attributeName", "fieldType", "listUom"];
@@ -143,7 +160,11 @@ export default function AttributeGrid({
     <div>
       <CustomDataGrid
         rows={PlantData || []}
-        columns={masterDatagridColumns.concat(actionColumn)}
+        columns={
+          masterDatagridColumns.length > 0
+            ? masterDatagridColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           selectionIDArr(item);
         }}

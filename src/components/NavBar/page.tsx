@@ -27,13 +27,15 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     setSelectedMasterDatatab,
     settabValue,
     ThemeColor,
+    setPlantData,
   } = useContext(UseContextHook);
   const open = Boolean(SecondSideBar);
   if (
     !auth ||
     !setSelectedMasterDatatab ||
     !SelectedMasterDatatab ||
-    !settabValue
+    !settabValue ||
+    !setPlantData
   ) {
     return null; // or some other fallback or loading state
   }
@@ -78,6 +80,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     settabValue("table");
     router.push(SelectedData.path);
     setSecondSideBar(null); // need to check
+    setPlantData([]);
   };
   const listStyles = {
     // color: ThemeColor.primaryColor,

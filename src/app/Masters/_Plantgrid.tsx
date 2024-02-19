@@ -139,9 +139,8 @@ export default function Plantgrid({
           SelectedMasterDatatab.slice(1)
         }Status`,
         "createdAt",
-        "updatedAt",
         "createdBy",
-        "updatedBy",
+        "updateAuditHistories",
       ].includes(key)
   );
 
@@ -156,7 +155,11 @@ export default function Plantgrid({
 
           headerName: `${capitalizeFunc(data)}`,
           renderCell: (params: any) => {
-            return params.row.plant.plantName;
+            return capitalizeFunc(
+              params.row.plant.plantName
+                ? params.row.plant.plantName.toString()
+                : ""
+            );
           },
         };
       }
@@ -168,7 +171,11 @@ export default function Plantgrid({
 
           headerName: `${capitalizeFunc(data)}`,
           renderCell: (params: any) => {
-            return params.row.storageLocation.storageLocationName;
+            return capitalizeFunc(
+              params.row.storageLocation.storageLocationName
+                ? params.row.storageLocation.storageLocationName.toString()
+                : ""
+            );
           },
         };
       }
@@ -178,6 +185,8 @@ export default function Plantgrid({
           headerClassName: "super-app-theme--header",
           flex: 0.5,
           headerName: `${capitalizeFunc(data)}`,
+          renderCell: (params: any) =>
+            capitalizeFunc(params.row[data] ? params.row[data].toString() : ""),
         };
       }
       return {
@@ -185,6 +194,8 @@ export default function Plantgrid({
         headerClassName: "super-app-theme--header",
         flex: 1,
         headerName: `${capitalizeFunc(data)}`,
+        renderCell: (params: any) =>
+          capitalizeFunc(params.row[data] ? params.row[data].toString() : ""),
       };
     }
   );
@@ -258,7 +269,11 @@ export default function Plantgrid({
     <div>
       <CustomDataGrid
         rows={PlantData || []}
-        columns={masterDatagridColumns.concat(actionColumn)}
+        columns={
+          masterDatagridColumns.length > 0
+            ? masterDatagridColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           selectionIDArr(item);
         }}

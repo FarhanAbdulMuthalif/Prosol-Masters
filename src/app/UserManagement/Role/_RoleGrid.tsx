@@ -221,7 +221,11 @@ export default function RoleGrid({
     <div>
       <CustomDataGrid
         rows={RoleData || []}
-        columns={RoleTableColumns.concat(actionColumn)}
+        columns={
+          RoleTableColumns.length > 0
+            ? RoleTableColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           setSelectionIDArr(item);
         }}

@@ -130,9 +130,8 @@ export default function ValueGrid({
       ![
         `${(masters[ExactPath] as mastersVendorSubsubFields)?.keyName}Status`,
         "createdAt",
-        "updatedAt",
         "createdBy",
-        "updatedBy",
+        "updateAuditHistories",
       ].includes(key)
   );
   const ArrColumns = [
@@ -221,7 +220,11 @@ export default function ValueGrid({
     <div>
       <CustomDataGrid
         rows={PlantData || []}
-        columns={masterDatagridColumns.concat(actionColumn)}
+        columns={
+          masterDatagridColumns.length > 0
+            ? masterDatagridColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           selectionIDArr(item);
         }}

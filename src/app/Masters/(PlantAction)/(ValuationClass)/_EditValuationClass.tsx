@@ -53,7 +53,7 @@ export default function EditValuationClass({ EditDataGet }: any) {
       } catch (e: any) {
         console.log(e?.response);
         if (!setReusableSnackBar) return;
-        if (e?.response?.status === 404) return;
+        if (e?.response?.status === 404 || e?.response?.status === 400) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",
@@ -131,8 +131,7 @@ export default function EditValuationClass({ EditDataGet }: any) {
     const keysToRemove: KeysToRemoveEditMaster[] = [
       "createdAt",
       "createdBy",
-      "updatedAt",
-      "updatedBy",
+      "updateAuditHistories",
       "plant",
       "storageLocation",
     ];

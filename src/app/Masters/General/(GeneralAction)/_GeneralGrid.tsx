@@ -140,9 +140,8 @@ export default function Generalgrid({
           ]?.keyName
         }Status`,
         "createdAt",
-        "updatedAt",
         "createdBy",
-        "updatedBy",
+        "updateAuditHistories",
       ].includes(key)
   );
 
@@ -261,7 +260,11 @@ export default function Generalgrid({
     <div>
       <CustomDataGrid
         rows={PlantData || []}
-        columns={masterDatagridColumns.concat(actionColumn)}
+        columns={
+          masterDatagridColumns.length > 0
+            ? masterDatagridColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           selectionIDArr(item);
         }}

@@ -110,8 +110,10 @@ export default function ClientContext({ children }: { children: ReactNode }) {
       const dataPlant = await getAllPlantData(`/plant/getAllPlant`);
       setPlantData(dataPlant);
     };
-    fetchData();
-  }, []);
+    if (auth) {
+      fetchData();
+    }
+  }, [auth]);
 
   const ContextVal: UseContextHookTypes = {
     UserInfo,

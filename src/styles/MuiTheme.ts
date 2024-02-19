@@ -19,6 +19,17 @@ export const MuiCreateTheme = createTheme({
         },
       },
     },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          padding: "8px", // Adjust the padding value as needed
+          minHeight: "unset", // Set minHeight to 'unset' or your desired value
+          "&.Mui-expanded": {
+            minHeight: "unset", // Adjust the expanded minHeight
+          },
+        },
+      },
+    },
     MuiPopover: {
       styleOverrides: {
         paper: {

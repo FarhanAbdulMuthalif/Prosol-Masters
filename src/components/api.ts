@@ -1,5 +1,5 @@
 import axios from "axios";
-export const URL_FIX_BASE_PATH = "http://localhost:9191";
+export const URL_FIX_BASE_PATH = "http://192.168.1.3:9191";
 const api = axios.create({ baseURL: URL_FIX_BASE_PATH });
 
 api.interceptors.request.use(

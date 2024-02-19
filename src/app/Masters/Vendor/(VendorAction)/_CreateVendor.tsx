@@ -48,7 +48,7 @@ export default function CreateVendor() {
         }
       } catch (e: any) {
         if (!setReusableSnackBar) return;
-        if (e?.response?.status === 404) return;
+        if (e?.response?.status === 404 || e?.response?.status === 400) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",
@@ -319,7 +319,7 @@ export default function CreateVendor() {
             type="text"
             value={formData ? formData["acquriedBy"] : ""}
             onChange={handleInputChange}
-            name={`acquriedBy`}
+            name={`acquiredBy`}
           />
 
           {dynamicFields?.map((data: PostCreateFieldData) => {

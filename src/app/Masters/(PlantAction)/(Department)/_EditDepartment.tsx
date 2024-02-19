@@ -41,7 +41,7 @@ export default function EditDepartmentMastert({ EditDataGet }: any) {
       } catch (e: any) {
         console.log(e?.response);
         if (!setReusableSnackBar) return;
-        if (e?.response?.status === 404) return;
+        if (e?.response?.status === 404 || e?.response?.status === 400) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",
@@ -104,8 +104,7 @@ export default function EditDepartmentMastert({ EditDataGet }: any) {
     const keysToRemove: KeysToRemoveEditMaster[] = [
       "createdAt",
       "createdBy",
-      "updatedAt",
-      "updatedBy",
+      "updateAuditHistories",
     ];
     const { id, ...filteredData } = formData;
 

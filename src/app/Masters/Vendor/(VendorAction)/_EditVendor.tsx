@@ -7,6 +7,7 @@ import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRen
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
+import { replaceNullWithEmptyString } from "@/utils/NulltoStringConver";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -44,7 +45,7 @@ export default function EditVendor({ EditDataGet }: any) {
         }
       } catch (e: any) {
         if (!setReusableSnackBar) return;
-        if (e?.response?.status === 404) return;
+        if (e?.response?.status === 404 || e?.response?.status === 400) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",
@@ -101,20 +102,20 @@ export default function EditVendor({ EditDataGet }: any) {
         address: false,
       }));
     }
-    const { id, email, ...filteredData } = formData;
+    const { id, ...filteredData } = formData;
 
     // List of keys to be removed
     const keysToRemove: KeysToRemoveEditMaster[] = [
       "createdAt",
       "createdBy",
-      "updatedAt",
-      "updatedBy",
+      "updateAuditHistories",
     ];
 
     // Create a new object by filtering out specified keys
     const filteredUserData = { ...filteredData };
 
     keysToRemove.forEach((key) => delete filteredUserData[key]);
+    const newObjData = replaceNullWithEmptyString(filteredUserData);
     const validationErrors: Record<string, string> = {};
     for (const field of dynamicFields) {
       const value = formData[field.fieldName];
@@ -132,7 +133,7 @@ export default function EditVendor({ EditDataGet }: any) {
       try {
         const response = await api.put(
           `${(masters[ExactPath] as mastersVendorSubsubFields).update}/${id}`,
-          filteredUserData
+          newObjData
         );
         const data = await response.data;
         if (response.status === 200) {
@@ -343,7 +344,7 @@ export default function EditVendor({ EditDataGet }: any) {
             type="text"
             value={formData ? formData["acquriedBy"] : ""}
             onChange={handleInputChange}
-            name={`acquriedBy`}
+            name={`acquiredBy`}
           />
           <MasterDynamicFieldRender
             formData={formData}

@@ -2,6 +2,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import api from "@/components/api";
+import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -130,9 +131,8 @@ export default function VendorGrid({
       ![
         `${(masters[ExactPath] as mastersVendorSubsubFields)?.keyName}Status`,
         "createdAt",
-        "updatedAt",
         "createdBy",
-        "updatedBy",
+        "updateAuditHistories",
       ].includes(key)
   );
 
@@ -143,42 +143,52 @@ export default function VendorGrid({
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `Short Desc`,
+      renderCell: (params) =>
+        capitalizeFunc(
+          params.row.shortDescName ? params.row.shortDescName.toString() : ""
+        ),
     },
     {
       field: "name",
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `Name`,
+      renderCell: (params) => capitalizeFunc(params.row.name),
     },
     {
       field: "address",
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `Address`,
+      renderCell: (params) => capitalizeFunc(params.row.address),
     },
     {
       field: "city",
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `City`,
+      renderCell: (params) => capitalizeFunc(params.row.city),
     },
     {
       field: "state",
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `State`,
+      renderCell: (params) => capitalizeFunc(params.row.state),
     },
     {
       field: "country",
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `Country`,
+      renderCell: (params) => capitalizeFunc(params.row.country),
     },
     {
       field: "email",
       headerClassName: "super-app-theme--header",
       flex: 1,
       headerName: `Email`,
+      renderCell: (params) => capitalizeFunc(params.row.email),
     },
   ];
   const actionColumn: GridColDef[] = [
@@ -241,7 +251,11 @@ export default function VendorGrid({
     <div>
       <CustomDataGrid
         rows={PlantData || []}
-        columns={masterDatagridColumns.concat(actionColumn)}
+        columns={
+          masterDatagridColumns.length > 0
+            ? masterDatagridColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           selectionIDArr(item);
         }}

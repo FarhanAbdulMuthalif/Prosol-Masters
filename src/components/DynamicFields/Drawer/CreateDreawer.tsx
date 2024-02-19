@@ -176,15 +176,15 @@ export default function CreateDreawer({
           `/dynamic/saveField/${SelectedMasterDatatab}`,
           CreateFieldSetObj
         );
-        if (res.status === 201) {
-          setReusableSnackBar((prev) => ({
-            severity: "success",
-            message: `Field Created Sucessfully!`,
-            open: true,
-          }));
-          HandlerCloseDrawer();
-          settabValue("table");
-        }
+        // if (res.status === 201) {
+        // }
+        setReusableSnackBar((prev) => ({
+          severity: "success",
+          message: `Field Created Sucessfully!`,
+          open: true,
+        }));
+        HandlerCloseDrawer();
+        settabValue("table");
       } catch (e: any) {
         console.log(e?.response);
         if (!setReusableSnackBar) return;

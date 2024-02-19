@@ -193,7 +193,11 @@ export default function UserGrid({
     <div>
       <CustomDataGrid
         rows={UserData || []}
-        columns={UserTableColumns.concat(actionColumn)}
+        columns={
+          UserTableColumns.length > 0
+            ? UserTableColumns.concat(actionColumn)
+            : []
+        }
         onRowSelectionModelChange={(item) => {
           setSelectionIDArr(item);
         }}
