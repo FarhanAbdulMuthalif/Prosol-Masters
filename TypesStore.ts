@@ -21,6 +21,9 @@ export type UseContextHookTypes = {
   colorThemesArr: SingleThemeObjProps[];
   ThemeColor: SingleThemeObjProps;
   setThemeColor?: Dispatch<SetStateAction<SingleThemeObjProps>>;
+  setselectedFont?: Dispatch<SetStateAction<string>>;
+  selectedFont: string;
+  FontsListArr: string[];
 };
 export type SingleThemeObjProps = {
   id: number;
@@ -247,6 +250,7 @@ export interface Option {
 export type PathObjProps = {
   Masters: { name: string; path: string }[];
   UserManagement: { name: string; path: string }[];
+  Settings: { name: string; path: string }[];
 };
 export type UserInitialStateProps = {
   id?: number;

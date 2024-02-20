@@ -50,6 +50,7 @@ export default function Header() {
     setSelectedMasterDatatab,
     ThemeColor,
     setReusableSnackBar,
+    selectedFont,
   } = useContext(UseContextHook);
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -104,7 +105,7 @@ export default function Header() {
     }
   };
   return (
-    <header>
+    <header style={{ fontFamily: `'${selectedFont}', sans-serif` }}>
       <Image
         src="/Images/prosol-logo.svg"
         className="Logo-img"
@@ -151,6 +152,19 @@ export default function Header() {
             href="/Masters"
           >
             Masters
+          </Link>
+        </li>
+        <li>
+          <Link
+            className="active"
+            style={
+              currentRoute.split("/").includes("Settings")
+                ? listStyles
+                : { height: "100%" }
+            }
+            href="/Settings"
+          >
+            Settings
           </Link>
         </li>
       </ul>

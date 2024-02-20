@@ -16,4 +16,5 @@ export const pathObj: PathObjProps = {
     { name: "User", path: "/UserManagement" },
     { name: "Role", path: "/UserManagement/Role" },
   ],
+  Settings: [{ name: "UI Settings", path: "/Settings" }],
 };

@@ -3,7 +3,7 @@ import UseAuth from "@/Hooks/useAuth";
 import Header from "@/components/Header/page";
 import Navbar from "@/components/NavBar/page";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
-import { MuiCreateTheme } from "@/styles/MuiTheme";
+import MUIThemeComp from "@/styles/MUIThemeComp";
 import { MasterSubFieldWithData, getAllPlantData } from "@/utils/masters/plant";
 import { toogleSidebarHandler } from "@/utils/sideBarFunc";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -33,6 +33,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     status: true,
     roles: [],
   });
+  const [selectedFont, setselectedFont] = useState("Segoe UI");
   const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
@@ -55,6 +56,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
+
   const colorThemesArr = [
     {
       id: 1,
@@ -99,6 +101,18 @@ export default function ClientContext({ children }: { children: ReactNode }) {
       tertiaryColor: "#fad757",
     },
   ];
+  const FontsListArr = [
+    "Segoe UI",
+    "Arial",
+    "Calibri",
+    "Lucida Sans",
+    "Microsoft Gothic Neo",
+    "Microsoft San Serif",
+    "Source Sans Pro",
+    "Tahoma",
+    "Verdana",
+    "Univers",
+  ];
   const [ReusableSnackBar, setReusableSnackBar] =
     useState<SnackBarReusableProps>({
       open: false,
@@ -136,18 +150,25 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     colorThemesArr,
     ThemeColor,
     setThemeColor,
+    selectedFont,
+    setselectedFont,
+    FontsListArr,
   };
 
   const iconRotateHandler = {
     transform: toogleSidebar ? "rotate(180deg)" : "",
   };
   const authHook = UseAuth();
+  const dataTheme = MUIThemeComp(selectedFont);
 
   return (
-    <ThemeProvider theme={MuiCreateTheme}>
+    <ThemeProvider theme={dataTheme}>
       <UseContextHook.Provider value={ContextVal}>
         <Header />
-        <div className="wrapper-parent">
+        <div
+          className="wrapper-parent"
+          style={{ fontFamily: `'${selectedFont}', sans-serif` }}
+        >
           <Navbar OpenSideBar={toogleSidebar} />
           {auth ? (
             <div
@@ -167,7 +188,6 @@ export default function ClientContext({ children }: { children: ReactNode }) {
           ) : (
             ""
           )}
-
           <div className="wrapper-child">{children}</div>
         </div>
         <ReusableSnackbar

@@ -15,4 +15,6 @@ export const UseContextHook = createContext<UseContextHookTypes>({
     secondaryColor: "#614cff",
     tertiaryColor: "#e6effc",
   },
+  selectedFont: "Segoe UI",
+  FontsListArr: [],
 });

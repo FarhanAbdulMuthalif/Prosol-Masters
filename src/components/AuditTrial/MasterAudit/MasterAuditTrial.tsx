@@ -53,7 +53,7 @@ export default function MasterAuditTrial({ formData }: any) {
             }}
           >
             <Typography
-              sx={{ color: "#6f6f6f", fontSize: "12px", fontWeight: "500" }}
+              sx={{ color: "#4642427c", fontSize: "12px", fontWeight: "500" }}
             >
               Updated History
             </Typography>
@@ -99,7 +99,7 @@ export default function MasterAuditTrial({ formData }: any) {
                   <p>{data?.updatedAt}</p>
                 </div>
               ))}
-              {formData?.updateAuditHistories.length === 0 ? (
+              {formData?.updateAuditHistories?.length === 0 ? (
                 <div className="edit-master-audit-wrpr-accordion-no-records">
                   <p className="edit-master-audit-wrpr-accordion-no-records-text">
                     No Update History
