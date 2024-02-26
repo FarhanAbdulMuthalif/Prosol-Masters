@@ -44,6 +44,14 @@ export default function Generalgrid({
   const getAllLinkName = (masters[ExactPath] as mastersGeneralSubFields)[
     SelectedMasterDatatab as ValidMasterGeneralDataTabs
   ]?.getAll;
+  console.log(ExactPath);
+  console.log(getAllLinkName);
+  console.log(SelectedMasterDatatab);
+  console.log(
+    (masters[ExactPath] as mastersGeneralSubFields)[
+      SelectedMasterDatatab as ValidMasterGeneralDataTabs
+    ]?.getAll
+  );
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,6 +63,7 @@ export default function Generalgrid({
       } catch (e: any) {
         console.log(e?.response);
         if (!setReusableSnackBar) return;
+        if (e?.response.status === 404) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",

@@ -24,6 +24,8 @@ export type UseContextHookTypes = {
   setselectedFont?: Dispatch<SetStateAction<string>>;
   selectedFont: string;
   FontsListArr: string[];
+  fontPropertyArr: fontPropertyProps[];
+  setfontPropertyArr?: Dispatch<SetStateAction<fontPropertyProps[]>>;
 };
 export type SingleThemeObjProps = {
   id: number;
@@ -269,6 +271,7 @@ export type UserInitialStateProps = {
   createdBy?: string;
   updatedAt?: string;
   updatedBy?: string;
+  updateAuditHistories?: [];
 };
 export type RoleInitialStateProps = {
   id?: number;
@@ -339,4 +342,11 @@ export type SnackBarReusableProps = {
   open: boolean;
   message: string;
   severity: "success" | "info" | "error" | "warning";
+};
+
+export type fontPropertyProps = {
+  id: number;
+  name: string;
+  defaultSize: number;
+  fontWeight: string;
 };

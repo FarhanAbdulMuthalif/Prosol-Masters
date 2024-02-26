@@ -8,6 +8,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { GridRowId } from "@mui/x-data-grid";
 import { ReactNode, useContext, useState } from "react";
 
+import UseAuth from "@/Hooks/useAuth";
 import { RoleInitialState } from "@/utils/UserDataExport";
 import { RoleInitialStateProps } from "../../../../TypesStore";
 import CreateRole from "./_CreateRole";
@@ -148,7 +149,10 @@ export default function Role() {
   const handleOpenDeleteConfirmationDialog = () => {
     setbulkDeleteDialog(true);
   };
-
+  const auth = UseAuth();
+  if (!auth) {
+    return null;
+  }
   return (
     <div className="usermanagement-wrapper">
       <div className="usermanagement-main-content-header">

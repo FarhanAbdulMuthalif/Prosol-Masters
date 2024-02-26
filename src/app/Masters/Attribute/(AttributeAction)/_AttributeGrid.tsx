@@ -49,6 +49,7 @@ export default function AttributeGrid({
         }
       } catch (e: any) {
         if (!setReusableSnackBar) return;
+        if (e?.response.status === 404) return;
         if (e?.response) {
           setReusableSnackBar((prev) => ({
             severity: "error",

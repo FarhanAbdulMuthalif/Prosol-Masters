@@ -134,7 +134,7 @@ export default function Header() {
             }
             href="/UserManagement"
           >
-            UserManagement
+            User Management
           </Link>
         </li>
         <li

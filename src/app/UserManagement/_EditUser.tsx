@@ -1,5 +1,6 @@
 import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTrial";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableMultipleSelect from "@/components/Dropdown/MultipleDropdown";
@@ -25,7 +26,12 @@ export default function EditUser({
   };
   const { id, email, ...filteredData } = ArrId;
   // Define a type for the keys to remove
-  type KeysToRemove = "createdAt" | "createdBy" | "updatedAt" | "updatedBy";
+  type KeysToRemove =
+    | "createdAt"
+    | "createdBy"
+    | "updatedAt"
+    | "updatedBy"
+    | "updateAuditHistories";
 
   // List of keys to be removed
   const keysToRemove: KeysToRemove[] = [
@@ -33,6 +39,7 @@ export default function EditUser({
     "createdBy",
     "updatedAt",
     "updatedBy",
+    "updateAuditHistories",
   ];
 
   // Create a new object by filtering out specified keys
@@ -249,6 +256,7 @@ export default function EditUser({
       ) : (
         ""
       )}
+      <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
       <div className="create-user-wrapper-action">
         <OutlinedButton>Cancel</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>

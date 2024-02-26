@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material/styles";
+import { SingleThemeObjProps } from "../../TypesStore";
 
-const MUIThemeComp = (selectedFont: string) =>
+const MUIThemeComp = (selectedFont: string, ThemeColor: SingleThemeObjProps) =>
   createTheme({
     components: {
       MuiInputBase: {
@@ -16,6 +17,18 @@ const MUIThemeComp = (selectedFont: string) =>
             "& input::placeholder": {
               color: "brown",
               opacity: ".7",
+            },
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          contained: {
+            // padding: "5px 16px",
+            backgroundColor: ThemeColor.primaryColor,
+
+            "&:hover": {
+              backgroundColor: ThemeColor.secondaryColor,
             },
           },
         },
@@ -72,13 +85,7 @@ const MUIThemeComp = (selectedFont: string) =>
           },
         },
       },
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            padding: "5px 16px", // Set default padding
-          },
-        },
-      },
+
       MuiBadge: {
         styleOverrides: {
           badge: {

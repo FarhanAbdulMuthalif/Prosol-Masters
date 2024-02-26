@@ -4,6 +4,11 @@ import Header from "@/components/Header/page";
 import Navbar from "@/components/NavBar/page";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
 import MUIThemeComp from "@/styles/MUIThemeComp";
+import {
+  FontsListArr,
+  colorThemesArr,
+  initialFontProperty,
+} from "@/utils/Theme/themeData";
 import { MasterSubFieldWithData, getAllPlantData } from "@/utils/masters/plant";
 import { toogleSidebarHandler } from "@/utils/sideBarFunc";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -14,6 +19,7 @@ import {
   SingleUserInfoProps,
   SnackBarReusableProps,
   UseContextHookTypes,
+  fontPropertyProps,
 } from "../../../TypesStore";
 import { UseContextHook } from "../UseContextHook";
 import "./ClientContext.scss";
@@ -56,63 +62,9 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
+  const [fontPropertyArr, setfontPropertyArr] =
+    useState<fontPropertyProps[]>(initialFontProperty);
 
-  const colorThemesArr = [
-    {
-      id: 1,
-      name: "default",
-      primaryColor: "#1976d2",
-      secondaryColor: "#614cff",
-      tertiaryColor: "#e6effc",
-    },
-    {
-      id: 2,
-      name: "light",
-      primaryColor: "#CE5A67",
-      secondaryColor: "#F4BF96",
-      tertiaryColor: "#FCF5ED",
-    },
-    {
-      id: 3,
-      name: "dark",
-      primaryColor: "#4F6F52",
-      secondaryColor: "#86A789",
-      tertiaryColor: "#D2E3C8",
-    },
-    {
-      id: 4,
-      name: "shinePupule",
-      primaryColor: "#070F2B",
-      secondaryColor: "#535C91",
-      tertiaryColor: "#9290C3",
-    },
-    {
-      id: 5,
-      name: "shineOrange",
-      primaryColor: "#454545",
-      secondaryColor: "#FF6000",
-      tertiaryColor: "#FFE6C7",
-    },
-    {
-      id: 6,
-      name: "lotusTheme",
-      primaryColor: "black",
-      secondaryColor: "white",
-      tertiaryColor: "#fad757",
-    },
-  ];
-  const FontsListArr = [
-    "Segoe UI",
-    "Arial",
-    "Calibri",
-    "Lucida Sans",
-    "Microsoft Gothic Neo",
-    "Microsoft San Serif",
-    "Source Sans Pro",
-    "Tahoma",
-    "Verdana",
-    "Univers",
-  ];
   const [ReusableSnackBar, setReusableSnackBar] =
     useState<SnackBarReusableProps>({
       open: false,
@@ -153,13 +105,15 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     selectedFont,
     setselectedFont,
     FontsListArr,
+    fontPropertyArr,
+    setfontPropertyArr,
   };
 
   const iconRotateHandler = {
     transform: toogleSidebar ? "rotate(180deg)" : "",
   };
   const authHook = UseAuth();
-  const dataTheme = MUIThemeComp(selectedFont);
+  const dataTheme = MUIThemeComp(selectedFont, ThemeColor);
 
   return (
     <ThemeProvider theme={dataTheme}>

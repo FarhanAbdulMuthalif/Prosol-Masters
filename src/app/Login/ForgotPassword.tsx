@@ -1,10 +1,11 @@
 "use client";
-import React, { Dispatch, SetStateAction, useState } from "react";
-
+import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Image from "next/image";
+import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { SnackBarReusableProps } from "../../../TypesStore";
 import "./ForgotPassword.css";
 
@@ -14,7 +15,8 @@ const ForgotPassword: React.FC<{
 }> = ({ setShowForgotPassword, setSucesSnackBar }) => {
   const [emailText, setEmailText] = useState<string>("");
   const [loading, setloading] = useState(false);
-
+  const contextDataHub = useContext(UseContextHook);
+  const { ThemeColor } = contextDataHub;
   const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailText(event.target.value);
   };
@@ -91,7 +93,9 @@ const ForgotPassword: React.FC<{
             onClick={() => {
               setShowForgotPassword(false);
             }}
+            style={{ color: ThemeColor.primaryColor }}
           >
+            <ArrowBackIcon sx={{ fontSize: "0.8rem" }} />
             Back to Login
           </p>
           <FillButton

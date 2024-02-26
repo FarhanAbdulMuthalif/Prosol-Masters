@@ -2,6 +2,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import { RoleInitialStateProps } from "../../../../TypesStore";
 
 import useFetch from "@/Hooks/useFetch";
+import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTrial";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
@@ -275,6 +276,7 @@ export default function EditRole({
       ) : (
         ""
       )}
+      <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
       <div className="create-user-wrapper-action">
         <OutlinedButton>Cancel</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>

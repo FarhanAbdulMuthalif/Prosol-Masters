@@ -23,20 +23,7 @@ export default function MasterAuditTrial({ formData }: any) {
           </p>
         </div>
       </div>
-      {/* <div className="edit-master-audit-wrpr">
-        <div className="edit-master-audit-trial-single-view">
-          <p className="edit-master-audit-trial-label">Updated By :</p>
-          <p className="edit-master-audit-trial-label-value">
-            {formData?.updatedBy}
-          </p>
-        </div>
-        <div className="edit-master-audit-trial-single-view">
-          <p className="edit-master-audit-trial-label">Date and Time :</p>
-          <p className="edit-master-audit-trial-label-value">
-            {formData?.updatedAt}
-          </p>
-        </div>
-      </div> */}
+
       <div className="edit-master-audit-wrpr-accordion">
         <Accordion className="custom-accordion-shadow">
           <AccordionSummary
@@ -53,7 +40,7 @@ export default function MasterAuditTrial({ formData }: any) {
             }}
           >
             <Typography
-              sx={{ color: "#4642427c", fontSize: "12px", fontWeight: "500" }}
+              sx={{ color: "#4642427c", fontSize: "10px", fontWeight: "500" }}
             >
               Updated History
             </Typography>

@@ -28,6 +28,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
     settabValue,
     ThemeColor,
     setPlantData,
+    selectedFont,
   } = useContext(UseContextHook);
   const open = Boolean(SecondSideBar);
   if (
@@ -106,6 +107,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
               id="search-sidebar"
               variant="standard"
               placeholder="Search here"
+              sx={{ fontSize: "10px" }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -206,6 +208,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                 vertical: "top",
                 horizontal: "left",
               }}
+              sx={{ fontFamily: `'${selectedFont}', sans-serif` }}
               onClose={handleSecondBarClose}
               onBlur={handleSecondBarClose}
             >

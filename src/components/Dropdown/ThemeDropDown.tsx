@@ -8,13 +8,13 @@ import { FC, ReactNode } from "react";
 
 interface DropdownProps {
   label: string;
-  value: boolean;
+  value: string;
   onChange: (event: SelectChangeEvent) => void;
-  options: { value: boolean; label: ReactNode; id: number }[];
+  options: { value: string; label: ReactNode }[];
   name: string;
 }
 
-const BooleanSingleSelectDropdown: FC<DropdownProps> = ({
+const ThemeDropDown: FC<DropdownProps> = ({
   label,
   value,
   onChange,
@@ -28,15 +28,21 @@ const BooleanSingleSelectDropdown: FC<DropdownProps> = ({
   const SelectStyle = {
     fontSize: "12px",
     color: "brown",
-    height: "2.2rem",
+    height: "1.6rem",
+    width: "5rem",
   };
-  const DwnValue = options.find((data) => data.value === value)?.label;
-
   return (
-    <FormControl fullWidth>
+    <FormControl
+      sx={{
+        flex: "1",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Select
         name={name}
-        value={DwnValue?.toString()}
+        value={value.toString()}
         sx={SelectStyle}
         placeholder={label}
         displayEmpty
@@ -49,11 +55,7 @@ const BooleanSingleSelectDropdown: FC<DropdownProps> = ({
           {label}
         </MenuItem>
         {options.map((option) => (
-          <MenuItem
-            key={option.id}
-            sx={menuItemStyle}
-            value={option.value ? 1 : 0}
-          >
+          <MenuItem key={option.value} sx={menuItemStyle} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
@@ -62,4 +64,4 @@ const BooleanSingleSelectDropdown: FC<DropdownProps> = ({
   );
 };
 
-export default BooleanSingleSelectDropdown;
+export default ThemeDropDown;

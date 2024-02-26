@@ -1,10 +1,10 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import FillButton from "@/components/Button/FillButton";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
@@ -27,8 +27,9 @@ const Login = () => {
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
 
   const router = useRouter();
-  const MasterDetails = useContext(UseContextHook);
-  const { setauth, setUserInfo, setReusableSnackBar, auth } = MasterDetails;
+  const contextDataHub = useContext(UseContextHook);
+  const { setauth, setUserInfo, setReusableSnackBar, auth, ThemeColor } =
+    contextDataHub;
 
   if (!setauth || !setUserInfo || !setReusableSnackBar) {
     return null;
@@ -185,7 +186,7 @@ const Login = () => {
                 }}
                 style={{
                   fontSize: ".8rem",
-                  color: "blue",
+                  color: ThemeColor.primaryColor,
                   textAlign: "right",
                   cursor: "pointer",
                 }}
@@ -194,8 +195,8 @@ const Login = () => {
               </span>
             </div>
 
-            <Button
-              sx={{
+            <FillButton
+              style={{
                 marginTop: "1rem",
                 height: "2rem",
                 width: "100%",
@@ -205,7 +206,7 @@ const Login = () => {
               disabled={loading}
             >
               {loading ? "Loading...." : "Login"}
-            </Button>
+            </FillButton>
           </form>
         </div>
       )}

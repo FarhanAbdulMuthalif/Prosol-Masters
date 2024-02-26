@@ -52,7 +52,7 @@ export default function EditStorageBin({ EditDataGet }: any) {
     async function getter() {
       try {
         const res = await api.get(
-          `/plant/getAllByPlantById/${formData?.plantId}`
+          `/plant/getAllByPlantById/${EditDataGet?.plant?.id}`
         );
         if (res.status === 200) {
           setstorgaeLocationData(res.data);
@@ -80,7 +80,7 @@ export default function EditStorageBin({ EditDataGet }: any) {
       }
     }
     getter();
-  }, [formData.plantId, setReusableSnackBar]);
+  }, [EditDataGet, setReusableSnackBar]);
 
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {

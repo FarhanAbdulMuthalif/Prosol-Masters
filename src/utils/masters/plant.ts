@@ -74,7 +74,7 @@ export const MasterSubFieldWithData: mastersProps = {
       includePlantDropdown: true,
     },
     StorageBin: {
-      getAll: "/plant/getAllStorageLocationBin",
+      getAll: "/plant/getAllStorageLocationBin", // Need to remove the word location in futher
       getSingle: "/plant/getStorageLocationBinById",
       create: "/plant/saveStorageLocationBin",
       createBulk: "/plant/ImportExcelDataStorageBin",

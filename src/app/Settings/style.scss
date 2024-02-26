@@ -7,61 +7,201 @@
   background-color: white;
   box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
     rgb(9 30 66 / 8%) 0px 2px 4px 1px;
-  gap: 10px;
+  gap: 5px;
+  overflow: auto;
   .settings-content-header-div {
     width: 100%;
     border-bottom: 0.5px solid #c5ccd4;
+    .settings-content-header-div {
+      font-size: 14px;
+      font-weight: bold;
+      color: #6f6f6f;
+      padding: 10px 15px;
+    }
   }
   .settings-content-div {
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column;
+    // flex-wrap: wrap;
+    gap: 10px;
     padding: 0 10px;
-    .settings-container-theme-box {
+    .theme-wrapper-div {
+      width: 100%;
       display: flex;
-      position: relative;
-      border-radius: 5px;
-      height: 80px;
-      width: 240px;
-      overflow: hidden;
-      box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
-        rgb(9 30 66 / 8%) 0px 2px 4px 1px;
-      .settings-container-theme-single-box {
-        height: 80px;
-        width: 80px;
-      }
-    }
-    .withBorder-settings-container-theme-box {
-      border: 3px solid rgb(107, 103, 103);
-      .settings-container-theme-single-box {
-        height: 80px;
-        width: 80px;
-      }
-    }
-  }
-  .fonts-wrapper-div {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 0 10px;
-    .single-font-display-div {
-      display: flex;
-      position: relative;
-      border-radius: 5px;
-      align-items: center;
-      justify-content: center;
-      height: 80px;
-      width: 240px;
-      overflow: hidden;
-      box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
-        rgb(9 30 66 / 8%) 0px 2px 4px 1px;
-      .single-font-display-text {
-        font-size: 18px;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0;
+      border-bottom: 0.5px solid #d5d9de;
+      .setting-theme-div-text {
+        font-size: 14px;
         color: #6f6f6f;
         font-weight: 600;
+        // text-transform: uppercase;
       }
+      .setting-theme-div {
+        flex: 1;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        .settings-container-theme-box-wrapper {
+          display: flex;
+          flex-direction: column;
+          .settings-container-theme-box-wrapper-text {
+            font-size: 10px;
+            // color: #6f6f6f;
+            // text-transform: uppercase;
+            font-weight: 500;
+            text-align: center;
+            padding: 5px;
+          }
+          .settings-container-theme-box {
+            display: flex;
+            position: relative;
+            border-radius: 5px;
+            height: 40px;
+            width: 120px;
+            overflow: hidden;
+            box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+              rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+            .settings-container-theme-single-box {
+              height: 40px;
+              width: 40px;
+            }
+          }
+        }
+        .withBorder-settings-container-theme-box {
+          border: 3px solid rgb(107, 103, 103);
+          .settings-container-theme-single-box {
+            height: 40px;
+            width: 40px;
+          }
+        }
+      }
+    }
+
+    .fonts-wrapper-div {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      // padding: 10px 0;
+      .font-family-side-wrapper {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .font-family-side-wrapper-text {
+          font-size: 14px;
+          color: #6f6f6f;
+          font-weight: 600;
+          // text-transform: uppercase;
+        }
+        .font-family-side {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          padding: 0 10px;
+
+          .single-font-display-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            height: 30px;
+            width: 100px;
+            box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
+              rgb(9 30 66 / 8%) 0px 2px 4px 1px;
+            .single-font-display-text {
+              font-size: 12px;
+
+              text-align: center;
+              color: #6f6f6f;
+            }
+          }
+        }
+      }
+
+      .fonts-property {
+        padding: 0 20px;
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-left: 0.5px solid #c5ccd4;
+        .fonts-property-text {
+          font-size: 14px;
+          color: #6f6f6f;
+          font-weight: 500;
+        }
+        .font-propety-content-div {
+          width: 100%;
+          display: flex;
+          .font-propety-content-font-weight {
+            flex: 4;
+            color: #6f6f6f;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            .font-propety-content-weight-text-fnt-wght {
+              font-weight: bold;
+              font-size: 10px;
+            }
+            .font-propety-content-weight-text {
+              // display: flex;
+              // gap: 15px;
+              .fnt-cnt-medium {
+                font-weight: 500;
+              }
+              .fnt-cnt-bold {
+                font-weight: bold;
+              }
+            }
+          }
+          .font-propety-content-font-size-slider {
+            display: flex;
+            flex: 3;
+            align-items: center;
+            justify-content: space-evenly;
+            .font-propety-content-font-size-slider-text {
+              font-weight: bold;
+              font-size: 10px;
+              color: #6f6f6f;
+            }
+          }
+          .font-propety-content-font-size-decimal {
+            flex: 1;
+            // display: flex;
+            // align-items: center;
+            // justify-content: space-evenly;
+            // .font-propety-content-font-size-decimal-text {
+            //   font-weight: bold;
+            //   font-size: 10px;
+            //   color: #6f6f6f;
+            // }
+          }
+
+          .font-propety-content-div-text {
+            flex: 1;
+            color: #6f6f6f;
+            font-weight: 500;
+            // text-align: center;
+            text-transform: uppercase;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+          }
+        }
+      }
+    }
+    .setting-font-display-example-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 0.5px solid #c5ccd4;
     }
   }
 }
