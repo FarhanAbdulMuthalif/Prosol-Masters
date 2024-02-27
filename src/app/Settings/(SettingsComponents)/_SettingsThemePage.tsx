@@ -2,16 +2,21 @@ import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import CheckIcon from "@mui/icons-material/Check";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
+import { SingleThemeObjProps } from "../../../../TypesStore";
 
-export default function SettingsThemePage() {
+export default function SettingsThemePage({
+  setinsideSelectedTheme,
+  insideSelectedTheme,
+}: {
+  setinsideSelectedTheme: Dispatch<SetStateAction<SingleThemeObjProps>>;
+  insideSelectedTheme: SingleThemeObjProps;
+}) {
   const ContextDataHub = useContext(UseContextHook);
 
-  const { setThemeColor, ThemeColor, colorThemesArr, setReusableSnackBar } =
-    ContextDataHub;
-  if (!setThemeColor) return null;
+  const { colorThemesArr } = ContextDataHub;
   const auth = UseAuth();
-  if (!auth || !setReusableSnackBar) {
+  if (!auth) {
     return null;
   }
   return (
@@ -23,12 +28,12 @@ export default function SettingsThemePage() {
             <div key={data.id} className="settings-container-theme-box-wrapper">
               <section
                 className={
-                  ThemeColor.name === data.name
+                  insideSelectedTheme.name === data.name
                     ? "settings-container-theme-box withBorder-settings-container-theme-box"
                     : "settings-container-theme-box"
                 }
                 onClick={() => {
-                  setThemeColor(data);
+                  setinsideSelectedTheme(data);
                   localStorage.setItem("theme", JSON.stringify(data));
                 }}
               >
@@ -50,7 +55,7 @@ export default function SettingsThemePage() {
                     backgroundColor: data.tertiaryColor,
                   }}
                 ></div>
-                {ThemeColor.name === data.name ? (
+                {insideSelectedTheme.name === data.name ? (
                   <CheckIcon
                     sx={{
                       color: "white",

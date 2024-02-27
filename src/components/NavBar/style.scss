@@ -24,9 +24,6 @@
       padding: 0;
       margin-top: 1.2rem;
     }
-    #search-sidebar::placeholder {
-      font-size: 14px;
-    }
   }
   nav {
     width: 180px;
@@ -37,14 +34,12 @@
     margin: 0;
     padding: 0;
 
-    h2 {
-      font-size: 12px;
+    .h3befrtxt {
       color: #535353;
       text-transform: uppercase;
-      font-weight: 500;
+
       letter-spacing: 0.5px;
       margin: 1rem 0;
-      //   align-self: flex-start;
     }
     ul {
       width: 180px;
@@ -53,12 +48,11 @@
       /*  align-items: flex-start; */
       gap: 3px;
       color: #6f6f6f;
-      font-size: 10px;
 
       width: 180px;
       padding: 5px 0;
       margin: 0;
-      font-weight: 500;
+
       letter-spacing: 0.5px;
       transition: all 200ms ease;
 
@@ -75,7 +69,6 @@
         &:hover {
           // color: #0000ff;
 
-          font-weight: 600;
           letter-spacing: 0.5px;
         }
       }
@@ -90,7 +83,6 @@
         align-items: center;
         cursor: pointer;
         margin: 0;
-        font-weight: 600;
         letter-spacing: 0.5px;
         transition: all 500ms ease;
       }
@@ -108,16 +100,10 @@
   // padding: 2px 0;
   box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
     rgb(9 30 66 / 8%) 0px 2px 4px 1px;
-  p {
-    margin: 20px 0;
-    color: #6f6f6f;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
+
   ul {
     width: 100%;
-    font-size: 10px;
-    font-weight: 500;
+
     color: #6f6f6f;
     letter-spacing: 0.3px;
     li {

@@ -2,28 +2,31 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import ReusableFontSlider from "@/components/Slider/FontSlider";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import ReusableToggleButton from "@/components/ToogleButtom.tsx/ToogleButton";
-import { ChangeEvent, useContext } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react";
+import { fontPropertyProps } from "../../../../TypesStore";
 
-export default function SettingFontPage() {
+export default function SettingFontPage({
+  setinsideSelectedFont,
+  insideSelectedFont,
+  insideSelectFontProperty,
+  setinsideSelectFontProperty,
+}: {
+  insideSelectedFont: string;
+  setinsideSelectedFont: Dispatch<SetStateAction<string>>;
+  insideSelectFontProperty: fontPropertyProps[];
+  setinsideSelectFontProperty: Dispatch<SetStateAction<fontPropertyProps[]>>;
+}) {
   const dataContextHub = useContext(UseContextHook);
 
-  const {
-    fontPropertyArr,
-    setfontPropertyArr,
-    FontsListArr,
-    selectedFont,
-    setselectedFont,
-    ThemeColor,
-  } = dataContextHub;
+  const { FontsListArr, ThemeColor } = dataContextHub;
 
   const options = [
     { type: "normal", label: "Aa" },
     { type: "600", label: "Aa" },
     { type: "bold", label: "Aa" },
   ];
-  if (!setfontPropertyArr) return null;
   const handleToggleChange = (value: string, id: number) => {
-    setfontPropertyArr((prev) => {
+    setinsideSelectFontProperty((prev) => {
       return prev.map((data) => {
         if (data.id === id) {
           // Update the font weight for the specific font property
@@ -40,7 +43,7 @@ export default function SettingFontPage() {
     id: number
   ) => {
     // console.log(value, id);
-    setfontPropertyArr((prev) => {
+    setinsideSelectFontProperty((prev) => {
       return prev.map((data) => {
         if (data.id === id) {
           // Update the defaultSize for the specific font property
@@ -56,7 +59,7 @@ export default function SettingFontPage() {
     id: number
   ) => {
     const { value } = e.target;
-    setfontPropertyArr((prev) => {
+    setinsideSelectFontProperty((prev) => {
       return prev.map((data) => {
         if (data.id === id) {
           // Update the defaultSize for the specific font property
@@ -67,7 +70,6 @@ export default function SettingFontPage() {
     });
   };
 
-  if (!setselectedFont) return null;
   function valuetext(value: number) {
     return `${value}px`;
   }
@@ -84,12 +86,12 @@ export default function SettingFontPage() {
               key={data}
               className="single-font-display-div"
               style={
-                selectedFont === data
+                insideSelectedFont === data
                   ? { border: `3px solid ${ThemeColor.primaryColor}` }
                   : {}
               }
               onClick={() => {
-                setselectedFont(data);
+                setinsideSelectedFont(data);
               }}
             >
               <p
@@ -102,9 +104,10 @@ export default function SettingFontPage() {
           ))}
         </div>
       </div>
+
       <div className="fonts-property">
         <p className="fonts-property-text">Font Property</p>
-        {fontPropertyArr.map((data) => (
+        {insideSelectFontProperty.map((data) => (
           <div key={data.name} className="font-propety-content-div">
             <p className="font-propety-content-div-text">{data.name} </p>
             <div className="font-propety-content-font-weight">

@@ -13,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { MouseEvent, useContext, useState } from "react";
 import ThemedDialog from "../Dialog/ThemeDialog";
 import ChangePasswordDialog from "../Dialog/userDialog/ChangePasswordDialog";
+import TextComp from "../TextComp/TextComp";
 import api from "../api";
 import "./style.scss";
 
@@ -134,7 +135,7 @@ export default function Header() {
             }
             href="/UserManagement"
           >
-            User Management
+            <TextComp variant="subTitle">User Management</TextComp>
           </Link>
         </li>
         <li
@@ -151,7 +152,7 @@ export default function Header() {
             }
             href="/Masters"
           >
-            Masters
+            <TextComp variant="subTitle">Masters</TextComp>
           </Link>
         </li>
         <li>
@@ -164,7 +165,7 @@ export default function Header() {
             }
             href="/Settings"
           >
-            Settings
+            <TextComp variant="subTitle">Settings</TextComp>
           </Link>
         </li>
       </ul>
@@ -187,9 +188,9 @@ export default function Header() {
             handleClick(e);
           }}
         >
-          <span>
+          <TextComp variant="subTitle">
             {UserInfo?.firstName} {UserInfo?.lastName}
-          </span>
+          </TextComp>
 
           <Image src="/Images/AdminSvg.svg" height={40} width={40} alt="Img" />
         </div>

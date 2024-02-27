@@ -11,27 +11,27 @@ export const UseContextHook = createContext<UseContextHookTypes>({
   fontPropertyArr: [
     {
       id: 1,
-      name: "Title",
+      name: "title",
       defaultSize: 14,
       fontWeight: "bold",
     },
     {
       id: 2,
-      name: "Sub Title",
+      name: "subTitle",
       defaultSize: 12,
-      fontWeight: "500",
+      fontWeight: "600",
     },
     {
       id: 3,
-      name: "Body",
+      name: "body",
       defaultSize: 12,
-      fontWeight: "regular",
+      fontWeight: "normal",
     },
     {
       id: 4,
-      name: "Body Small",
+      name: "bodySmall",
       defaultSize: 10,
-      fontWeight: "regular",
+      fontWeight: "normal",
     },
   ],
   ThemeColor: {

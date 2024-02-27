@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { PathObjProps, mastersProps } from "../../../TypesStore";
+import TextComp from "../TextComp/TextComp";
 import "./style.scss";
 
 export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
@@ -119,24 +120,19 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
             />
           </div>
           <nav>
-            <h2>{NamewithMatch}</h2>
+            <TextComp
+              variant="title"
+              style={{
+                color: "#535353",
+                textTransform: "uppercase",
+                margin: "1rem 0",
+              }}
+            >
+              {NamewithMatch}
+            </TextComp>
+
             <ul>
               {CurrentView.map((data: { name: string; path: string }) => {
-                // if (noSecondBar.includes(data.name)) {
-                //   return (
-                //     <Link
-                //       href={data.path}
-                //       key={data.name}
-                //       className={
-                //         pathName === data.path
-                //           ? "activ-sidebar-link"
-                //           : "normal-sidebar-link"
-                //       }
-                //     >
-                //       {data.name}
-                //     </Link>
-                //   );
-                // }
                 if (ExactPathArr[0] === "Masters") {
                   if (noSecondBar.includes(data.name)) {
                     return (
@@ -150,7 +146,12 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         }
                         style={pathName === data.path ? listStyles : {}}
                       >
-                        {data.name}
+                        <TextComp
+                          variant="bodySmall"
+                          style={{ fontWeight: "600" }}
+                        >
+                          {data.name}
+                        </TextComp>
                       </Link>
                     );
                   }
@@ -167,11 +168,16 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         handleSecondBarClick(e, data);
                       }}
                     >
-                      {data.name}
+                      <TextComp
+                        variant="bodySmall"
+                        style={{ fontWeight: "600" }}
+                      >
+                        {data.name}
+                      </TextComp>
                       <ArrowForwardIosIcon
                         sx={{ color: "#6f6f6f", fontSize: "0.6rem" }}
                         style={
-                          open && pathName === data.path
+                          open && SelectedData.name === data.name
                             ? { rotate: "90deg" }
                             : {}
                         }
@@ -190,7 +196,9 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                     }
                     style={pathName === data.path ? listStyles : {}}
                   >
-                    {data.name}
+                    <TextComp variant="bodySmall" style={{ fontWeight: "600" }}>
+                      {data.name}
+                    </TextComp>
                   </Link>
                 );
               })}
@@ -231,7 +239,12 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         subListHandlerClick(data);
                       }}
                     >
-                      {data}
+                      <TextComp
+                        variant="bodySmall"
+                        style={{ fontWeight: "600" }}
+                      >
+                        {data}
+                      </TextComp>
                     </li>
                   ))}
                 </ul>

@@ -6,16 +6,23 @@ const MUIThemeComp = (selectedFont: string, ThemeColor: SingleThemeObjProps) =>
     components: {
       MuiInputBase: {
         styleOverrides: {
-          // inputMultiline: {
-          //   "&::placeholder": {
-          //     color: "brown", // Change the color as needed
+          // root: {
+          //   fontSize: "12px",
+          //   padding: 0,
+          //   "& input::placeholder": {
+          //     color: "brown",
+          //     opacity: ".7",
           //   },
           // },
           root: {
             fontSize: "12px",
-            padding: 0,
-            "& input::placeholder": {
-              color: "brown",
+            "&.MuiOutlinedInput-root": {
+              padding: "0", // Adjust padding as needed
+            },
+          },
+          input: {
+            "&::placeholder": {
+              color: "#6f6f6f",
               opacity: ".7",
             },
           },

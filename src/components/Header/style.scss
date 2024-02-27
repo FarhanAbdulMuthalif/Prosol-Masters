@@ -26,10 +26,10 @@ header {
     flex-direction: row;
     align-items: center;
     gap: 30px;
-    font-weight: 600;
+
     color: #535353;
     list-style: none;
-    font-size: 12px;
+
     li {
       height: 100%;
       display: flex;
@@ -72,10 +72,6 @@ header {
       display: flex;
       align-items: center;
       gap: 5px;
-      span {
-        font-weight: bold;
-        font-size: 12px;
-      }
     }
   }
 }

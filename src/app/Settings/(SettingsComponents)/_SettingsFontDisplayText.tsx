@@ -1,20 +1,27 @@
-import { UseContextHook } from "@/Provides/UseContextHook";
-import { useContext } from "react";
+import { fontPropertyProps } from "../../../../TypesStore";
 
-export default function SettingsFontDisplayText() {
-  const dataContextHub = useContext(UseContextHook);
-
-  const { fontPropertyArr } = dataContextHub;
-  const [title, subTile, body, bodySmall] = fontPropertyArr;
+export default function SettingsFontDisplayText({
+  insideSelectFontProperty,
+  insideSelectedFont,
+}: {
+  insideSelectFontProperty: fontPropertyProps[];
+  insideSelectedFont: string;
+}) {
+  // const dataContextHub = useContext(UseContextHook);
+  // const { fontPropertyArr } = dataContextHub;
+  const [title, subTile, body, bodySmall] = insideSelectFontProperty;
   return (
-    <section className="setting-font-display-example-section">
+    <section
+      className="setting-font-display-example-section"
+      style={{ fontFamily: insideSelectedFont }}
+    >
       <h1
         style={{
           fontSize: `${title.defaultSize}px`,
           fontWeight: title.fontWeight,
         }}
       >
-        <u>Title (Heading)</u> :
+        <u>Title </u>
       </h1>
       <h3
         style={{
@@ -22,7 +29,7 @@ export default function SettingsFontDisplayText() {
           fontWeight: subTile.fontWeight,
         }}
       >
-        <u>SubTitle Text</u> :
+        <u>SubTitle </u>
       </h3>
       <p
         style={{
@@ -31,9 +38,7 @@ export default function SettingsFontDisplayText() {
         }}
       >
         <u>Body Text</u> : Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Asperiores, doloribus voluptatibus. Perspiciatis distinctio error
-        facere, quas dolores expedita delectus ea laborum nisi unde
-        exercitationem ad nostrum dolorum neque adipisci nam.
+        elit. Quo sint, veniam voluptatum fugit modi quaerat?
       </p>
       <p
         style={{
@@ -41,10 +46,8 @@ export default function SettingsFontDisplayText() {
           fontWeight: bodySmall.fontWeight,
         }}
       >
-        <u>Small Body Text</u> : Lorem ipsum dolor, sit amet consectetur
-        adipisicing elit. Maiores illum voluptatibus alias dolore dolorum odio
-        animi harum voluptates aliquid aliquam accusantium facere vero, voluptas
-        assumenda molestias deleniti enim doloremque. Laborum.
+        <u>Small Body Text</u> : Lorem ipsum dolor sit amet consectetur
+        adipisicing elit. Odio ad ab sequi autem quae assumenda?
       </p>
     </section>
   );
