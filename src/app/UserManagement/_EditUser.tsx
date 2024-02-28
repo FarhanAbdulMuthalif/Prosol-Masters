@@ -6,8 +6,10 @@ import OutlinedButton from "@/components/Button/OutlineButton";
 import ReusableMultipleSelect from "@/components/Dropdown/MultipleDropdown";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { UserInitialState } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { FormEvent, useContext, useState } from "react";
@@ -237,9 +239,12 @@ export default function EditUser({
           name="business"
         />
         <div className="status-user-toogle-div">
-          <p className="status-user-toogle-switch-text">
+          <TextComp
+            variant="body"
+            style={{ fontWeight: "bold", color: PrimaryTextColor }}
+          >
             User Status {`(Active / Inactive)`}
-          </p>
+          </TextComp>
           <span>:</span>
 
           <ReusableSwitch
@@ -251,7 +256,9 @@ export default function EditUser({
       </div>
       {FormErrorMessage.length > 0 ? (
         <div className="user-error-message-div">
-          <p className="user-error-message-div-text">{FormErrorMessage}</p>
+          <TextComp variant="body" style={{ color: "red" }}>
+            {FormErrorMessage}
+          </TextComp>
         </div>
       ) : (
         ""

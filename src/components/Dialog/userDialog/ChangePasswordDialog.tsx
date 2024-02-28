@@ -2,8 +2,10 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import {
   Dialog,
   DialogActions,
@@ -121,7 +123,12 @@ export default function ChangePasswordDialog({
         id="alert-dialog-title"
         sx={{ borderBottom: "1px solid #bdbdbda2", padding: "10px 16px" }}
       >
-        <p style={{ color: "#6f6f6f" }}>Change Password</p>
+        <TextComp
+          variant="subTitle"
+          style={{ color: PrimaryTextColor, textTransform: "uppercase" }}
+        >
+          Change Password
+        </TextComp>
       </DialogTitle>
       <form onSubmit={ChangePasswordSubmitHandler}>
         <DialogContent
@@ -158,16 +165,12 @@ export default function ChangePasswordDialog({
             }
           />
           {ChangePasswordError.equal ? (
-            <p
-              style={{
-                color: "red",
-                fontSize: "12px",
-                fontWeight: "600",
-                padding: "0 3px",
-              }}
+            <TextComp
+              variant="body"
+              style={{ color: "red", fontWeight: "600", padding: "0 3px" }}
             >
               Current password and New Password Should be different
-            </p>
+            </TextComp>
           ) : (
             ""
           )}

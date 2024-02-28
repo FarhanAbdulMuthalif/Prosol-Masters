@@ -2,6 +2,8 @@
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import TextComp from "@/components/TextComp/TextComp";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PersonIcon from "@mui/icons-material/Person";
@@ -22,11 +24,13 @@ export default function Home() {
 
   return (
     <main className="dashboard-page-wrapper">
-      <h3>Dashboard</h3>
       <div className="dashboard-page-content-view">
         <div className="dashboard-modules">
           <PersonIcon sx={{ fontSize: "2rem" }} />
-          <p className="dashboard-modules-text">User Mannagement</p>
+          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+            User Management
+          </TextComp>
+
           <OutlinedButton className="dashboard-modules-sub-text">
             Click here
           </OutlinedButton>
@@ -43,7 +47,10 @@ export default function Home() {
         </div>
         <div className="dashboard-modules">
           <SettingsSuggestIcon sx={{ fontSize: "2rem" }} />
-          <p className="dashboard-modules-text">Material Master</p>
+          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+            Material Master
+          </TextComp>
+
           <OutlinedButton
             onClick={() => {
               router.push("/Masters");
@@ -66,8 +73,9 @@ export default function Home() {
         </div>
         <div className="dashboard-modules">
           <WarehouseIcon sx={{ fontSize: "2rem" }} />
-
-          <p className="dashboard-modules-text">Asset Master</p>
+          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+            Asset Master
+          </TextComp>
 
           <OutlinedButton className="dashboard-modules-sub-text">
             Click here
@@ -83,7 +91,10 @@ export default function Home() {
         </div>
         <div className="dashboard-modules">
           <ManageAccountsIcon sx={{ fontSize: "2rem" }} />
-          <p className="dashboard-modules-text">Service Master</p>
+          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+            Service Master
+          </TextComp>
+
           <OutlinedButton className="dashboard-modules-sub-text">
             Click here
           </OutlinedButton>

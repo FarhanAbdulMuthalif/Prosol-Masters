@@ -1,6 +1,8 @@
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { FormControlLabel, SelectChangeEvent } from "@mui/material";
 import { ChangeEvent } from "react";
 import { PostCreateFieldData } from "../../../../../TypesStore";
@@ -18,30 +20,63 @@ export default function SelectTextarea({
 }) {
   return (
     <div className="render-fields-namess">
-      <label htmlFor="DrawerInputFieldCrtId">Enter Name *</label>
-      <OutlineTextField
-        name="fieldName"
-        placeholder="Enter Name"
-        autoComplete="off"
-        value={valueData?.fieldName}
-        fullWidth
-        onChange={handleInput}
-      />
-
-      <label id="DrawerInputIdSelect">Select Number of lines *</label>
-      <SingleSelectDropdown
-        label="Select Field"
-        value={valueData?.identity ?? ""}
-        onChange={handleSelect}
-        options={[
-          { value: "1", label: "One" },
-          { value: "2", label: "Two" },
-          { value: "3", label: "Three" },
-        ]}
-      />
+      <div className="input-render-field-wrap">
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            textTransform: "uppercase",
+          }}
+        >
+          Enter Name *
+        </TextComp>
+        <OutlineTextField
+          name="fieldName"
+          placeholder="Enter Name"
+          autoComplete="off"
+          value={valueData?.fieldName}
+          fullWidth
+          onChange={handleInput}
+        />
+      </div>
+      <div className="input-render-field-wrap">
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            textTransform: "uppercase",
+          }}
+        >
+          Select Number of lines *
+        </TextComp>
+        <SingleSelectDropdown
+          label="Select Field"
+          value={valueData?.identity ?? ""}
+          onChange={handleSelect}
+          options={[
+            { value: "1", label: "One" },
+            { value: "2", label: "Two" },
+            { value: "3", label: "Three" },
+          ]}
+        />
+      </div>
 
       <div className="minmaxval">
-        <label className="minmaxLabel">Min :</label>
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            width: "40%",
+            margin: "auto 0",
+          }}
+        >
+          Min * :
+        </TextComp>
         <OutlineTextField
           type="number"
           fullWidth
@@ -51,7 +86,17 @@ export default function SelectTextarea({
           autoComplete="off"
           onChange={handleInput}
         />
-        <label className="minmaxLabel">Max :</label>
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            width: "40%",
+            margin: "auto 0",
+          }}
+        >
+          Max * :
+        </TextComp>
         <OutlineTextField
           fullWidth
           type="number"

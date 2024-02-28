@@ -6,10 +6,6 @@
   gap: 10px;
   padding: 5px;
 
-  h3 {
-    color: #6f6f6f;
-  }
-
   .dashboard-page-content-view {
     width: 100%;
     display: grid;
@@ -30,11 +26,6 @@
       box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
         rgb(9 30 66 / 8%) 0px 2px 4px 1px;
       border-radius: 5px;
-
-      .dashboard-modules-text {
-        font-size: 16px;
-        font-weight: 600;
-      }
 
       .dashboard-modules-icon-btn {
         display: none;

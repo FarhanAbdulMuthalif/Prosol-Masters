@@ -32,34 +32,20 @@
   align-items: center;
   justify-content: center;
 }
-.login-form .login-form-content p {
-  color: #373f41;
-  font-size: 0.9rem;
-  text-align: center;
-}
+
 .login-form-content-inputs {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.login-form-content-inputs span {
-  margin: 0;
-  padding: 0;
-  font-size: 1.2rem;
-  color: #515151;
-  font-weight: 500;
-}
 #input-username {
-  height: 1.2rem;
   width: 20rem;
 }
 #input-username::placeholder {
   font-size: 0.8rem;
 }
-#input-password {
-  height: 1.2rem;
-}
+
 #input-password::placeholder {
   font-size: 0.8rem;
 }

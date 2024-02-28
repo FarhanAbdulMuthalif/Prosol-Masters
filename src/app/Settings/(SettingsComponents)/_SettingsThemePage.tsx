@@ -1,5 +1,6 @@
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import TextComp from "@/components/TextComp/TextComp";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import CheckIcon from "@mui/icons-material/Check";
 import { Dispatch, SetStateAction, useContext } from "react";
@@ -21,7 +22,8 @@ export default function SettingsThemePage({
   }
   return (
     <div className="theme-wrapper-div">
-      <p className="setting-theme-div-text">Theme Palettes</p>
+      <TextComp variant="subTitle">Theme Palettes</TextComp>
+
       <div className="setting-theme-div">
         {colorThemesArr.map((data) => {
           return (
@@ -70,12 +72,16 @@ export default function SettingsThemePage({
                   ""
                 )}
               </section>
-              <p
-                className="settings-container-theme-box-wrapper-text"
-                style={{ color: data.primaryColor }}
+              <TextComp
+                variant="bodySmall"
+                style={{
+                  padding: "5px",
+                  textAlign: "center",
+                  color: data.primaryColor,
+                }}
               >
                 {capitalizeFunc(data.name)}
-              </p>
+              </TextComp>
             </div>
           );
         })}

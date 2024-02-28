@@ -70,7 +70,7 @@ export const RoleTableColumns: GridColDef[] = [
   {
     field: "description",
     headerClassName: "super-app-theme--header",
-    headerName: "description",
+    headerName: "Description",
     /*  renderCell: (params) => {
           return params.row.roles?.map((datarol: any) => datarol.name).join(", ");
         }, */

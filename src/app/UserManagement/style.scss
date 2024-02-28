@@ -37,21 +37,12 @@
         width: 100%;
         justify-content: space-evenly;
         padding: 10px;
-        .status-user-toogle-switch-text {
-          font-size: 12px;
-          color: #6f6f6f;
-          font-weight: bold;
-        }
       }
     }
     .user-error-message-div {
       width: 100%;
       display: flex;
       justify-content: center;
-      .user-error-message-div-text {
-        color: red;
-        font-weight: 600;
-      }
     }
     .create-user-wrapper-action {
       margin-left: auto;

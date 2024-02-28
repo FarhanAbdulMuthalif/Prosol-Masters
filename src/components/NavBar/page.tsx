@@ -1,4 +1,5 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { pathObj } from "@/utils/LinkData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SearchIcon from "@mui/icons-material/Search";
@@ -175,7 +176,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         {data.name}
                       </TextComp>
                       <ArrowForwardIosIcon
-                        sx={{ color: "#6f6f6f", fontSize: "0.6rem" }}
+                        sx={{ color: PrimaryTextColor, fontSize: "0.6rem" }}
                         style={
                           open && SelectedData.name === data.name
                             ? { rotate: "90deg" }

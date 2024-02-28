@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import { SingleThemeObjProps } from "../../TypesStore";
+import { PrimaryTextColor } from "./colorsCode";
 
 const MUIThemeComp = (selectedFont: string, ThemeColor: SingleThemeObjProps) =>
   createTheme({
@@ -22,7 +23,7 @@ const MUIThemeComp = (selectedFont: string, ThemeColor: SingleThemeObjProps) =>
           },
           input: {
             "&::placeholder": {
-              color: "#6f6f6f",
+              color: PrimaryTextColor,
               opacity: ".7",
             },
           },

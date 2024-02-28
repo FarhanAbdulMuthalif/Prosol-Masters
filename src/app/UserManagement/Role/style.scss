@@ -37,6 +37,7 @@
         width: 100%;
         justify-content: space-between;
         align-items: center;
+
         .status-role-div-checkbox-list {
           display: flex;
           gap: 10px;
@@ -45,22 +46,12 @@
           font-size: 12px;
           color: #6f6f6f;
         }
-        .status-role-div-text {
-          font-size: 12px;
-          color: #6f6f6f;
-          font-weight: 500;
-        }
       }
       .status-user-toogle-div {
         display: flex;
         width: 100%;
         justify-content: space-evenly;
         padding: 10px;
-        .status-user-toogle-switch-text {
-          font-size: 12px;
-          color: #6f6f6f;
-          font-weight: bold;
-        }
       }
     }
     .user-error-message-div {

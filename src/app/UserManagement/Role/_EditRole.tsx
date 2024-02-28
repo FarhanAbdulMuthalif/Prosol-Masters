@@ -7,8 +7,10 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { RoleInitialState } from "@/utils/UserDataExport";
 import {
   Checkbox,
@@ -194,9 +196,12 @@ export default function EditRole({
           name="plantId"
         />
         <div className="status-user-toogle-div">
-          <p className="status-user-toogle-switch-text">
+          <TextComp
+            variant="body"
+            style={{ fontWeight: "bold", color: PrimaryTextColor }}
+          >
             Role Status {`(Active / Inactive)`}
-          </p>
+          </TextComp>
 
           <span>:</span>
 
@@ -207,7 +212,13 @@ export default function EditRole({
           />
         </div>
         <div className="status-role-div">
-          <p className="status-role-div-text">Privilages </p>
+          <TextComp
+            variant="body"
+            style={{ fontWeight: "bold", color: PrimaryTextColor }}
+          >
+            Privilages
+          </TextComp>
+
           <span>:</span>
           <div className="status-role-div-checkbox-list">
             <FormControlLabel

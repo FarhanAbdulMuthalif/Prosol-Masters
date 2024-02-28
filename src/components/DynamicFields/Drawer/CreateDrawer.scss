@@ -27,19 +27,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     padding: 0 10px;
-    label {
-      align-self: flex-start;
-      color: #6f6f6f;
-      font-size: 12px;
+    .input-render-field-wrap {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      gap: 3px;
     }
+    // label {
+    //   align-self: flex-start;
+    //   color: #6f6f6f;
+    //   font-size: 12px;
+    // }
     .render-fields-namess {
       width: 100%;
       display: flex;
       gap: 15px;
       flex-direction: column;
       align-items: center;
+      .input-render-field-wrap {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 3px;
+      }
       .api-chip-wrapper-div {
         padding: 5px;
         width: 100%;
@@ -47,7 +59,7 @@
         border-radius: 5px;
         outline: 1px solid rgba(31, 31, 31, 0.267);
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -69,10 +81,6 @@
         gap: 5px;
         width: 100%;
         height: 40px;
-        .minmaxLabel {
-          width: 30%;
-          margin: auto 0;
-        }
       }
       .validating-checkbox-div {
         width: 100%;

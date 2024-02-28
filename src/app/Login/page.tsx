@@ -1,8 +1,10 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
@@ -120,30 +122,19 @@ const Login = () => {
             height={50}
             style={{ margin: "5px 0" }}
           />
-          <p>
+          <TextComp
+            variant="subTitle"
+            style={{ textAlign: "center", color: PrimaryTextColor }}
+          >
             welcome to <span style={{ color: "#2752E3" }}>prosol ,</span>
             Please put your Login Credentials below to start
-          </p>
+          </TextComp>
+          <p></p>
           <form onSubmit={SubmitHandler}>
             <div className="login-form-content-inputs">
-              <span>Login</span>
-
-              {emptyError && (
-                <span
-                  className="erroe-msg"
-                  style={{ color: "red", fontSize: ".9rem" }}
-                >
-                  Username and password cannot be empty
-                </span>
-              )}
-              {InvalidUser && (
-                <span
-                  className="erroe-msg"
-                  style={{ color: "red", fontSize: ".9rem" }}
-                >
-                  Please enter the valid email and password
-                </span>
-              )}
+              <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+                LOGIN
+              </TextComp>
 
               <OutlineTextField
                 type="text"
@@ -180,18 +171,38 @@ const Login = () => {
                   ),
                 }}
               />
+              {emptyError && (
+                <TextComp
+                  variant="body"
+                  style={{ color: "red", fontWeight: "600" }}
+                >
+                  Username and password cannot be empty
+                </TextComp>
+              )}
+              {InvalidUser && (
+                <TextComp
+                  variant="body"
+                  style={{ color: "red", fontWeight: "600" }}
+                >
+                  Please enter the valid email and password
+                </TextComp>
+              )}
               <span
                 onClick={() => {
                   setShowForgotPassword(true);
                 }}
-                style={{
-                  fontSize: ".8rem",
-                  color: ThemeColor.primaryColor,
-                  textAlign: "right",
-                  cursor: "pointer",
-                }}
               >
-                Forget password?
+                <TextComp
+                  variant="body"
+                  style={{
+                    color: ThemeColor.primaryColor,
+                    textAlign: "right",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                  }}
+                >
+                  Forget password?
+                </TextComp>
               </span>
             </div>
 

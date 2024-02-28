@@ -4,9 +4,11 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
 import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
 import {
@@ -237,9 +239,10 @@ export default function CreateAttribute() {
               gap: "5px",
             }}
           >
-            <label style={{ fontSize: "12px", color: "#6f6f6f" }}>
-              FieldType :{" "}
-            </label>
+            <TextComp variant="subTitle" style={{ color: PrimaryTextColor }}>
+              FieldType :
+            </TextComp>
+
             <MuiRadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               row
@@ -339,7 +342,12 @@ export default function CreateAttribute() {
           })}
         </div>
         <div className="master-attribute-uom-list">
-          <p className="master-attribute-uom-list-text">UOM List</p>
+          <TextComp
+            variant="subTitle"
+            style={{ fontWeight: "bold", color: PrimaryTextColor }}
+          >
+            UOM List
+          </TextComp>
           <div className="master-attribute-uom-list-grid">
             {MainGroupDropDownData.map((data) => {
               return (

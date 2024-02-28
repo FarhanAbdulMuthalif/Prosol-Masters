@@ -32,9 +32,6 @@ const CustomRadioGroupComponent: FC<RadioGroupProps> = ({
         gap: "5px",
       }}
     >
-      {/* <label style={{ fontSize: "12px", color: "#6f6f6f", fontWeight: "bold" }}>
-        {label}
-      </label> */}
       <MuiRadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         row

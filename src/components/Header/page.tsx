@@ -1,5 +1,6 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import HelpIcon from "@mui/icons-material/Help";
 import LockResetIcon from "@mui/icons-material/LockReset";
@@ -204,7 +205,9 @@ export default function Header() {
           }}
         >
           <MenuItem sx={myPrfStyle} onClick={handleLogout}>
-            <LogoutOutlinedIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
+            <LogoutOutlinedIcon
+              sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }}
+            />
             Logout
           </MenuItem>
           <MenuItem
@@ -214,7 +217,9 @@ export default function Header() {
               handleClose();
             }}
           >
-            <LockResetIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
+            <LockResetIcon
+              sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }}
+            />
             Change Password
           </MenuItem>
         </Menu>
@@ -234,7 +239,9 @@ export default function Header() {
               handleSettingClose();
             }}
           >
-            <ColorLensIcon sx={{ color: "#6f6f6f", fontSize: "1.2rem" }} />
+            <ColorLensIcon
+              sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }}
+            />
             Themes
           </MenuItem>
         </Menu>

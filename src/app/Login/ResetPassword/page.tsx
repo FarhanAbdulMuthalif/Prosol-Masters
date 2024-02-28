@@ -1,14 +1,16 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useState } from "react";
 import "./style.scss";
 const ResetPassword = () => {
@@ -28,12 +30,13 @@ const ResetPassword = () => {
 
   const router = useRouter();
   const MasterDetails = useContext(UseContextHook);
-  const { setauth } = MasterDetails;
+  const { setauth, setReusableSnackBar } = MasterDetails;
   // Extract token from the query parameters
-  const queryParams = new URLSearchParams(window.location.search);
+  // const queryParams = new URLSearchParams(window.location.search);
+  const queryParams = useSearchParams();
   const token = queryParams.get("token");
   console.log(token);
-  if (!setauth) {
+  if (!setauth || !setReusableSnackBar) {
     return null;
   }
 
@@ -41,8 +44,11 @@ const ResetPassword = () => {
     e.preventDefault();
 
     if (password.password?.length > 0 && password?.confirmPassword.length > 0) {
+      if (password.password !== password.confirmPassword) {
+        setEmptyError({ empty: false, notSame: true });
+        return null;
+      }
       setEmptyError({ empty: false, notSame: false });
-
       try {
         setloading(true);
         const res = await apiLogin.post(
@@ -58,6 +64,15 @@ const ResetPassword = () => {
           // router.refresh();
         }
       } catch (e: any) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.statusText
+          ),
+          open: true,
+        }));
         console.log(e?.response);
       } finally {
         setloading(false);
@@ -83,24 +98,9 @@ const ResetPassword = () => {
         />
 
         <div className="reset-form-content-inputs">
-          <span>Enter Your new Password</span>
-
-          {emptyError.notSame && (
-            <span
-              className="erroe-msg"
-              style={{ color: "red", fontSize: ".9rem" }}
-            >
-              password and ConfirmPassword should be same
-            </span>
-          )}
-          {emptyError.empty && (
-            <span
-              className="erroe-msg"
-              style={{ color: "red", fontSize: ".9rem" }}
-            >
-              password and ConfirmPassword cannot be empty
-            </span>
-          )}
+          <TextComp variant="subTitle" style={{ color: PrimaryTextColor }}>
+            ENTER YOU NEW PASSWORD
+          </TextComp>
 
           <OutlineTextField
             type={showPassword.password ? "text" : "password"}
@@ -166,6 +166,22 @@ const ResetPassword = () => {
               ),
             }}
           />
+          {emptyError.notSame && (
+            <TextComp
+              variant="body"
+              style={{ color: "red", fontWeight: "600" }}
+            >
+              password and ConfirmPassword should be same
+            </TextComp>
+          )}
+          {emptyError.empty && (
+            <TextComp
+              variant="body"
+              style={{ color: "red", fontWeight: "600" }}
+            >
+              password and ConfirmPassword cannot be empty
+            </TextComp>
+          )}
         </div>
 
         <FillButton

@@ -1,4 +1,6 @@
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { Chip } from "@mui/material";
 import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction } from "react";
 import { PostCreateFieldData } from "../../../../../TypesStore";
@@ -22,26 +24,50 @@ export default function SelectRadio({
 }) {
   return (
     <div className="render-fields-namess">
-      <label htmlFor="DrawerInputFieldCrtId">Enter Name *</label>
-      <OutlineTextField
-        fullWidth
-        name="fieldName"
-        placeholder="Enter Name"
-        autoComplete="off"
-        value={valueData?.fieldName}
-        onChange={handleInput}
-      />
-
-      <label id="DrawerInputIdSelect">Enter Options *</label>
-      <OutlineTextField
-        fullWidth
-        name="Options"
-        placeholder="Enter Options"
-        onChange={setChipIntoDivHandler}
-        value={ChipTextIndiual}
-        onKeyDown={ChipEnterHandler}
-        autoComplete="off"
-      />
+      <div className="input-render-field-wrap">
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            textTransform: "uppercase",
+          }}
+        >
+          Enter Name *
+        </TextComp>
+        <OutlineTextField
+          size="small"
+          name="fieldName"
+          placeholder="Enter Name"
+          autoComplete="off"
+          value={valueData?.fieldName}
+          onChange={handleInput}
+          fullWidth
+        />
+      </div>
+      <div className="input-render-field-wrap">
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            textTransform: "uppercase",
+          }}
+        >
+          Enter Options *
+        </TextComp>
+        <OutlineTextField
+          fullWidth
+          name="Options"
+          placeholder="Enter Options"
+          onChange={setChipIntoDivHandler}
+          value={ChipTextIndiual}
+          onKeyDown={ChipEnterHandler}
+          autoComplete="off"
+        />
+      </div>
 
       <div className="api-chip-wrapper-div">
         {ChipArrayList?.map((data: string) => {
@@ -58,7 +84,15 @@ export default function SelectRadio({
           );
         })}
         {ChipArrayList?.length < 1 ? (
-          <p style={{ fontSize: "12px" }}>options listed here</p>
+          <TextComp
+            variant="bodySmall"
+            style={{
+              color: PrimaryTextColor,
+              fontWeight: "600",
+            }}
+          >
+            options listed here
+          </TextComp>
         ) : (
           ""
         )}

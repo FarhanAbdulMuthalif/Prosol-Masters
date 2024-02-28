@@ -2,7 +2,9 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
+import TextComp from "@/components/TextComp/TextComp";
 import api from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { initialDynamicStateField } from "@/utils/DynamicFields/DynamicFieldsData";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, SelectChangeEvent } from "@mui/material";
@@ -340,24 +342,45 @@ export default function CreateDreawer({
     >
       <form className="drawer-wrapper-form" onSubmit={DrawerSubmitHandlet}>
         <header className="header-of-drawer">
-          <span>Create Field</span>
+          <TextComp
+            variant="subTitle"
+            style={{
+              color: PrimaryTextColor,
+              textTransform: "uppercase",
+              fontWeight: "bold",
+            }}
+          >
+            Create Field
+          </TextComp>
           <IconButton onClick={HandlerCloseDrawer} sx={{ padding: "3px" }}>
             <CloseIcon />
           </IconButton>
         </header>
         <section className="drawer-Center-Part">
-          <label htmlFor="DrawerCrtInputId">Select Field Type</label>
-          <SingleSelectDropdown
-            label="Select Field"
-            value={FieldTypeSelect}
-            onChange={handleFieldTypeChangeSelect}
-            options={[
-              { value: "textField", label: "TextField" },
-              { value: "textArea", label: "TextArea" },
-              { value: "dropDown", label: "DropDown" },
-              { value: "radioButton", label: "RadioButton" },
-            ]}
-          />
+          <div className="input-render-field-wrap">
+            <TextComp
+              variant="bodySmall"
+              style={{
+                color: PrimaryTextColor,
+                fontWeight: "600",
+                alignSelf: "flex-start",
+                textTransform: "uppercase",
+              }}
+            >
+              Select Field Type *
+            </TextComp>
+            <SingleSelectDropdown
+              label="Select Field"
+              value={FieldTypeSelect}
+              onChange={handleFieldTypeChangeSelect}
+              options={[
+                { value: "textField", label: "TextField" },
+                { value: "textArea", label: "TextArea" },
+                { value: "dropDown", label: "DropDown" },
+                { value: "radioButton", label: "RadioButton" },
+              ]}
+            />
+          </div>
           {fieldTypeFieldRender[FieldTypeSelect]}
         </section>
         <footer>

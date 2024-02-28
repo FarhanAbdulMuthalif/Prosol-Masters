@@ -5,8 +5,10 @@ import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTri
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
 import {
   Checkbox,
@@ -262,9 +264,9 @@ export default function EditAttribute({ EditDataGet }: any) {
               gap: "5px",
             }}
           >
-            <label style={{ fontSize: "12px", color: "#6f6f6f" }}>
-              FieldType :{" "}
-            </label>
+            <TextComp variant="subTitle" style={{ color: PrimaryTextColor }}>
+              FieldType :
+            </TextComp>
             <MuiRadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               row
@@ -308,7 +310,12 @@ export default function EditAttribute({ EditDataGet }: any) {
           />
         </div>
         <div className="master-attribute-uom-list">
-          <p className="master-attribute-uom-list-text">UOM List</p>
+          <TextComp
+            variant="subTitle"
+            style={{ fontWeight: "bold", color: PrimaryTextColor }}
+          >
+            UOM List
+          </TextComp>
           <div className="master-attribute-uom-list-grid">
             {MainGroupDropDownData.map((data) => {
               return (

@@ -3,6 +3,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 0.5px solid #c5ccd4;
+  padding: 0 10px;
   .masters-main-content-header-text {
     color: #6f6f6f;
     font-weight: 600;
@@ -26,11 +27,7 @@
     flex-direction: column;
     padding: 5px;
     gap: 5px;
-    .template-nm-uom-section-text {
-      font-size: 12px;
-      color: #6f6f6f;
-      font-weight: 600;
-    }
+
     .template-nm-uom-section-checkbox {
       width: 100%;
       border: 1px solid #c5ccd4a7;
@@ -48,8 +45,6 @@
     border-radius: 5px;
     padding: 0 10px;
     .template-nm-characteristic-section-text {
-      font-size: 12px;
-      font-weight: 600;
       color: white;
       display: flex;
     }

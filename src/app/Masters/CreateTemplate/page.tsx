@@ -28,11 +28,14 @@ import CreateTemplateValuesDialog from "@/components/Dialog/CreateTemplateValues
 import CharacteristicSingleSelectDropdown from "@/components/Dropdown/CharacteristicDropdown";
 import CustomRadioGroupComponent from "@/components/RadioButton/CustomRadioGroup";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { CharacteristSingleInitialData } from "@/utils/masters/plant";
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import {
   Autocomplete,
   Checkbox,
@@ -442,9 +445,13 @@ export default function Value() {
   return (
     <section className="masters-vendor-main-content-section">
       <div className="masters-main-content-header">
-        <p className="masters-main-content-header-text">
-          {SelectedMasterDatatab}
-        </p>
+        <TextComp
+          variant="subTitle"
+          style={{ color: PrimaryTextColor, textTransform: "uppercase" }}
+        >
+          {splitWordByCapitalLetter(SelectedMasterDatatab)}
+        </TextComp>
+
         <div className="export-import-header-master-div">
           <FillButton
             onClick={() => {
@@ -475,7 +482,7 @@ export default function Value() {
               <li
                 style={{
                   fontSize: "12px",
-                  color: "#6f6f6f",
+                  color: PrimaryTextColor,
                 }}
                 {...props}
               >
@@ -510,7 +517,7 @@ export default function Value() {
               <li
                 style={{
                   fontSize: "12px",
-                  color: "#6f6f6f",
+                  color: PrimaryTextColor,
                 }}
                 {...props}
               >
@@ -601,7 +608,10 @@ export default function Value() {
           )}
         </div>
         <div className="template-nm-uom-section">
-          <p className="template-nm-uom-section-text">Select UOM</p>
+          <TextComp variant="subTitle" style={{ color: PrimaryTextColor }}>
+            Select UOM
+          </TextComp>
+
           <div className="template-nm-uom-section-checkbox">
             {nmUomDropDownData.map((option) => (
               <FormControlLabel
@@ -632,26 +642,30 @@ export default function Value() {
           className="template-nm-characteristic-section"
           style={{ backgroundColor: ThemeColor.primaryColor }}
         >
-          <p className="template-nm-characteristic-section-text one">
-            Characteristic
-          </p>
-          <p className="template-nm-characteristic-section-text two">
-            Short Priority
-          </p>
-          <p className="template-nm-characteristic-section-text three">
-            Mandatory
-          </p>
-          <p className="template-nm-characteristic-section-text four">
-            Definition
-          </p>
-          <p className="template-nm-characteristic-section-text five">Values</p>
-          <p className="template-nm-characteristic-section-text six">
-            UOM Mandatory
-          </p>
-          <p className="template-nm-characteristic-section-text seven">UOM</p>
-          <p className="template-nm-characteristic-section-text eight">
-            Action
-          </p>
+          <div className="template-nm-characteristic-section-text one">
+            <TextComp variant="subTitle">Characteristic</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text two">
+            <TextComp variant="subTitle">Short Priority</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text three">
+            <TextComp variant="subTitle">Mandatory</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text four">
+            <TextComp variant="subTitle">Definition</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text five">
+            <TextComp variant="subTitle">Values</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text six">
+            <TextComp variant="subTitle">UOM Mandatory</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text seven">
+            <TextComp variant="subTitle">UOM</TextComp>
+          </div>
+          <div className="template-nm-characteristic-section-text eight">
+            <TextComp variant="subTitle">Action</TextComp>
+          </div>
         </div>
         <div className="template-nm-characteristic-section-input-wrp">
           {(Characteristic.length > 0 ? Characteristic : []).map((cData) => {

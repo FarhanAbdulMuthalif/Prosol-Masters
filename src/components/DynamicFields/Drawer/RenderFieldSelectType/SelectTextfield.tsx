@@ -1,6 +1,8 @@
 import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import {
   Checkbox,
   FormControlLabel,
@@ -24,32 +26,65 @@ export default function SelectTextfield({
 }) {
   return (
     <div className="render-fields-namess">
-      <label htmlFor="DrawerInputFieldCrtId">Enter Name *</label>
-      <OutlineTextField
-        size="small"
-        name="fieldName"
-        placeholder="Enter Name"
-        autoComplete="off"
-        value={valueData?.fieldName}
-        onChange={handleInput}
-        fullWidth
-      />
-
-      <label id="DrawerInputIdSelect">Select Textbox Type *</label>
-      <SingleSelectDropdown
-        label="Select Field"
-        value={valueData?.identity ?? ""}
-        onChange={handleSelect}
-        options={[
-          { value: "text", label: "Text" },
-          { value: "number", label: "Number" },
-          { value: "password", label: "Password" },
-          { value: "radioButton", label: "RadioButton" },
-        ]}
-      />
+      <div className="input-render-field-wrap">
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            textTransform: "uppercase",
+          }}
+        >
+          Enter Name *
+        </TextComp>
+        <OutlineTextField
+          size="small"
+          name="fieldName"
+          placeholder="Enter Name"
+          autoComplete="off"
+          value={valueData?.fieldName}
+          onChange={handleInput}
+          fullWidth
+        />
+      </div>
+      <div className="input-render-field-wrap">
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            alignSelf: "flex-start",
+            textTransform: "uppercase",
+          }}
+        >
+          Select Textbox Type *
+        </TextComp>
+        <SingleSelectDropdown
+          label="Select Field"
+          value={valueData?.identity ?? ""}
+          onChange={handleSelect}
+          options={[
+            { value: "text", label: "Text" },
+            { value: "number", label: "Number" },
+            { value: "password", label: "Password" },
+            { value: "radioButton", label: "RadioButton" },
+          ]}
+        />
+      </div>
 
       <div className="minmaxval">
-        <label className="minmaxLabel">Min :</label>
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            width: "40%",
+            margin: "auto 0",
+          }}
+        >
+          Min * :
+        </TextComp>
         <OutlineTextField
           type="number"
           fullWidth
@@ -59,7 +94,17 @@ export default function SelectTextfield({
           autoComplete="off"
           onChange={handleInput}
         />
-        <label className="minmaxLabel">Max :</label>
+        <TextComp
+          variant="bodySmall"
+          style={{
+            color: PrimaryTextColor,
+            fontWeight: "600",
+            width: "40%",
+            margin: "auto 0",
+          }}
+        >
+          Max * :
+        </TextComp>
         <OutlineTextField
           fullWidth
           type="number"
@@ -119,9 +164,6 @@ export default function SelectTextfield({
         />
       </FormGroup>
 
-      {/* <label htmlFor="DrawerInputId" style={{ alignSelf: "flex-start" }}>
-      Select Required
-      </label> */}
       <FormControlLabel
         control={
           <ReusableSwitch

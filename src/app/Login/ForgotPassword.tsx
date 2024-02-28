@@ -1,8 +1,10 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import apiLogin from "@/components/apiLogin";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Image from "next/image";
 import React, { Dispatch, SetStateAction, useContext, useState } from "react";
@@ -15,6 +17,7 @@ const ForgotPassword: React.FC<{
 }> = ({ setShowForgotPassword, setSucesSnackBar }) => {
   const [emailText, setEmailText] = useState<string>("");
   const [loading, setloading] = useState(false);
+  const [emptyError, setemptyError] = useState(false);
   const contextDataHub = useContext(UseContextHook);
   const { ThemeColor } = contextDataHub;
   const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +26,11 @@ const ForgotPassword: React.FC<{
 
   const BackToLoginSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (emailText.length < 1) {
+      setemptyError(true);
+      return null;
+    }
+    setemptyError(false);
     try {
       setloading(true);
       const res = await apiLogin.post("/user/forgotPassword", {
@@ -75,28 +83,47 @@ const ForgotPassword: React.FC<{
           height={50}
           style={{ alignSelf: "center" }}
         />
-        <p>
+        <TextComp
+          variant="subTitle"
+          style={{ color: PrimaryTextColor, textAlign: "center" }}
+        >
           Enter your registered e-mail below and we will send you reset
           instruction!
-        </p>
-        <span>Email</span>
+        </TextComp>
+        <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+          EMAIL
+        </TextComp>
+
         <OutlineTextField
           type="text"
           placeholder="Enter Email"
           id="input-email-forgot-password"
           onChange={emailHandler}
           size="small"
-          required
         />
+        {emptyError && (
+          <TextComp variant="body" style={{ color: "red", fontWeight: "600" }}>
+            Please enter the email to send reset link
+          </TextComp>
+        )}
         <div className="button-div-forgotPassword">
           <p
             onClick={() => {
               setShowForgotPassword(false);
             }}
-            style={{ color: ThemeColor.primaryColor }}
           >
-            <ArrowBackIcon sx={{ fontSize: "0.8rem" }} />
-            Back to Login
+            <TextComp
+              variant="subTitle"
+              style={{
+                color: ThemeColor.primaryColor,
+                display: "flex",
+                gap: "3px",
+                alignItems: "center",
+              }}
+            >
+              <ArrowBackIcon sx={{ fontSize: "0.8rem" }} />
+              Back to Login
+            </TextComp>
           </p>
           <FillButton
             sx={{

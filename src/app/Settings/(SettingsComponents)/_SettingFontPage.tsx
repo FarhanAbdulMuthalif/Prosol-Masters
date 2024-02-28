@@ -1,7 +1,9 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import ReusableFontSlider from "@/components/Slider/FontSlider";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import ReusableToggleButton from "@/components/ToogleButtom.tsx/ToogleButton";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react";
 import { fontPropertyProps } from "../../../../TypesStore";
 
@@ -79,7 +81,8 @@ export default function SettingFontPage({
   return (
     <section className="fonts-wrapper-div">
       <div className="font-family-side-wrapper">
-        <p className="font-family-side-wrapper-text">Font Family</p>
+        <TextComp variant="subTitle">Font Family</TextComp>
+
         <div className="font-family-side">
           {FontsListArr.map((data) => (
             <div
@@ -106,14 +109,29 @@ export default function SettingFontPage({
       </div>
 
       <div className="fonts-property">
-        <p className="fonts-property-text">Font Property</p>
+        <TextComp variant="subTitle">Font Propertry</TextComp>
+
         {insideSelectFontProperty.map((data) => (
           <div key={data.name} className="font-propety-content-div">
-            <p className="font-propety-content-div-text">{data.name} </p>
+            <TextComp
+              variant="bodySmall"
+              style={{
+                flex: 1,
+                color: PrimaryTextColor,
+                textTransform: "uppercase",
+                display: "flex",
+                alignItems: "center",
+                fontWeight: "600",
+              }}
+            >
+              {data.name}
+            </TextComp>
+            {/* <p className="font-propety-content-div-text">{data.name} </p> */}
             <div className="font-propety-content-font-weight">
-              <p className="font-propety-content-weight-text-fnt-wght">
+              <TextComp variant="bodySmall" style={{ fontWeight: "bold" }}>
                 Font Weight :
-              </p>
+              </TextComp>
+
               <div className="font-propety-content-weight-text">
                 {/* <p className=" fnt-cnt-regular">Aa</p>
                 <p className="fnt-cnt-medium">Aa</p>
@@ -127,9 +145,9 @@ export default function SettingFontPage({
               </div>
             </div>
             <div className="font-propety-content-font-size-slider">
-              <p className="font-propety-content-font-size-slider-text">
+              <TextComp variant="bodySmall" style={{ fontWeight: "bold" }}>
                 Font Size :
-              </p>
+              </TextComp>
               <ReusableFontSlider
                 value={data.defaultSize}
                 onChange={handleSliderChange}

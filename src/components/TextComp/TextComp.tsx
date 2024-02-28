@@ -22,7 +22,7 @@ type FontData = {
 const TextComp: React.FC<TextProps> = ({ variant, children, style }) => {
   const dataContextHub = useContext(UseContextHook);
 
-  const { fontPropertyArr } = dataContextHub;
+  const { fontPropertyArr, selectedFont } = dataContextHub;
 
   const transformedData: FontData = fontPropertyArr.reduce((result, item) => {
     result[item.name as keyof FontData] = {
@@ -36,6 +36,7 @@ const TextComp: React.FC<TextProps> = ({ variant, children, style }) => {
   return (
     <p
       style={{
+        fontFamily: selectedFont,
         fontSize: `${selectedFntData.defaultSize}px`,
         fontWeight: selectedFntData.fontWeight,
         ...style,

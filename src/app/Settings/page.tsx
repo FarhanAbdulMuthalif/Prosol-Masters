@@ -3,6 +3,7 @@ import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import TextComp from "@/components/TextComp/TextComp";
 import { useContext, useState } from "react";
 import { fontPropertyProps } from "../../../TypesStore";
 import SettingFontPage from "./(SettingsComponents)/_SettingFontPage";
@@ -39,7 +40,7 @@ export default function Settings() {
   return (
     <main className="settings-wrapper">
       <div className="settings-content-header-div">
-        <p className="settings-content-header-div">UI Settings</p>
+        <TextComp variant="title">UI Settings</TextComp>
       </div>
       <div className="settings-content-div">
         <SettingsThemePage

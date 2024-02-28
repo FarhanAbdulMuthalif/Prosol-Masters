@@ -2,6 +2,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import CheckIcon from "@mui/icons-material/Check";
 import {
   Dialog,
@@ -63,7 +64,7 @@ export default function ThemedDialog({ open, handleClose }: ThemeDialogProps) {
         id="alert-dialog-title"
         sx={{ borderBottom: "1px solid #bdbdbda2", padding: "10px 16px" }}
       >
-        <p style={{ color: "#6f6f6f" }}>Themes</p>
+        <p style={{ color: PrimaryTextColor }}>Themes</p>
       </DialogTitle>
       <form onSubmit={ChangeThemeSubmitHandler}>
         <DialogContent

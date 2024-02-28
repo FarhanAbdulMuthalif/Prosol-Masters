@@ -1,4 +1,5 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import {
   Checkbox,
   Dialog,
@@ -18,6 +19,7 @@ import {
 import { CharacteristicSingleProps } from "../../../TypesStore";
 import FillButton from "../Button/FillButton";
 import OutlinedButton from "../Button/OutlineButton";
+import TextComp from "../TextComp/TextComp";
 import api from "../api";
 type ViewDialogProps = {
   open: boolean;
@@ -111,7 +113,12 @@ export default function CreateTemplateValuesDialog({
   return (
     <Dialog maxWidth="sm" fullWidth={true} open={open} onClose={handleClose}>
       <DialogTitle sx={{ padding: "5px 10px" }}>
-        <p style={{ color: "#6f6f6f", fontSize: "14px" }}>Select Value Types</p>
+        <TextComp
+          variant="subTitle"
+          style={{ color: PrimaryTextColor, textTransform: "uppercase" }}
+        >
+          Select Value Types
+        </TextComp>
       </DialogTitle>
       <DialogContent dividers={true} sx={{ padding: "15px" }}>
         <div className="template-nm-uom-section">
