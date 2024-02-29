@@ -23,7 +23,6 @@ const TextComp: React.FC<TextProps> = ({ variant, children, style }) => {
   const dataContextHub = useContext(UseContextHook);
 
   const { fontPropertyArr, selectedFont } = dataContextHub;
-
   const transformedData: FontData = fontPropertyArr.reduce((result, item) => {
     result[item.name as keyof FontData] = {
       defaultSize: item.defaultSize,

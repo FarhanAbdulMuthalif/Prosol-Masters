@@ -41,6 +41,22 @@ const MUIThemeComp = (selectedFont: string, ThemeColor: SingleThemeObjProps) =>
           },
         },
       },
+      MuiSlider: {
+        styleOverrides: {
+          root: {
+            "& .MuiSlider-thumb": {
+              backgroundColor: ThemeColor.primaryColor,
+            },
+            "& .MuiSlider-track": {
+              color: ThemeColor.secondaryColor,
+            },
+            "& .MuiSlider-rail": {
+              color: ThemeColor.secondaryColor,
+              opacity: "0.3",
+            },
+          },
+        },
+      },
       MuiAccordionSummary: {
         styleOverrides: {
           root: {

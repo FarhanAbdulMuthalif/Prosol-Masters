@@ -39,16 +39,15 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     status: true,
     roles: [],
   });
-  const [selectedFont, setselectedFont] = useState("Segoe UI");
   const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
-  const lcsValu =
+  const lcsValueTheme =
     typeof localStorage !== "undefined" ? localStorage.getItem("theme") : null;
   const [ThemeColor, setThemeColor] = useState<SingleThemeObjProps>(() => {
-    if (lcsValu) {
-      return JSON.parse(lcsValu);
+    if (lcsValueTheme) {
+      return JSON.parse(lcsValueTheme);
     } else {
       return {
         id: 1,
@@ -59,11 +58,31 @@ export default function ClientContext({ children }: { children: ReactNode }) {
       };
     }
   });
+  const lcsValueFontProperty =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("fontProperty")
+      : null;
+  const [fontPropertyArr, setfontPropertyArr] = useState<fontPropertyProps[]>(
+    () => {
+      if (lcsValueFontProperty) {
+        return JSON.parse(lcsValueFontProperty);
+      } else {
+        return initialFontProperty;
+      }
+    }
+  );
+  const lcsValueFont =
+    typeof localStorage !== "undefined" ? localStorage.getItem("font") : null;
   const [tabValue, settabValue] = useState<"table" | "edit" | "create">(
     "table"
   );
-  const [fontPropertyArr, setfontPropertyArr] =
-    useState<fontPropertyProps[]>(initialFontProperty);
+  const [selectedFont, setselectedFont] = useState(() => {
+    if (lcsValueFont) {
+      return JSON.parse(lcsValueFont);
+    } else {
+      return "Segoe UI";
+    }
+  });
 
   const [ReusableSnackBar, setReusableSnackBar] =
     useState<SnackBarReusableProps>({

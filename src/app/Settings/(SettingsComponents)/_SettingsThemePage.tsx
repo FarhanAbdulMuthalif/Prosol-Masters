@@ -36,7 +36,6 @@ export default function SettingsThemePage({
                 }
                 onClick={() => {
                   setinsideSelectedTheme(data);
-                  localStorage.setItem("theme", JSON.stringify(data));
                 }}
               >
                 <div

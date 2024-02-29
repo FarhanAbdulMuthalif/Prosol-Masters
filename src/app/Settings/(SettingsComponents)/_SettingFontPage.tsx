@@ -32,7 +32,7 @@ export default function SettingFontPage({
       return prev.map((data) => {
         if (data.id === id) {
           // Update the font weight for the specific font property
-          data.fontWeight = value;
+          return { ...data, fontWeight: value };
         }
         return data;
       });
@@ -49,7 +49,7 @@ export default function SettingFontPage({
       return prev.map((data) => {
         if (data.id === id) {
           // Update the defaultSize for the specific font property
-          data.defaultSize = Number(value);
+          return { ...data, defaultSize: Number(value) };
         }
         return data;
       });
@@ -65,7 +65,7 @@ export default function SettingFontPage({
       return prev.map((data) => {
         if (data.id === id) {
           // Update the defaultSize for the specific font property
-          data.defaultSize = Number(value);
+          return { ...data, defaultSize: Number(value) }; // Use spread operator to create a new object
         }
         return data;
       });
