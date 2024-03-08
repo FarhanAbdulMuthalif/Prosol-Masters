@@ -49,7 +49,7 @@ export default function SettingFontPage({
       return prev.map((data) => {
         if (data.id === id) {
           // Update the defaultSize for the specific font property
-          return { ...data, defaultSize: Number(value) };
+          return { ...data, fontSize: Number(value) };
         }
         return data;
       });
@@ -65,7 +65,7 @@ export default function SettingFontPage({
       return prev.map((data) => {
         if (data.id === id) {
           // Update the defaultSize for the specific font property
-          return { ...data, defaultSize: Number(value) }; // Use spread operator to create a new object
+          return { ...data, fontSize: Number(value) }; // Use spread operator to create a new object
         }
         return data;
       });
@@ -112,7 +112,7 @@ export default function SettingFontPage({
         <TextComp variant="subTitle">Font Propertry</TextComp>
 
         {insideSelectFontProperty.map((data) => (
-          <div key={data.name} className="font-propety-content-div">
+          <div key={data.fontFormat} className="font-propety-content-div">
             <TextComp
               variant="bodySmall"
               style={{
@@ -124,7 +124,7 @@ export default function SettingFontPage({
                 fontWeight: "600",
               }}
             >
-              {data.name}
+              {data.fontFormat}
             </TextComp>
             {/* <p className="font-propety-content-div-text">{data.name} </p> */}
             <div className="font-propety-content-font-weight">
@@ -149,7 +149,7 @@ export default function SettingFontPage({
                 Font Size :
               </TextComp>
               <ReusableFontSlider
-                value={data.defaultSize}
+                value={data.fontSize}
                 onChange={handleSliderChange}
                 idRecord={data.id}
                 min={10}
@@ -166,7 +166,7 @@ export default function SettingFontPage({
             <div className="font-propety-content-font-size-decimal">
               <OutlineTextField
                 placeholder="Fontsize"
-                value={data.defaultSize}
+                value={data.fontSize}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   handlePixelInputChange(e, data.id);
                 }}

@@ -4,6 +4,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import TextComp from "@/components/TextComp/TextComp";
+import api from "@/components/api";
 import { FormEvent, useContext, useState } from "react";
 import SettingFontPage from "./(SettingsComponents)/_SettingFontPage";
 import SettingsFontDisplayText from "./(SettingsComponents)/_SettingsFontDisplayText";
@@ -21,6 +22,7 @@ export default function Settings() {
     setThemeColor,
     setfontPropertyArr,
     setselectedFont,
+    setReusableSnackBar,
   } = dataContextHub;
   const [tempSelectedFont, setTempSelectedFont] = useState(selectedFont);
   const [tempThemeColor, setTempThemeColor] = useState(ThemeColor);
@@ -28,18 +30,66 @@ export default function Settings() {
     ...fontPropertyArr,
   ]);
 
-  if (!auth || !setThemeColor || !setfontPropertyArr || !setselectedFont) {
+  if (
+    !auth ||
+    !setThemeColor ||
+    !setfontPropertyArr ||
+    !setselectedFont ||
+    !setReusableSnackBar
+  ) {
     return null;
   }
-  const uiSettingsChangeHandler = (e: FormEvent) => {
+  const uiSettingsChangeHandler = async (e: FormEvent) => {
     e.preventDefault();
-    // Apply temporary changes immediately
-    setThemeColor(tempThemeColor);
-    setfontPropertyArr(tempFontPropertyArr);
-    setselectedFont(tempSelectedFont);
-    localStorage.setItem("theme", JSON.stringify(tempThemeColor));
-    localStorage.setItem("fontProperty", JSON.stringify(tempFontPropertyArr));
-    localStorage.setItem("font", JSON.stringify(tempSelectedFont));
+    const newTempFontPropertyArr = tempFontPropertyArr.map(
+      ({ id, ...rest }) => rest
+    );
+    const { id, ...newThemeObjData } = tempThemeColor;
+    const updateFontSettings = {
+      fontName: tempSelectedFont,
+      fontProperties: newTempFontPropertyArr,
+      theme: newThemeObjData,
+    };
+    try {
+      const res = await api.put("/userSettings/updateFont", updateFontSettings);
+      const data = await res.data;
+      console.log(data);
+      if (res.status === 200) {
+        setThemeColor(tempThemeColor);
+        setfontPropertyArr(tempFontPropertyArr);
+        setselectedFont(tempSelectedFont);
+        localStorage.setItem("theme", JSON.stringify(tempThemeColor));
+        localStorage.setItem(
+          "fontProperty",
+          JSON.stringify(tempFontPropertyArr)
+        );
+        localStorage.setItem("font", JSON.stringify(tempSelectedFont));
+      }
+      setReusableSnackBar((prev) => ({
+        severity: "success",
+        message: `Theme Applied Sucessfully!`,
+        open: true,
+      }));
+    } catch (e: any) {
+      console.log(e?.response);
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
+    }
   };
   return (
     <form className="settings-wrapper" onSubmit={uiSettingsChangeHandler}>

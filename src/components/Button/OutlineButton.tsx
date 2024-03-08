@@ -25,6 +25,11 @@ const OutlinedButton: React.FC<OutlinedButtonProps> = ({
         whiteSpace: "nowrap",
         borderColor: ThemeColor.primaryColor,
         color: ThemeColor.primaryColor,
+        "&:hover": {
+          borderColor: ThemeColor.secondaryColor,
+          color: ThemeColor.secondaryColor,
+          backgroundColor: "transparent",
+        },
       }}
     >
       {children}

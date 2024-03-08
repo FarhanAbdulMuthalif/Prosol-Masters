@@ -17,7 +17,7 @@ export default function SettingsFontDisplayText({
     >
       <h1
         style={{
-          fontSize: `${title.defaultSize}px`,
+          fontSize: `${title.fontSize}px`,
           fontWeight: title.fontWeight,
         }}
       >
@@ -25,7 +25,7 @@ export default function SettingsFontDisplayText({
       </h1>
       <h3
         style={{
-          fontSize: `${subTile.defaultSize}px`,
+          fontSize: `${subTile.fontSize}px`,
           fontWeight: subTile.fontWeight,
         }}
       >
@@ -33,7 +33,7 @@ export default function SettingsFontDisplayText({
       </h3>
       <p
         style={{
-          fontSize: `${body.defaultSize}px`,
+          fontSize: `${body.fontSize}px`,
           fontWeight: body.fontWeight,
         }}
       >
@@ -42,7 +42,7 @@ export default function SettingsFontDisplayText({
       </p>
       <p
         style={{
-          fontSize: `${bodySmall.defaultSize}px`,
+          fontSize: `${bodySmall.fontSize}px`,
           fontWeight: bodySmall.fontWeight,
         }}
       >

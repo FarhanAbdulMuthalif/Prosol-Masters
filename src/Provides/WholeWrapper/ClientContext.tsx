@@ -47,7 +47,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     typeof localStorage !== "undefined" ? localStorage.getItem("theme") : null;
   const [ThemeColor, setThemeColor] = useState<SingleThemeObjProps>(() => {
     if (lcsValueTheme) {
-      return JSON.parse(lcsValueTheme);
+      return JSON?.parse(lcsValueTheme);
     } else {
       return {
         id: 1,
@@ -65,7 +65,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const [fontPropertyArr, setfontPropertyArr] = useState<fontPropertyProps[]>(
     () => {
       if (lcsValueFontProperty) {
-        return JSON.parse(lcsValueFontProperty);
+        return JSON?.parse(lcsValueFontProperty);
       } else {
         return initialFontProperty;
       }

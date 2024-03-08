@@ -346,7 +346,7 @@ export type SnackBarReusableProps = {
 
 export type fontPropertyProps = {
   id: number;
-  name: string;
-  defaultSize: number;
+  fontFormat: string;
+  fontSize: number;
   fontWeight: string;
 };

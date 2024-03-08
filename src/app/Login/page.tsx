@@ -30,10 +30,25 @@ const Login = () => {
 
   const router = useRouter();
   const contextDataHub = useContext(UseContextHook);
-  const { setauth, setUserInfo, setReusableSnackBar, auth, ThemeColor } =
-    contextDataHub;
+  const {
+    setauth,
+    setUserInfo,
+    setReusableSnackBar,
+    auth,
+    ThemeColor,
+    setThemeColor,
+    setfontPropertyArr,
+    setselectedFont,
+  } = contextDataHub;
 
-  if (!setauth || !setUserInfo || !setReusableSnackBar) {
+  if (
+    !setauth ||
+    !setUserInfo ||
+    !setReusableSnackBar ||
+    !setThemeColor ||
+    !setfontPropertyArr ||
+    !setselectedFont
+  ) {
     return null;
   }
 
@@ -59,11 +74,36 @@ const Login = () => {
 
           const resData = await resMe?.data; // Extract data from response
           if (resMe.status === 200) {
-            setUserInfo(resData);
-
+            try {
+              const resTheme = await apiLogin.get("/userSettings/getFont", {
+                headers: {
+                  Authorization: `Bearer ${data.accessToken}`,
+                },
+              });
+              const resDataTheme = await resTheme?.data; // Extract data from response
+              if (resTheme.status === 200) {
+                setUserInfo(resData);
+                setThemeColor(resDataTheme?.theme);
+                setfontPropertyArr(resDataTheme?.fontProperties);
+                setselectedFont(resDataTheme?.fontName);
+                localStorage.setItem(
+                  "theme",
+                  JSON.stringify(resDataTheme?.theme)
+                );
+                localStorage.setItem(
+                  "font",
+                  JSON.stringify(resDataTheme?.fontName)
+                );
+                localStorage.setItem(
+                  "fontProperty",
+                  JSON.stringify(resDataTheme?.fontProperties)
+                );
+              }
+            } catch (e: any) {
+              console.log(e);
+            }
             localStorage.setItem("accessToken", data?.accessToken);
             localStorage.setItem("refreshToken", data?.refreshToken);
-
             router.push("/");
             router.refresh();
             setauth(true);

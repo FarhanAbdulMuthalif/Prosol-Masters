@@ -24,7 +24,10 @@ const FillButton: React.FC<FillButtonProps> = ({ children, ...props }) => {
 
         "&:hover": {
           backgroundColor: ThemeColor.secondaryColor, // Set the hover color to the same as the background color
-
+          color:
+            ThemeColor.name === "lotusTheme"
+              ? ThemeColor.primaryColor
+              : "white",
           // or use the following line to clear the hover color
           // backgroundColor: "transparent",
         },
