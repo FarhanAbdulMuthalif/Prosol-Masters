@@ -41,7 +41,7 @@ export default function CreateMRPDataWithPlant() {
     const dynamicFormFieldHandler = async () => {
       try {
         const res = await api.get(
-          `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
+          `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
         );
         const data = await res.data;
         if (res.status === 200) {

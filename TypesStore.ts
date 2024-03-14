@@ -26,6 +26,16 @@ export type UseContextHookTypes = {
   FontsListArr: string[];
   fontPropertyArr: fontPropertyProps[];
   setfontPropertyArr?: Dispatch<SetStateAction<fontPropertyProps[]>>;
+  incoming: string[];
+  outgoing: string[];
+  setSelectedNodeData?: Dispatch<SetStateAction<selectedNodeTypeProps>>;
+  setSelectedFormFields?: Dispatch<SetStateAction<PostCreateFieldData[]>>;
+  SelectedFormFields?: PostCreateFieldData[];
+};
+
+export type selectedNodeTypeProps = {
+  incoming: string[];
+  outgoing: string[];
 };
 export type SingleThemeObjProps = {
   id: number;
@@ -235,15 +245,14 @@ export interface PostCreateFieldData {
   pattern?: string[];
   min?: number;
   max?: number;
-  minLength?: number;
-  maxLength?: number;
-  extraField?: boolean;
-  readable?: boolean;
-  writable?: boolean;
-  showAsColumn?: boolean;
+  isRequired: boolean;
+  isExtraField?: boolean;
+  isReadable?: boolean;
+  isWritable?: boolean;
+  isUnique?: boolean;
   enums?: string[];
-  required: boolean;
   dropDowns?: Option[];
+  displayRelationFieldName?: string;
 }
 export interface Option {
   id?: string;
@@ -253,6 +262,7 @@ export type PathObjProps = {
   Masters: { name: string; path: string }[];
   UserManagement: { name: string; path: string }[];
   Settings: { name: string; path: string }[];
+  Dynamic: { name: string; path: string }[];
 };
 export type UserInitialStateProps = {
   id?: number;
@@ -291,6 +301,8 @@ export type KeysToRemoveEditMaster =
   | "updateAuditHistories"
   | "plant"
   | "salesOrganization"
+  | "updatedAt"
+  | "updatedBy"
   | "storageLocation"
   | "subGroupCodesId";
 
@@ -349,4 +361,13 @@ export type fontPropertyProps = {
   fontFormat: string;
   fontSize: number;
   fontWeight: string;
+};
+export type DynamicFormsProps = {
+  id: number;
+  formName: string;
+  fields: PostCreateFieldData[];
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
 };

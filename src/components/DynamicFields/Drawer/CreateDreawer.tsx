@@ -46,9 +46,18 @@ export default function CreateDreawer({
     setChipTextIndiual(e.target.value);
   };
   const router = useRouter();
-  const { SelectedMasterDatatab, settabValue, setReusableSnackBar } =
-    useContext(UseContextHook);
-  if (!SelectedMasterDatatab || !settabValue || !setReusableSnackBar) {
+  const {
+    SelectedMasterDatatab,
+    settabValue,
+    setReusableSnackBar,
+    setSelectedFormFields,
+  } = useContext(UseContextHook);
+  if (
+    !SelectedMasterDatatab ||
+    !settabValue ||
+    !setReusableSnackBar ||
+    !setSelectedFormFields
+  ) {
     return null;
   }
   const handleFieldTypeChangeSelect = (e: SelectChangeEvent) => {
@@ -59,7 +68,7 @@ export default function CreateDreawer({
   };
 
   const HandletInputCreateName = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === "required") {
+    if (e.target.name === "isRequired") {
       setCreateFieldSetObj((prev: PostCreateFieldData) => {
         return { ...prev, [e.target.name]: e.target.checked as boolean };
       });
@@ -157,6 +166,24 @@ export default function CreateDreawer({
       />
     ),
   };
+  const getUpdatedFieldData = async () => {
+    try {
+      const resField = await api.get(
+        `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
+      );
+      const dataField = await resField.data;
+      console.log(dataField);
+      if (resField.status === 200) {
+        setSelectedFormFields(dataField);
+      }
+    } catch (e: any) {
+      setReusableSnackBar((prev) => ({
+        severity: "error",
+        message: `Error: ${e?.message} on getting updated fields`,
+        open: true,
+      }));
+    }
+  };
   const DrawerSubmitHandlet = async (e: FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -175,11 +202,12 @@ export default function CreateDreawer({
       console.log(CreateFieldSetObj);
       try {
         const res = await api.post(
-          `/dynamic/saveField/${SelectedMasterDatatab}`,
+          `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
           CreateFieldSetObj
         );
-        // if (res.status === 201) {
-        // }
+        if (res.status === 201 || res.status === 200) {
+          getUpdatedFieldData();
+        }
         setReusableSnackBar((prev) => ({
           severity: "success",
           message: `Field Created Sucessfully!`,
@@ -216,14 +244,12 @@ export default function CreateDreawer({
         identity: CreateFieldSetObj.identity,
         min: 2,
         max: 20,
-        required: CreateFieldSetObj.required,
+        isRequired: CreateFieldSetObj.isRequired,
         pattern: [],
-        minLength: 0,
-        maxLength: 0,
-        extraField: true,
-        readable: true,
-        writable: true,
-        showAsColumn: true,
+        isExtraField: true,
+        isReadable: true,
+        isWritable: true,
+        isUnique: false,
         enums: [],
 
         dropDowns: DropDownChipArrayList,
@@ -238,10 +264,11 @@ export default function CreateDreawer({
       }
       try {
         const res = await api.post(
-          `/dynamic/saveField/${SelectedMasterDatatab}`,
+          `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
           dataSet
         );
-        if (res.status === 201) {
+        if (res.status === 201 || res.status === 200) {
+          getUpdatedFieldData();
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `Field Created Sucessfully!`,
@@ -279,14 +306,12 @@ export default function CreateDreawer({
         identity: "",
         min: 2,
         max: 20,
-        required: true,
+        isRequired: true,
         pattern: [],
-        minLength: 0,
-        maxLength: 0,
-        extraField: true,
-        readable: true,
-        writable: true,
-        showAsColumn: true,
+        isExtraField: true,
+        isReadable: true,
+        isWritable: true,
+        isUnique: false,
         enums: ChipArrayList,
         dropDowns: [],
       };
@@ -298,10 +323,11 @@ export default function CreateDreawer({
       }
       try {
         const res = await api.post(
-          `/dynamic/saveField/${SelectedMasterDatatab}`,
+          `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
           dataSet
         );
-        if (res.status === 201) {
+        if (res.status === 201 || res.status === 200) {
+          getUpdatedFieldData();
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `Field Created Sucessfully!`,
@@ -350,7 +376,7 @@ export default function CreateDreawer({
               fontWeight: "bold",
             }}
           >
-            Create Field
+            Create Field ({SelectedMasterDatatab})
           </TextComp>
           <IconButton onClick={HandlerCloseDrawer} sx={{ padding: "3px" }}>
             <CloseIcon />

@@ -114,9 +114,9 @@ Select Required
       <FormControlLabel
         control={
           <ReusableSwitch
-            checked={valueData.required}
+            checked={valueData.isRequired}
             onChange={handleInput}
-            name="required"
+            name="isRequired"
           />
         }
         label="Textarea fill required (yes / no) : "

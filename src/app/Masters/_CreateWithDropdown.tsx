@@ -4,12 +4,9 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
-import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
+import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
-import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
-import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
-import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -41,7 +38,7 @@ export default function CreateMastertWithDropdown() {
     const dynamicFormFieldHandler = async () => {
       try {
         const res = await api.get(
-          `/dynamic/getAllFieldsByForm/${SelectedMasterDatatab}`
+          `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
         );
         const data = await res.data;
         if (res.status === 200) {
@@ -239,7 +236,7 @@ export default function CreateMastertWithDropdown() {
             label={"Select Plant"}
             name="plantId"
           />
-          {dynamicFields?.map((data: PostCreateFieldData) => {
+          {/* {dynamicFields?.map((data: PostCreateFieldData) => {
             return (
               <>
                 {data.dataType === "textField" ? (
@@ -301,7 +298,15 @@ export default function CreateMastertWithDropdown() {
                 )}
               </>
             );
-          })}
+          })} */}
+          <MasterDynamicFieldRender
+            formData={formData}
+            dynamicFields={dynamicFields}
+            handleInputChange={handleInputChange}
+            handleMultiSelectChange={handleMultiSelectChange}
+            handleSelectChange={handleSelectChange}
+            dynFldErrValidation={dynFldErrValidation}
+          />
         </div>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>

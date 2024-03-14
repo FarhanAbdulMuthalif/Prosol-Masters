@@ -12,7 +12,7 @@ import SettingsThemePage from "./(SettingsComponents)/_SettingsThemePage";
 import "./style.scss";
 
 export default function Settings() {
-  const auth = UseAuth();
+  const authHook = UseAuth();
   const dataContextHub = useContext(UseContextHook);
 
   const {
@@ -23,6 +23,7 @@ export default function Settings() {
     setfontPropertyArr,
     setselectedFont,
     setReusableSnackBar,
+    auth,
   } = dataContextHub;
   const [tempSelectedFont, setTempSelectedFont] = useState(selectedFont);
   const [tempThemeColor, setTempThemeColor] = useState(ThemeColor);
@@ -31,11 +32,12 @@ export default function Settings() {
   ]);
 
   if (
-    !auth ||
+    !authHook ||
     !setThemeColor ||
     !setfontPropertyArr ||
     !setselectedFont ||
-    !setReusableSnackBar
+    !setReusableSnackBar ||
+    !auth
   ) {
     return null;
   }

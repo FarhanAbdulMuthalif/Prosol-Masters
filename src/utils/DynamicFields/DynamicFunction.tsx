@@ -15,7 +15,7 @@ export const validateTextField = (
   field: PostCreateFieldData,
   value: string
 ) => {
-  if (field.required && !value) {
+  if (field.isRequired && !value) {
     return "This field is required.";
   }
   if (field.min && value?.length < field.min) {
@@ -27,7 +27,7 @@ export const validateTextField = (
   // ... add other validation rules for text fields
 };
 export const validateDropDown = (field: PostCreateFieldData, value: string) => {
-  if (field.required && !value) {
+  if (field.isRequired && !value) {
     return "This field is required.";
   }
 

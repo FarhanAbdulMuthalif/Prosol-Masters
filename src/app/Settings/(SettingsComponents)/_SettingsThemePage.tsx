@@ -20,6 +20,7 @@ export default function SettingsThemePage({
   if (!auth) {
     return null;
   }
+
   return (
     <div className="theme-wrapper-div">
       <TextComp variant="subTitle">Theme Palettes</TextComp>

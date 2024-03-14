@@ -1,6 +1,6 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import apiLogin from "@/components/apiLogin";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 const UseAuth = () => {
@@ -11,6 +11,7 @@ const UseAuth = () => {
     setReusableSnackBar,
   } = useContext(UseContextHook);
   const router = useRouter();
+  const currentRoute = usePathname();
 
   useEffect(() => {
     // Check if the user is authenticated (you might want to improve this logic)
@@ -43,7 +44,7 @@ const UseAuth = () => {
             }
           }
         } catch (e: any) {
-          localStorage.removeItem("accessToken");
+          // localStorage.removeItem("accessToken");
           // If access token is expired, try to refresh it using the refresh token
           if (e.response && e.response.status === 400 && storedRefreshToken) {
             try {
@@ -118,10 +119,21 @@ const UseAuth = () => {
             SetContextAuth(false);
           }
         }
+      } else {
+        if (!auth && !currentRoute.split("/").includes("/Login")) {
+          router.push("/Login");
+        }
       }
     }
     fetch();
-  }, [router, SetContextAuth, setUserInfo, setReusableSnackBar]);
+  }, [
+    router,
+    SetContextAuth,
+    setUserInfo,
+    setReusableSnackBar,
+    currentRoute,
+    auth,
+  ]);
 
   return auth;
 };

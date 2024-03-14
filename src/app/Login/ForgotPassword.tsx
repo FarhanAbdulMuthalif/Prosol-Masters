@@ -78,6 +78,7 @@ const ForgotPassword: React.FC<{
       <div className="forgotPassword-form-content">
         <Image
           src="/images/prosol-logo.svg"
+          priority={true}
           alt="loding view"
           width={150}
           height={50}

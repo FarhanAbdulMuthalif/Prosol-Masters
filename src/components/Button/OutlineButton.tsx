@@ -26,9 +26,9 @@ const OutlinedButton: React.FC<OutlinedButtonProps> = ({
         borderColor: ThemeColor.primaryColor,
         color: ThemeColor.primaryColor,
         "&:hover": {
+          backgroundColor: ThemeColor.secondaryColor,
+          color: ThemeColor.name === "LotusTheme" ? "black" : "white",
           borderColor: ThemeColor.secondaryColor,
-          color: ThemeColor.secondaryColor,
-          backgroundColor: "transparent",
         },
       }}
     >

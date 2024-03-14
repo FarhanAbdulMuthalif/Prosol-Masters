@@ -94,6 +94,7 @@ const ResetPassword = () => {
           alt="loding view"
           width={150}
           height={50}
+          priority={true}
           className="logo-img-reset"
         />
 

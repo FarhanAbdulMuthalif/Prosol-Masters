@@ -15,11 +15,13 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ThemeProvider } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import {
+  PostCreateFieldData,
   SingleThemeObjProps,
   SingleUserInfoProps,
   SnackBarReusableProps,
   UseContextHookTypes,
   fontPropertyProps,
+  selectedNodeTypeProps,
 } from "../../../TypesStore";
 import { UseContextHook } from "../UseContextHook";
 import "./ClientContext.scss";
@@ -27,6 +29,8 @@ import "./ClientContext.scss";
 export default function ClientContext({ children }: { children: ReactNode }) {
   const [toogleSidebar, settoogleSidebar] = useState(true);
   const [userId, setuserId] = useState(0);
+  const [SelectedNodeData, setSelectedNodeData] =
+    useState<selectedNodeTypeProps>({ incoming: [], outgoing: [] });
   const [UserInfo, setUserInfo] = useState<SingleUserInfoProps>({
     id: 0,
     email: "",
@@ -41,6 +45,9 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   });
   const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);
+  const [SelectedFormFields, setSelectedFormFields] = useState<
+    PostCreateFieldData[]
+  >([]);
   const [PlantData, setPlantData] = useState<any[] | undefined>([]);
   const [SelectedMasterDatatab, setSelectedMasterDatatab] = useState("Plant");
   const lcsValueTheme =
@@ -53,8 +60,8 @@ export default function ClientContext({ children }: { children: ReactNode }) {
         id: 1,
         name: "default",
         primaryColor: "#1976d2",
-        secondaryColor: "#614cff",
-        tertiaryColor: "#e6effc",
+        secondaryColor: "#1669bb",
+        tertiaryColor: "#d1e3f6",
       };
     }
   });
@@ -126,6 +133,11 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     FontsListArr,
     fontPropertyArr,
     setfontPropertyArr,
+    setSelectedNodeData,
+    incoming: SelectedNodeData.incoming,
+    outgoing: SelectedNodeData.outgoing,
+    setSelectedFormFields,
+    SelectedFormFields,
   };
 
   const iconRotateHandler = {

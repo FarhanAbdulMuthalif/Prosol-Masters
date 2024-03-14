@@ -158,6 +158,7 @@ const Login = () => {
           <Image
             src="/images/prosol-logo.svg"
             alt="loding view"
+            priority={true}
             width={150}
             height={50}
             style={{ margin: "5px 0" }}

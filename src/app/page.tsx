@@ -31,7 +31,7 @@ export default function Home() {
             User Management
           </TextComp>
 
-          <OutlinedButton className="dashboard-modules-sub-text">
+          <OutlinedButton /*  className="dashboard-modules-sub-text" */>
             Click here
           </OutlinedButton>
           <IconButton
@@ -55,7 +55,7 @@ export default function Home() {
             onClick={() => {
               router.push("/Masters");
             }}
-            className="dashboard-modules-sub-text"
+            /*  className="dashboard-modules-sub-text" */
           >
             Click here
           </OutlinedButton>
@@ -77,7 +77,7 @@ export default function Home() {
             Asset Master
           </TextComp>
 
-          <OutlinedButton className="dashboard-modules-sub-text">
+          <OutlinedButton /*  className="dashboard-modules-sub-text" */>
             Click here
           </OutlinedButton>
           <IconButton
@@ -95,7 +95,7 @@ export default function Home() {
             Service Master
           </TextComp>
 
-          <OutlinedButton className="dashboard-modules-sub-text">
+          <OutlinedButton /*  className="dashboard-modules-sub-text" */>
             Click here
           </OutlinedButton>
 

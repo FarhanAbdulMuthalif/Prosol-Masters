@@ -54,15 +54,7 @@ export default function Header() {
     setReusableSnackBar,
     selectedFont,
   } = useContext(UseContextHook);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const dataUser = await getAllPlantData(`/user/me`);
-  //     if (setUserInfo) {
-  //       setUserInfo(dataUser);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [setUserInfo]);
+
   const listStyles = {
     borderBottom: `3px solid ${ThemeColor.primaryColor}`,
     color: ThemeColor.primaryColor,
@@ -114,6 +106,7 @@ export default function Header() {
         alt="Loading...."
         width={120}
         height={45}
+        priority={true}
         onClick={() => {
           router.push("/");
         }}
@@ -167,6 +160,19 @@ export default function Header() {
             href="/Settings"
           >
             <TextComp variant="subTitle">Settings</TextComp>
+          </Link>
+        </li>
+        <li>
+          <Link
+            className="active"
+            style={
+              currentRoute.split("/").includes("Dynamic")
+                ? listStyles
+                : { height: "100%" }
+            }
+            href="/Dynamic"
+          >
+            <TextComp variant="subTitle">Dynamic</TextComp>
           </Link>
         </li>
       </ul>

@@ -1,0 +1,76 @@
+#alert-dialog-title {
+  width: 70vw;
+}
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  width: 70vw;
+}
+
+.input-wrapper-div {
+  width: 100%;
+  display: flex;
+
+  align-items: center;
+  padding: 5px 8px;
+  .input-wrapper-label {
+    width: 20%;
+    font-size: 14px;
+  }
+  #SetRoleOnConfig {
+    color: brown;
+  }
+  #SetRoleOnConfig,
+  #SetEmailSubjectOnConfig,
+  #SetEmailTableRowsOnConfig,
+  #SetEmailTableColumnsOnConfig,
+  #SetEmailSignatureOnConfig,
+  #SetEmailBodyOnConfig::placeholder {
+    font-size: 12px;
+  }
+}
+#SetReworkOnConfig {
+  width: 29%;
+  font-size: 14px;
+}
+.input-wrapper-div-table-setup {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+
+  .input-wrapper-label {
+    width: 20%;
+    font-size: 14px;
+  }
+  .input-wrapper-div-table-setup-view {
+    display: flex;
+    gap: 5px;
+    .tbl-inpt-wrp-grd {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      .show-tbl-dta {
+        display: flex;
+        flex-direction: column;
+      }
+      #SetEmailTableColumnsHeaderOnConfig {
+        font-size: 12px;
+      }
+    }
+  }
+}
+.emailtoccbcccls {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  width: 30%;
+}
+.form-setuo-dialog-tab-onworkflow {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  .input-wrapper-div {
+    .input-wrapper-label {
+      width: 35%;
+    }
+  }
+}
