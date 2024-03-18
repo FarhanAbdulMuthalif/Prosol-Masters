@@ -14,13 +14,13 @@
     align-items: center;
     padding: 5px 15px;
   }
-  .dynamic-field-module-body-div {
+  .dynamic-page-field-module-body-div {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
     gap: 20px;
     padding: 10px;
-    .dynamic-field-module-field-wrapper {
+    .dynamic-page-field-module-field-wrapper {
       display: flex;
       width: 100%;
       align-items: center;

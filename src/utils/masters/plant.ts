@@ -74,18 +74,18 @@ export const MasterSubFieldWithData: mastersProps = {
       includePlantDropdown: true,
     },
     StorageBin: {
-      getAll: "/plant/getAllStorageLocationBin", // Need to remove the word location in futher
-      getSingle: "/plant/getStorageLocationBinById",
-      create: "/plant/saveStorageLocationBin",
+      getAll: "/plant/getAllStorageBin", // Need to remove the word location in futher
+      getSingle: "/plant/getStorageBinById",
+      create: "/plant/saveStorageBin",
       createBulk: "/plant/ImportExcelDataStorageBin",
-      updateStatus: "/plant/updateStorageLocationStatusById",
-      updateBulkStatus: "/plant/updateBulkStorageLocationId",
-      template: "/plant/exportTemplateStorageLocationBin",
+      updateStatus: "/plant/updateStorageStatusById",
+      updateBulkStatus: "/plant/updateBulkStorageId",
+      template: "/plant/exportTemplateStorageBin",
       exportPdf: "/plant/pdfStorageBinReport",
-      exportExcel: "/plant/exportDataStorageLocationBin",
-      delete: "/plant/deleteStorageLocationBin",
-      deleteBulk: "/plant/deleteBatchStorageLocationBin",
-      update: "/plant/updateStorageLocationBin",
+      exportExcel: "/plant/exportDataStorageBin",
+      delete: "/plant/deleteStorageBin",
+      deleteBulk: "/plant/deleteBatchStorageBin",
+      update: "/plant/updateStorageBin",
       includePlantDropdown: false,
     },
     ValuationCategory: {

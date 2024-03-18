@@ -19,6 +19,7 @@ import {
 } from "react";
 import { Option, PostCreateFieldData } from "../../../../TypesStore";
 import "./CreateDrawer.scss";
+import RelationalDropdown from "./RenderFieldSelectType/RelationalDropdown";
 import SelectDropDown from "./RenderFieldSelectType/SelectDropDown";
 import SelectRadio from "./RenderFieldSelectType/SelectRadio";
 import SelectTextarea from "./RenderFieldSelectType/SelectTextarea";
@@ -51,12 +52,14 @@ export default function CreateDreawer({
     settabValue,
     setReusableSnackBar,
     setSelectedFormFields,
+    SelectedFormFields,
   } = useContext(UseContextHook);
   if (
     !SelectedMasterDatatab ||
     !settabValue ||
     !setReusableSnackBar ||
-    !setSelectedFormFields
+    !setSelectedFormFields ||
+    !SelectedFormFields
   ) {
     return null;
   }
@@ -81,6 +84,13 @@ export default function CreateDreawer({
   const handlerSelectInputType = (e: SelectChangeEvent) => {
     setCreateFieldSetObj((prev: PostCreateFieldData) => {
       return { ...prev, identity: e.target.value as string };
+    });
+  };
+  const handlerReusableSelectInputType = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+
+    setCreateFieldSetObj((prev: PostCreateFieldData) => {
+      return { ...prev, [name]: e.target.value as string };
     });
   };
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,6 +175,14 @@ export default function CreateDreawer({
         valueData={CreateFieldSetObj}
       />
     ),
+    relational: (
+      <RelationalDropdown
+        handleSelectForm={handlerReusableSelectInputType}
+        handleSelect={handlerSelectInputType}
+        handleInput={HandletInputCreateName}
+        valueData={CreateFieldSetObj}
+      />
+    ),
   };
   const getUpdatedFieldData = async () => {
     try {
@@ -174,7 +192,40 @@ export default function CreateDreawer({
       const dataField = await resField.data;
       console.log(dataField);
       if (resField.status === 200) {
-        setSelectedFormFields(dataField);
+        const fetchDataAndUpdateArray = async (
+          displayRelationFieldName: string,
+          fieldName: string
+        ) => {
+          try {
+            const res = await api.get(
+              `/dynamic/getListOfFieldNameValues?displayName=${displayRelationFieldName}&formName=${fieldName}`
+            );
+            const responseData = res.data;
+            setSelectedFormFields((prevArrObj) =>
+              dataField.map((obj: PostCreateFieldData) => {
+                if (
+                  obj.dataType === "relational" &&
+                  obj.fieldName === fieldName &&
+                  obj.displayRelationFieldName === displayRelationFieldName
+                ) {
+                  return { ...obj, enums: responseData };
+                }
+                return obj;
+              })
+            );
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+
+        dataField.forEach((obj: PostCreateFieldData) => {
+          if (obj.dataType === "relational") {
+            fetchDataAndUpdateArray(
+              obj.displayRelationFieldName || "",
+              obj.fieldName
+            );
+          }
+        });
       }
     } catch (e: any) {
       setReusableSnackBar((prev) => ({
@@ -187,7 +238,11 @@ export default function CreateDreawer({
   const DrawerSubmitHandlet = async (e: FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (FieldTypeSelect === "textField" || FieldTypeSelect === "textArea") {
+    if (
+      FieldTypeSelect === "textField" ||
+      FieldTypeSelect === "textArea" ||
+      CreateFieldSetObj.dataType === "relational"
+    ) {
       if (
         CreateFieldSetObj.fieldName.length < 1 ||
         CreateFieldSetObj.identity?.length === 0
@@ -207,14 +262,14 @@ export default function CreateDreawer({
         );
         if (res.status === 201 || res.status === 200) {
           getUpdatedFieldData();
+          HandlerCloseDrawer();
+          setReusableSnackBar((prev) => ({
+            severity: "success",
+            message: `Field Created Sucessfully!`,
+            open: true,
+          }));
+          settabValue("table");
         }
-        setReusableSnackBar((prev) => ({
-          severity: "success",
-          message: `Field Created Sucessfully!`,
-          open: true,
-        }));
-        HandlerCloseDrawer();
-        settabValue("table");
       } catch (e: any) {
         console.log(e?.response);
         if (!setReusableSnackBar) return;
@@ -404,6 +459,7 @@ export default function CreateDreawer({
                 { value: "textArea", label: "TextArea" },
                 { value: "dropDown", label: "DropDown" },
                 { value: "radioButton", label: "RadioButton" },
+                { value: "relational", label: "Relational Dropdown" },
               ]}
             />
           </div>

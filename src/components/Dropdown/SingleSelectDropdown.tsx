@@ -20,11 +20,12 @@ const SingleSelectDropdown: FC<DropdownProps> = ({
   options,
 }) => {
   const menuItemStyle = {
-    fontSize: "12px",
+    fontSize: "10px",
     color: "#5E5873",
+    fontWeight: "600",
   };
   const SelectStyle = {
-    fontSize: "12px",
+    fontSize: "10px",
     color: "brown",
 
     height: "2.2rem",

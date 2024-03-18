@@ -28,7 +28,6 @@ const NameSingleSelectDropdown: FC<DropdownProps> = ({
   const SelectStyle = {
     fontSize: "12px",
     color: "brown",
-
     height: "2.2rem",
   };
   return (
