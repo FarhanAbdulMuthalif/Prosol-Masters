@@ -6,6 +6,7 @@ import TextComp from "@/components/TextComp/TextComp";
 import api from "@/components/api";
 import { PrimaryTextColor } from "@/styles/colorsCode";
 import { initialDynamicStateField } from "@/utils/DynamicFields/DynamicFieldsData";
+import { getUpdatedFieldData } from "@/utils/DynamicFields/MasterFieldDropdownData";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, SelectChangeEvent } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -184,57 +185,49 @@ export default function CreateDreawer({
       />
     ),
   };
-  const getUpdatedFieldData = async () => {
-    try {
-      const resField = await api.get(
-        `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
-      );
-      const dataField = await resField.data;
-      console.log(dataField);
-      if (resField.status === 200) {
-        const fetchDataAndUpdateArray = async (
-          displayRelationFieldName: string,
-          fieldName: string
-        ) => {
-          try {
-            const res = await api.get(
-              `/dynamic/getListOfFieldNameValues?displayName=${displayRelationFieldName}&formName=${fieldName}`
-            );
-            const responseData = res.data;
-            setSelectedFormFields((prevArrObj) =>
-              dataField.map((obj: PostCreateFieldData) => {
-                if (
-                  obj.dataType === "relational" &&
-                  obj.fieldName === fieldName &&
-                  obj.displayRelationFieldName === displayRelationFieldName
-                ) {
-                  return { ...obj, enums: responseData };
-                }
-                return obj;
-              })
-            );
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
+  // const getUpdatedFieldData = async () => {
+  //   try {
+  //     const resField = await api.get(
+  //       `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
+  //     );
+  //     const dataField = await resField.data;
 
-        dataField.forEach((obj: PostCreateFieldData) => {
-          if (obj.dataType === "relational") {
-            fetchDataAndUpdateArray(
-              obj.displayRelationFieldName || "",
-              obj.fieldName
-            );
-          }
-        });
-      }
-    } catch (e: any) {
-      setReusableSnackBar((prev) => ({
-        severity: "error",
-        message: `Error: ${e?.message} on getting updated fields`,
-        open: true,
-      }));
-    }
-  };
+  //     if (resField.status === 200) {
+  //       let updatedFields = [...dataField];
+
+  //       const promises = updatedFields.map(async (obj: PostCreateFieldData) => {
+  //         if (obj.dataType === "relational") {
+  //           try {
+  //             const res = await api.get(
+  //               `/dynamic/getListOfFieldNameValues?displayName=${obj.displayRelationFieldName}&formName=${obj.fieldName}`
+  //             );
+  //             const responseData = res.data;
+
+  //             // Update the enums property of the relational field
+  //             return { ...obj, enums: responseData };
+  //           } catch (error) {
+  //             console.error("Error fetching data:", error);
+  //             return obj; // Return original object if an error occurs
+  //           }
+  //         }
+  //         return obj; // Return original object if not a relational field
+  //       });
+
+  //       // Wait for all asynchronous operations to complete
+  //       const updatedFieldsWithData = await Promise.all(promises);
+
+  //       // Update the state with the updatedFields
+  //       setSelectedFormFields(updatedFieldsWithData);
+  //     }
+  //   } catch (e: any) {
+  //     setReusableSnackBar({
+  //       severity: "error",
+  //       message: `Error: ${e?.message} on getting updated fields`,
+  //       open: true,
+  //     });
+  //   }
+  // };
+
   const DrawerSubmitHandlet = async (e: FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -261,7 +254,11 @@ export default function CreateDreawer({
           CreateFieldSetObj
         );
         if (res.status === 201 || res.status === 200) {
-          getUpdatedFieldData();
+          await getUpdatedFieldData(
+            SelectedMasterDatatab,
+            setSelectedFormFields,
+            setReusableSnackBar
+          );
           HandlerCloseDrawer();
           setReusableSnackBar((prev) => ({
             severity: "success",
@@ -323,7 +320,11 @@ export default function CreateDreawer({
           dataSet
         );
         if (res.status === 201 || res.status === 200) {
-          getUpdatedFieldData();
+          await getUpdatedFieldData(
+            SelectedMasterDatatab,
+            setSelectedFormFields,
+            setReusableSnackBar
+          );
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `Field Created Sucessfully!`,
@@ -382,7 +383,11 @@ export default function CreateDreawer({
           dataSet
         );
         if (res.status === 201 || res.status === 200) {
-          getUpdatedFieldData();
+          await getUpdatedFieldData(
+            SelectedMasterDatatab,
+            setSelectedFormFields,
+            setReusableSnackBar
+          );
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `Field Created Sucessfully!`,

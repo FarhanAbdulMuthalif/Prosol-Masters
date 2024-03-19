@@ -2,6 +2,7 @@
 import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
+import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
 import EditDreawer from "@/components/DynamicFields/Drawer/EditDrawer/EditDrawer";
@@ -14,8 +15,10 @@ import { PrimaryTextColor } from "@/styles/colorsCode";
 import FormDataDropdown from "@/utils/DynamicFields/DynComponents/FormDataDropdown";
 import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
 import { initialDynamicStateField } from "@/utils/DynamicFields/DynamicFieldsData";
+import { getUpdatedFieldData } from "@/utils/DynamicFields/MasterFieldDropdownData";
 import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { SelectChangeEvent } from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -27,44 +30,12 @@ export default function DynamicField() {
   const [SelectedFormOption, setSelectedFormOption] = useState("");
   const [CreateDrawerOpen, setCreateDrawerOpen] = useState(false);
   const [EditDrawerOpen, setEditDrawerOpen] = useState(false);
+  const [deleteConfirmationDialogOpen, setDeleteConfirmationDialogOpen] =
+    useState(false);
   const [EditDataSelected, setEditDataSelected] = useState<PostCreateFieldData>(
     initialDynamicStateField
   );
   const [FormOption, setFormOption] = useState([]);
-  const [relationalFieldOptions, setRelationalFieldOptions] = useState<
-    string[]
-  >([]); // New state for relational field options
-  const [optionsCache, setOptionsCache] = useState<FormOptionsCache>({
-    example: ["hello", "hi"],
-  });
-  const memoizedDisplayFieldsFromForm = async (name: string, form: string) => {
-    if (!name || !form) return null;
-    if (optionsCache[form]) {
-      return optionsCache[form];
-    }
-    try {
-      const res = await api.get(
-        `/dynamic/getListOfFieldNameValues?displayName=${name}&formName=${form}`
-      );
-      const data = await res.data;
-      if (res.status === 200) {
-        const options = data as string[];
-        console.log(options);
-        console.log([...options]);
-
-        setOptionsCache((prev) => {
-          return {
-            ...prev,
-            [form]: [...options], // Ensure options is not undefined
-          };
-        });
-        return options;
-      }
-    } catch (e: any) {
-      return null;
-    }
-  };
-
   const contextDataHub = useContext(UseContextHook);
   const {
     setReusableSnackBar,
@@ -72,7 +43,16 @@ export default function DynamicField() {
     setSelectedMasterDatatab,
     setSelectedFormFields,
     SelectedFormFields,
+    SelectedMasterDatatab,
   } = contextDataHub;
+  const OpenDeleteConformationDialogHandler = () => {
+    setDeleteConfirmationDialogOpen(false);
+  };
+
+  const [optionsCache, setOptionsCache] = useState<FormOptionsCache>({
+    example: ["hello", "hi"],
+  });
+
   useEffect(() => {
     async function fetchData() {
       if (!setReusableSnackBar || !settabValue || !setSelectedFormFields)
@@ -141,22 +121,6 @@ export default function DynamicField() {
           />
         );
       case "relational":
-        // const displayRelationFieldName = data.displayRelationFieldName || "";
-        // const form = data.fieldName;
-        // let tempArr: string[] = [];
-        // memoizedDisplayFieldsFromForm(displayRelationFieldName, form).then(
-        //   (options) => {
-        //     tempArr = options || [];
-        //     console.log(tempArr);
-        //     console.log(options);
-
-        //     setOptionsCache((prevCache) => ({
-        //       ...prevCache,
-        //       [form]: options || [], // Ensure options is not undefined
-        //     }));
-        //   }
-        // );
-
         return (
           <FormDataDropdown
             label={`Select ${data.fieldName}`}
@@ -189,7 +153,9 @@ export default function DynamicField() {
     !setSelectedMasterDatatab ||
     !settabValue ||
     !setSelectedFormFields ||
-    !SelectedFormFields
+    !setReusableSnackBar ||
+    !SelectedFormFields ||
+    !SelectedMasterDatatab
   ) {
     return null;
   }
@@ -260,12 +226,15 @@ export default function DynamicField() {
     }
   };
   const HandlerCloseCreateDrawer = () => {
+    setEditDataSelected(initialDynamicStateField);
+
     setCreateDrawerOpen(false);
   };
   const HandlerOpenCreateDrawer = () => {
     setCreateDrawerOpen(true);
   };
   const HandlerCloseEditDrawer = () => {
+    setEditDataSelected(initialDynamicStateField);
     setEditDrawerOpen(false);
   };
   const FormDropDownData = FormOption
@@ -276,8 +245,48 @@ export default function DynamicField() {
         })
       )
     : [];
-  console.log(SelectedFormFields);
 
+  const DeleteConformationDialogHandler = async () => {
+    try {
+      const res = await api.delete(
+        `/dynamic/${EditDataSelected.id}/removeDynamicField`
+      );
+      const data = await res.data;
+      if (res.status === 204) {
+        await getUpdatedFieldData(
+          SelectedMasterDatatab,
+          setSelectedFormFields,
+          setReusableSnackBar
+        );
+        setDeleteConfirmationDialogOpen(false);
+        setReusableSnackBar({
+          severity: "success",
+          message: `${EditDataSelected.fieldName} Deleted Sucessfully!`,
+          open: true,
+        });
+      }
+    } catch (e: any) {
+      console.log(e?.response);
+      if (e?.response) {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: String(
+            e?.response?.data?.message
+              ? e?.response?.data?.message
+              : e?.response?.data?.error
+          ),
+          open: true,
+        }));
+      } else {
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: `Error: ${e?.message}`,
+          open: true,
+        }));
+      }
+    }
+  };
+  console.log(SelectedFormFields);
   return (
     <div className="dynamic-field-module-wrapper">
       <div className="dynamic-field-module-header-div">
@@ -325,14 +334,36 @@ export default function DynamicField() {
                       console.log(data);
                     }}
                     sx={{
-                      fontSize: "14px",
+                      fontSize: "12px",
                       color: PrimaryTextColor,
+                      opacity: "0.7",
                       position: "absolute",
                       right:
                         data.dataType === "dropDown" ||
                         data.dataType === "relational"
                           ? "30px"
                           : "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <DeleteIcon
+                    onClick={() => {
+                      setEditDataSelected(data);
+                      setDeleteConfirmationDialogOpen(true);
+                      console.log(data);
+                    }}
+                    sx={{
+                      fontSize: "12px",
+                      color: PrimaryTextColor,
+                      opacity: "0.7",
+                      position: "absolute",
+                      right:
+                        data.dataType === "dropDown" ||
+                        data.dataType === "relational"
+                          ? "50px"
+                          : "30px",
                       top: "50%",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
@@ -366,6 +397,13 @@ export default function DynamicField() {
         OpenDrawer={EditDrawerOpen}
         HandlerCloseDrawer={HandlerCloseEditDrawer}
         SelectedValue={EditDataSelected}
+      />
+      <ReusableConfirmationDialog
+        open={deleteConfirmationDialogOpen}
+        title={`Dynamic Field Delete`}
+        content="Are you sure you want to remove the field in the form it may affect the data?"
+        onConfirm={DeleteConformationDialogHandler}
+        onCancel={OpenDeleteConformationDialogHandler}
       />
     </div>
   );

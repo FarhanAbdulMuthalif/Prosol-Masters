@@ -1,3 +1,4 @@
+import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import {
   FormControl,
   MenuItem,
@@ -48,7 +49,7 @@ const NameSingleSelectDropdown: FC<DropdownProps> = ({
         </MenuItem>
         {options.map((option) => (
           <MenuItem key={option.value} sx={menuItemStyle} value={option.value}>
-            {option.label}
+            {capitalizeFunc(option.label ? option.label?.toString() : "")}
           </MenuItem>
         ))}
       </Select>

@@ -28,7 +28,7 @@ export default function RelationalDropdown({
     []
   );
   const contextDataHub = useContext(UseContextHook);
-  const { setReusableSnackBar } = contextDataHub;
+  const { setReusableSnackBar, SelectedMasterDatatab } = contextDataHub;
   useEffect(() => {
     async function getter() {
       if (valueData.fieldName.length === 0) return;
@@ -83,7 +83,9 @@ export default function RelationalDropdown({
           label="Select Form"
           value={valueData?.fieldName ?? ""}
           onChange={handleSelectForm}
-          options={MasterFieldDropdownDataFormName}
+          options={MasterFieldDropdownDataFormName.filter(
+            (data) => data !== SelectedMasterDatatab
+          )}
           name="fieldName"
         />
       </div>

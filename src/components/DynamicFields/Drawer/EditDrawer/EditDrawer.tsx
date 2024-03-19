@@ -5,6 +5,7 @@ import SingleSelectDropdown from "@/components/Dropdown/SingleSelectDropdown";
 import TextComp from "@/components/TextComp/TextComp";
 import api from "@/components/api";
 import { PrimaryTextColor } from "@/styles/colorsCode";
+import { getUpdatedFieldData } from "@/utils/DynamicFields/MasterFieldDropdownData";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, SelectChangeEvent } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ import {
   Option,
   PostCreateFieldData,
 } from "../../../../../TypesStore";
+import RelationalDropdown from "../RenderFieldSelectType/RelationalDropdown";
 import SelectDropDown from "../RenderFieldSelectType/SelectDropDown";
 import SelectRadio from "../RenderFieldSelectType/SelectRadio";
 import SelectTextarea from "../RenderFieldSelectType/SelectTextarea";
@@ -41,15 +43,19 @@ export default function EditDreawer({
   SelectedValue: PostCreateFieldData;
 }) {
   const [ChipTextIndiual, setChipTextIndiual] = useState("");
-  const [ChipArrayList, setChipArrayList] = useState<string[]>([]);
+  const [ChipArrayList, setChipArrayList] = useState<string[]>(
+    SelectedValue.enums || []
+  );
   const [EditFieldSetObj, setEditFieldSetObj] =
     useState<PostCreateFieldData>(SelectedValue);
+  const [DropDownChipArrayList, setDropDownChipArrayList] = useState<Option[]>(
+    SelectedValue.dropDowns || []
+  );
   useEffect(() => {
     setEditFieldSetObj(SelectedValue);
+    setChipArrayList(SelectedValue.enums || []);
+    setDropDownChipArrayList(SelectedValue.dropDowns || []);
   }, [SelectedValue]);
-  const [DropDownChipArrayList, setDropDownChipArrayList] = useState<Option[]>(
-    []
-  );
   const setChipIntoDivHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setChipTextIndiual(e.target.value);
   };
@@ -88,6 +94,13 @@ export default function EditDreawer({
   const handlerSelectInputType = (e: SelectChangeEvent) => {
     setEditFieldSetObj((prev: PostCreateFieldData) => {
       return { ...prev, identity: e.target.value as string };
+    });
+  };
+  const handlerReusableSelectInputType = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+
+    setEditFieldSetObj((prev: PostCreateFieldData) => {
+      return { ...prev, [name]: e.target.value as string };
     });
   };
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,25 +185,16 @@ export default function EditDreawer({
         valueData={EditFieldSetObj}
       />
     ),
+    relational: (
+      <RelationalDropdown
+        handleSelectForm={handlerReusableSelectInputType}
+        handleSelect={handlerSelectInputType}
+        handleInput={HandletInputEditName}
+        valueData={EditFieldSetObj}
+      />
+    ),
   };
-  const getUpdatedFieldData = async () => {
-    try {
-      const resField = await api.get(
-        `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
-      );
-      const dataField = await resField.data;
-      console.log(dataField);
-      if (resField.status === 200) {
-        setSelectedFormFields(dataField);
-      }
-    } catch (e: any) {
-      setReusableSnackBar((prev) => ({
-        severity: "error",
-        message: `Error: ${e?.message} on getting updated fields`,
-        open: true,
-      }));
-    }
-  };
+
   const DrawerSubmitHandlet = async (e: FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -208,7 +212,8 @@ export default function EditDreawer({
     keysToRemove.forEach((key) => delete (filteredUserData as any)[key]);
     if (
       EditFieldSetObj.dataType === "textField" ||
-      EditFieldSetObj.dataType === "textArea"
+      EditFieldSetObj.dataType === "textArea" ||
+      EditFieldSetObj.dataType === "relational"
     ) {
       if (
         EditFieldSetObj.fieldName.length < 1 ||
@@ -221,13 +226,18 @@ export default function EditDreawer({
         return alert("Minimum number should be lesser than maximun ");
       }
       console.log(EditFieldSetObj);
+      const updatedFilteredData = { ...filteredUserData, enums: [] };
       try {
         const res = await api.put(
           `/dynamic/updateDynamicFieldById/${id}?formName=${SelectedMasterDatatab}`,
-          filteredUserData
+          updatedFilteredData
         );
         if (res.status === 201 || res.status === 200) {
-          getUpdatedFieldData();
+          await getUpdatedFieldData(
+            SelectedMasterDatatab,
+            setSelectedFormFields,
+            setReusableSnackBar
+          );
         }
         setReusableSnackBar((prev) => ({
           severity: "success",
@@ -289,7 +299,11 @@ export default function EditDreawer({
           dataSet
         );
         if (res.status === 201 || res.status === 200) {
-          getUpdatedFieldData();
+          await getUpdatedFieldData(
+            SelectedMasterDatatab,
+            setSelectedFormFields,
+            setReusableSnackBar
+          );
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `Field Editd Sucessfully!`,
@@ -348,7 +362,11 @@ export default function EditDreawer({
           dataSet
         );
         if (res.status === 201 || res.status === 200) {
-          getUpdatedFieldData();
+          await getUpdatedFieldData(
+            SelectedMasterDatatab,
+            setSelectedFormFields,
+            setReusableSnackBar
+          );
           setReusableSnackBar((prev) => ({
             severity: "success",
             message: `Field Editd Sucessfully!`,
@@ -425,6 +443,7 @@ export default function EditDreawer({
                 { value: "textArea", label: "TextArea" },
                 { value: "dropDown", label: "DropDown" },
                 { value: "radioButton", label: "RadioButton" },
+                { value: "relational", label: "Relational Dropdown" },
               ]}
             />
           </div>
