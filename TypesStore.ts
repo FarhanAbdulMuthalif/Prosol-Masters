@@ -10,7 +10,7 @@ export type UseContextHookTypes = {
   setPlantData?: Dispatch<SetStateAction<any[] | undefined>>; // Adjust the type here
   PlantData?: any[] | undefined; // Adjust the type here
   masters: mastersProps;
-  SelectedMasterDatatab?: string;
+  SelectedMasterDatatab: string;
   setSelectedMasterDatatab?: Dispatch<SetStateAction<string>>;
   tabValue?: "table" | "edit" | "create";
   settabValue?: Dispatch<SetStateAction<"table" | "edit" | "create">>;

@@ -47,4 +47,5 @@ export const UseContextHook = createContext<UseContextHookTypes>({
   FontsListArr: [],
   incoming: [],
   outgoing: [],
+  SelectedMasterDatatab: "Plant",
 });

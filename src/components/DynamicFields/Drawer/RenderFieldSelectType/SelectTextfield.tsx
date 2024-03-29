@@ -48,7 +48,10 @@ export default function SelectTextfield({
           fullWidth
         />
       </div>
-      <div className="input-render-field-wrap">
+      <div
+        className="input-render-field-wrap"
+        data-testid="select-textfield-container"
+      >
         <TextComp
           variant="bodySmall"
           style={{
@@ -62,7 +65,7 @@ export default function SelectTextfield({
         </TextComp>
         <SingleSelectDropdown
           label="Select Field"
-          value={valueData?.identity ?? ""}
+          value={valueData?.identity ?? ``}
           onChange={handleSelect}
           options={[
             { value: "text", label: "Text" },

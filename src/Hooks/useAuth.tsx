@@ -1,5 +1,6 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import apiLogin from "@/components/apiLogin";
+import { singleUserDataHandler } from "@/utils/UserDataExport";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -14,118 +15,62 @@ const UseAuth = () => {
   const currentRoute = usePathname();
 
   useEffect(() => {
-    // Check if the user is authenticated (you might want to improve this logic)
-    const storedAccessToken = localStorage.getItem("accessToken");
-    const storedRefreshToken = localStorage.getItem("refreshToken");
+    async function fetchData() {
+      if (!SetContextAuth || !setUserInfo || !setReusableSnackBar) return;
+      try {
+        const storedAccessToken = localStorage.getItem("accessToken");
+        const storedRefreshToken = localStorage.getItem("refreshToken");
 
-    async function fetch() {
-      if (storedAccessToken) {
-        try {
+        if (!storedAccessToken && !storedRefreshToken) {
+          if (!auth && !currentRoute.split("/").includes("Login")) {
+            router.push("/Login");
+          }
+          return;
+        }
+
+        let accessToken = storedAccessToken || "";
+        if (storedAccessToken) {
           const res = await apiLogin.post(
             `/user/auth/validateToken?token=${storedAccessToken}`
           );
           if (res.status === 200) {
             setAuth(true);
-
-            if (SetContextAuth) {
-              SetContextAuth(true);
-            }
-            const resMe = await apiLogin.get("/user/me", {
-              headers: {
-                Authorization: `Bearer ${storedAccessToken}`,
-              },
-            });
-
-            const resData = await resMe?.data; // Extract data from response
-            if (resMe.status === 200) {
-              if (setUserInfo) {
-                setUserInfo(resData);
-              }
-            }
-          }
-        } catch (e: any) {
-          // localStorage.removeItem("accessToken");
-          // If access token is expired, try to refresh it using the refresh token
-          if (e.response && e.response.status === 400 && storedRefreshToken) {
-            try {
-              const refreshRes = await apiLogin.post(
-                `/user/auth/refresh-token?token=${storedRefreshToken}`
-              );
-
-              // Update the access token in local storage
-              localStorage.setItem("accessToken", refreshRes.data.accessToken);
-
-              // Retry the original request with the new access token
-              const retryRes = await apiLogin.post(
-                `/user/auth/validateToken?token=${refreshRes.data.accessToken}`
-              );
-
-              if (retryRes.status === 200) {
-                setAuth(true);
-
-                if (SetContextAuth) {
-                  SetContextAuth(true);
-                }
-                return;
-              }
-            } catch (refreshError: any) {
-              console.log(refreshError?.response);
-              if (!setReusableSnackBar) return;
-              if (refreshError?.response) {
-                setReusableSnackBar((prev) => ({
-                  severity: "error",
-                  message: String(refreshError?.response?.data?.message),
-                  open: true,
-                }));
-              } else {
-                setReusableSnackBar((prev) => ({
-                  severity: "error",
-                  message: `Error: ${refreshError?.message}`,
-                  open: true,
-                }));
-              }
-              router.push("/Login");
-              setAuth(false);
-              if (SetContextAuth) {
-                SetContextAuth(false);
-              }
-              console.log(e?.response);
-              if (!setReusableSnackBar) return;
-              if (e?.response) {
-                setReusableSnackBar((prev) => ({
-                  severity: "error",
-                  message: String(
-                    e?.response?.data?.message
-                      ? e?.response?.data?.message
-                      : e?.response?.data?.error
-                  ),
-                  open: true,
-                }));
-              } else {
-                setReusableSnackBar((prev) => ({
-                  severity: "error",
-                  message: `Error: ${e?.message}`,
-                  open: true,
-                }));
-              }
-              console.error("Error refreshing token:", refreshError);
-            }
-          }
-
-          // If refresh attempt fails or refresh token is missing, redirect to login
-          router.push("/Login");
-          setAuth(false);
-          if (SetContextAuth) {
-            SetContextAuth(false);
+            SetContextAuth(true);
+            singleUserDataHandler(storedAccessToken, setUserInfo);
+            return;
           }
         }
-      } else {
-        if (!auth && !currentRoute.split("/").includes("/Login")) {
-          router.push("/Login");
+
+        if (storedRefreshToken) {
+          const refreshRes = await apiLogin.post(
+            `/user/auth/refresh-token?token=${storedRefreshToken}`
+          );
+          accessToken = refreshRes?.data?.accessToken;
+          localStorage.setItem("accessToken", accessToken);
         }
+
+        const retryRes = await apiLogin.post(
+          `/user/auth/validateToken?token=${accessToken}`
+        );
+        if (retryRes.status === 200) {
+          setAuth(true);
+          SetContextAuth(true);
+          singleUserDataHandler(accessToken, setUserInfo);
+        }
+      } catch (error: any) {
+        console.error("Error in authentication:", error);
+        router.push("/Login");
+        setAuth(false);
+        SetContextAuth(false);
+        setReusableSnackBar((prev) => ({
+          severity: "error",
+          message: error?.response?.data?.message || `Error: ${error?.message}`,
+          open: true,
+        }));
       }
     }
-    fetch();
+
+    fetchData();
   }, [
     router,
     SetContextAuth,

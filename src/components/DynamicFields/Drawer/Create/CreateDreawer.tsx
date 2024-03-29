@@ -9,7 +9,6 @@ import { initialDynamicStateField } from "@/utils/DynamicFields/DynamicFieldsDat
 import { getUpdatedFieldData } from "@/utils/DynamicFields/MasterFieldDropdownData";
 import CloseIcon from "@mui/icons-material/Close";
 import { Drawer, IconButton, SelectChangeEvent } from "@mui/material";
-import { useRouter } from "next/navigation";
 import {
   ChangeEvent,
   FormEvent,
@@ -18,13 +17,13 @@ import {
   useContext,
   useState,
 } from "react";
-import { Option, PostCreateFieldData } from "../../../../TypesStore";
+import { Option, PostCreateFieldData } from "../../../../../TypesStore";
+import RelationalDropdown from "../RenderFieldSelectType/RelationalDropdown";
+import SelectDropDown from "../RenderFieldSelectType/SelectDropDown";
+import SelectRadio from "../RenderFieldSelectType/SelectRadio";
+import SelectTextarea from "../RenderFieldSelectType/SelectTextarea";
+import SelectTextfield from "../RenderFieldSelectType/SelectTextfield";
 import "./CreateDrawer.scss";
-import RelationalDropdown from "./RenderFieldSelectType/RelationalDropdown";
-import SelectDropDown from "./RenderFieldSelectType/SelectDropDown";
-import SelectRadio from "./RenderFieldSelectType/SelectRadio";
-import SelectTextarea from "./RenderFieldSelectType/SelectTextarea";
-import SelectTextfield from "./RenderFieldSelectType/SelectTextfield";
 
 type fieldRenderData = {
   [key: string]: ReactNode;
@@ -47,7 +46,7 @@ export default function CreateDreawer({
   const setChipIntoDivHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setChipTextIndiual(e.target.value);
   };
-  const router = useRouter();
+
   const {
     SelectedMasterDatatab,
     settabValue,
@@ -56,7 +55,6 @@ export default function CreateDreawer({
     SelectedFormFields,
   } = useContext(UseContextHook);
   if (
-    !SelectedMasterDatatab ||
     !settabValue ||
     !setReusableSnackBar ||
     !setSelectedFormFields ||
@@ -185,240 +183,111 @@ export default function CreateDreawer({
       />
     ),
   };
-  // const getUpdatedFieldData = async () => {
-  //   try {
-  //     const resField = await api.get(
-  //       `/dynamic/getAllDynamicFieldsByForm/${SelectedMasterDatatab}`
-  //     );
-  //     const dataField = await resField.data;
-
-  //     if (resField.status === 200) {
-  //       let updatedFields = [...dataField];
-
-  //       const promises = updatedFields.map(async (obj: PostCreateFieldData) => {
-  //         if (obj.dataType === "relational") {
-  //           try {
-  //             const res = await api.get(
-  //               `/dynamic/getListOfFieldNameValues?displayName=${obj.displayRelationFieldName}&formName=${obj.fieldName}`
-  //             );
-  //             const responseData = res.data;
-
-  //             // Update the enums property of the relational field
-  //             return { ...obj, enums: responseData };
-  //           } catch (error) {
-  //             console.error("Error fetching data:", error);
-  //             return obj; // Return original object if an error occurs
-  //           }
-  //         }
-  //         return obj; // Return original object if not a relational field
-  //       });
-
-  //       // Wait for all asynchronous operations to complete
-  //       const updatedFieldsWithData = await Promise.all(promises);
-
-  //       // Update the state with the updatedFields
-  //       setSelectedFormFields(updatedFieldsWithData);
-  //     }
-  //   } catch (e: any) {
-  //     setReusableSnackBar({
-  //       severity: "error",
-  //       message: `Error: ${e?.message} on getting updated fields`,
-  //       open: true,
-  //     });
-  //   }
-  // };
 
   const DrawerSubmitHandlet = async (e: FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (
-      FieldTypeSelect === "textField" ||
-      FieldTypeSelect === "textArea" ||
-      CreateFieldSetObj.dataType === "relational"
-    ) {
-      if (
-        CreateFieldSetObj.fieldName.length < 1 ||
-        CreateFieldSetObj.identity?.length === 0
-      ) {
-        return alert("required field should not be empty");
+
+    try {
+      let dataSet: any = {};
+
+      switch (FieldTypeSelect) {
+        case "textField":
+        case "textArea":
+        case "relational":
+          if (
+            CreateFieldSetObj.fieldName.length < 1 ||
+            !CreateFieldSetObj.identity
+          ) {
+            throw new Error("Required field should not be empty");
+          }
+          if (Number(CreateFieldSetObj.max) < Number(CreateFieldSetObj.min)) {
+            throw new Error("Minimum number should be lesser than maximum");
+          }
+          dataSet = { ...CreateFieldSetObj };
+          break;
+
+        case "dropDown":
+          dataSet = {
+            fieldName: CreateFieldSetObj.fieldName,
+            dataType: CreateFieldSetObj.dataType,
+            identity: CreateFieldSetObj.identity,
+            min: 2,
+            max: 20,
+            isRequired: CreateFieldSetObj.isRequired,
+            pattern: [],
+            isExtraField: true,
+            isReadable: true,
+            isWritable: true,
+            isUnique: false,
+            enums: [],
+            dropDowns: DropDownChipArrayList,
+          };
+          if (
+            CreateFieldSetObj.fieldName.length < 1 ||
+            !CreateFieldSetObj.identity
+          ) {
+            throw new Error("Required field should not be empty");
+          }
+          break;
+
+        case "radioButton":
+          dataSet = {
+            fieldName: CreateFieldSetObj.fieldName,
+            dataType: CreateFieldSetObj.dataType,
+            identity: "",
+            min: 2,
+            max: 20,
+            isRequired: true,
+            pattern: [],
+            isExtraField: true,
+            isReadable: true,
+            isWritable: true,
+            isUnique: false,
+            enums: ChipArrayList,
+            dropDowns: [],
+          };
+          if (CreateFieldSetObj.fieldName.length < 1 || !dataSet.enums.length) {
+            throw new Error("Required field should not be empty");
+          }
+          break;
+
+        default:
+          throw new Error("Invalid field type");
       }
 
-      if (Number(CreateFieldSetObj?.max) < Number(CreateFieldSetObj?.min)) {
-        return alert("Minimum number should be lesser than maximun ");
-      }
-      console.log(e);
-      console.log(CreateFieldSetObj);
-      try {
-        const res = await api.post(
-          `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
-          CreateFieldSetObj
+      const res = await api.post(
+        `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
+        dataSet
+      );
+      if (res.status === 201 || res.status === 200) {
+        await getUpdatedFieldData(
+          SelectedMasterDatatab,
+          setSelectedFormFields,
+          setReusableSnackBar
         );
-        if (res.status === 201 || res.status === 200) {
-          await getUpdatedFieldData(
-            SelectedMasterDatatab,
-            setSelectedFormFields,
-            setReusableSnackBar
-          );
-          HandlerCloseDrawer();
-          setReusableSnackBar((prev) => ({
-            severity: "success",
-            message: `Field Created Sucessfully!`,
-            open: true,
-          }));
-          settabValue("table");
-        }
-      } catch (e: any) {
-        console.log(e?.response);
-        if (!setReusableSnackBar) return;
-        if (e?.response) {
-          setReusableSnackBar((prev) => ({
-            severity: "error",
-            message: String(
-              e?.response?.data?.message
-                ? e?.response?.data?.message
-                : e?.response?.data?.error
-            ),
-            open: true,
-          }));
-        } else {
-          setReusableSnackBar((prev) => ({
-            severity: "error",
-            message: `Error: ${e?.message}`,
-            open: true,
-          }));
-        }
+        HandlerCloseDrawer();
+        setReusableSnackBar({
+          severity: "success",
+          message: "Field Created Successfully!",
+          open: true,
+        });
+        settabValue("table");
       }
-    }
-    if (FieldTypeSelect === "dropDown") {
-      const dataSet = {
-        fieldName: CreateFieldSetObj.fieldName,
-        dataType: CreateFieldSetObj.dataType,
-        identity: CreateFieldSetObj.identity,
-        min: 2,
-        max: 20,
-        isRequired: CreateFieldSetObj.isRequired,
-        pattern: [],
-        isExtraField: true,
-        isReadable: true,
-        isWritable: true,
-        isUnique: false,
-        enums: [],
-
-        dropDowns: DropDownChipArrayList,
-      };
-      console.log(dataSet);
-      if (
-        CreateFieldSetObj.fieldName.length < 1 ||
-        CreateFieldSetObj.identity?.length === 0 ||
-        CreateFieldSetObj.dataType?.length < 1
-      ) {
-        return alert("required field should not be empty");
-      }
-      try {
-        const res = await api.post(
-          `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
-          dataSet
-        );
-        if (res.status === 201 || res.status === 200) {
-          await getUpdatedFieldData(
-            SelectedMasterDatatab,
-            setSelectedFormFields,
-            setReusableSnackBar
-          );
-          setReusableSnackBar((prev) => ({
-            severity: "success",
-            message: `Field Created Sucessfully!`,
-            open: true,
-          }));
-          HandlerCloseDrawer();
-          settabValue("table");
-        }
-      } catch (e: any) {
-        console.log(e?.response);
-        if (!setReusableSnackBar) return;
-        if (e?.response) {
-          setReusableSnackBar((prev) => ({
-            severity: "error",
-            message: String(
-              e?.response?.data?.message
-                ? e?.response?.data?.message
-                : e?.response?.data?.error
-            ),
-            open: true,
-          }));
-        } else {
-          setReusableSnackBar((prev) => ({
-            severity: "error",
-            message: `Error: ${e?.message}`,
-            open: true,
-          }));
-        }
-      }
-    }
-    if (FieldTypeSelect === "radioButton") {
-      const dataSet = {
-        fieldName: CreateFieldSetObj.fieldName,
-        dataType: CreateFieldSetObj.dataType,
-        identity: "",
-        min: 2,
-        max: 20,
-        isRequired: true,
-        pattern: [],
-        isExtraField: true,
-        isReadable: true,
-        isWritable: true,
-        isUnique: false,
-        enums: ChipArrayList,
-        dropDowns: [],
-      };
-      if (
-        CreateFieldSetObj.fieldName.length < 1 ||
-        dataSet?.enums?.length === 0
-      ) {
-        return alert("required field should not be empty");
-      }
-      try {
-        const res = await api.post(
-          `/dynamic/saveDynamicField/${SelectedMasterDatatab}`,
-          dataSet
-        );
-        if (res.status === 201 || res.status === 200) {
-          await getUpdatedFieldData(
-            SelectedMasterDatatab,
-            setSelectedFormFields,
-            setReusableSnackBar
-          );
-          setReusableSnackBar((prev) => ({
-            severity: "success",
-            message: `Field Created Sucessfully!`,
-            open: true,
-          }));
-          HandlerCloseDrawer();
-          settabValue("table");
-        }
-      } catch (e: any) {
-        console.log(e?.response);
-        if (!setReusableSnackBar) return;
-        if (e?.response) {
-          setReusableSnackBar((prev) => ({
-            severity: "error",
-            message: String(
-              e?.response?.data?.message
-                ? e?.response?.data?.message
-                : e?.response?.data?.error
-            ),
-            open: true,
-          }));
-        } else {
-          setReusableSnackBar((prev) => ({
-            severity: "error",
-            message: `Error: ${e?.message}`,
-            open: true,
-          }));
-        }
+    } catch (error: any) {
+      if (setReusableSnackBar) {
+        setReusableSnackBar({
+          severity: "error",
+          message:
+            error.response?.data?.message ||
+            error.message ||
+            "Unknown error occurred",
+          open: true,
+        });
       }
     }
   };
+
   return (
     <Drawer
       anchor={"right"}
@@ -426,7 +295,11 @@ export default function CreateDreawer({
       open={OpenDrawer}
       onClose={HandlerCloseDrawer}
     >
-      <form className="drawer-wrapper-form" onSubmit={DrawerSubmitHandlet}>
+      <form
+        className="drawer-wrapper-form"
+        onSubmit={DrawerSubmitHandlet}
+        data-testid="create-drawer-form-submission"
+      >
         <header className="header-of-drawer">
           <TextComp
             variant="subTitle"

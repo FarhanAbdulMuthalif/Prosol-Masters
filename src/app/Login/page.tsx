@@ -146,7 +146,7 @@ const Login = () => {
     setPassword(event.target.value);
   };
   return (
-    <div className="login-form">
+    <div className="login-form" data-testid="login-form-id">
       {showForgotPassword && (
         <ForgotPassword
           setShowForgotPassword={setShowForgotPassword}
@@ -170,13 +170,16 @@ const Login = () => {
             welcome to <span style={{ color: "#2752E3" }}>prosol ,</span>
             Please put your Login Credentials below to start
           </TextComp>
-          <p></p>
+
           <form onSubmit={SubmitHandler}>
             <div className="login-form-content-inputs">
-              <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+              <TextComp
+                variant="title"
+                style={{ color: PrimaryTextColor }}
+                data-testid="login-text"
+              >
                 LOGIN
               </TextComp>
-
               <OutlineTextField
                 type="text"
                 placeholder="Username"

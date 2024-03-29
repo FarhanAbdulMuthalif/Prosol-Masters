@@ -39,11 +39,12 @@ const SingleSelectDropdown: FC<DropdownProps> = ({
         placeholder={label}
         displayEmpty
         onChange={onChange}
+        defaultValue={``}
         renderValue={(value) => {
           return value ? value : label;
         }}
       >
-        <MenuItem sx={menuItemStyle} value="">
+        <MenuItem sx={menuItemStyle} value={``}>
           {label}
         </MenuItem>
         {options.map((option) => (

@@ -98,10 +98,10 @@ export default function CreateMRPData() {
     //   }Status`]: true,
     // }));
     console.log(formData);
-    if (formData[fieldName].length === 0) {
+    if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
     }
-    if (formData[fieldCode].length === 0) {
+    if (formData[fieldCode]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, code: true }));
     } else {
       setplantFormError((prev) => ({ name: false, code: false }));
@@ -119,7 +119,7 @@ export default function CreateMRPData() {
       setdynFldErrValidation(validationErrors);
       return; // Prevent form submission if there are errors
     }
-    if (formData[fieldCode].length && formData[fieldName].length > 0) {
+    if (formData[fieldCode]?.length && formData[fieldName]?.length > 0) {
       try {
         const response = await api.post(
           `${

@@ -1,3 +1,7 @@
+import apiLogin from "@/components/apiLogin";
+import { Dispatch, SetStateAction } from "react";
+import { SingleUserInfoProps } from "../../TypesStore";
+
 export const UserInitialState = {
   email: "",
   password: "",
@@ -18,3 +22,19 @@ export const RoleInitialState = {
   status: false,
   privileges: [] as number[],
 };
+
+export async function singleUserDataHandler(
+  Token: string,
+  setUser: Dispatch<SetStateAction<SingleUserInfoProps>>
+) {
+  const resMe = await apiLogin.get("/user/me", {
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
+  });
+
+  const resData = await resMe?.data; // Extract data from response
+  if (resMe.status === 200) {
+    setUser(resData);
+  }
+}

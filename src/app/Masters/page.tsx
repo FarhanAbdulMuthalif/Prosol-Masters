@@ -5,7 +5,7 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
-import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
+import CreateDreawer from "@/components/DynamicFields/Drawer/Create/CreateDreawer";
 import CustomTabs from "@/components/Tabs/Tabs";
 import api, { URL_FIX_BASE_PATH } from "@/components/api";
 import { getAllPlantData } from "@/utils/masters/plant";

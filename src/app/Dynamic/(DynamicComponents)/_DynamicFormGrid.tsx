@@ -5,7 +5,6 @@ import api from "@/components/api";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { GridColDef } from "@mui/x-data-grid";
 import { useContext, useEffect, useState } from "react";
 import { DynamicFormsProps, PostCreateFieldData } from "../../../../TypesStore";
@@ -48,17 +47,6 @@ export default function DynamicFormGrid() {
       renderCell: (params) => {
         return (
           <div style={{ display: "flex", gap: "10px" }}>
-            <EditOutlinedIcon
-              onClick={() => {
-                console.log(params.row);
-              }}
-              sx={{
-                fontSize: "1rem",
-                color: ThemeColor.primaryColor,
-                cursor: "pointer",
-              }}
-            />
-
             <DeleteForeverOutlinedIcon
               onClick={() => {
                 console.log(params.row);

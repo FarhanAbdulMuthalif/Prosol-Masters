@@ -139,7 +139,6 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     setSelectedFormFields,
     SelectedFormFields,
   };
-
   const iconRotateHandler = {
     transform: toogleSidebar ? "rotate(180deg)" : "",
   };

@@ -4,7 +4,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
-import CreateDreawer from "@/components/DynamicFields/Drawer/CreateDreawer";
+import CreateDreawer from "@/components/DynamicFields/Drawer/Create/CreateDreawer";
 import EditDreawer from "@/components/DynamicFields/Drawer/EditDrawer/EditDrawer";
 import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
 import TextComp from "@/components/TextComp/TextComp";
@@ -286,7 +286,6 @@ export default function DynamicField() {
       }
     }
   };
-  console.log(SelectedFormFields);
   return (
     <div className="dynamic-field-module-wrapper">
       <div className="dynamic-field-module-header-div">

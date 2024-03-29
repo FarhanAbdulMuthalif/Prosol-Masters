@@ -62,6 +62,7 @@ const TextComp: React.FC<TextProps> = ({ variant, children, style }) => {
         fontWeight: selectedFntData?.fontWeight,
         ...style,
       }}
+      data-testid="reusableTextTag"
     >
       {children}
     </p>
