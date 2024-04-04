@@ -49,42 +49,4 @@ describe("CreateDrawer Page", () => {
     // Expect that the HandlerCloseDrawer function is called
     expect(handleClose).toHaveBeenCalled();
   });
-  //   it("calls HandlerCloseDrawer and setReusableSnackBar when form is submitted successfully", async () => {
-  //     (useRouter as jest.Mock).mockReturnValue({});
-  //     const handleClose = jest.fn();
-  //     const setReusableSnackBar = jest.fn();
-  //     const settabValue = jest.fn();
-
-  //     render(
-  //       <CreateDreawer OpenDrawer={true} HandlerCloseDrawer={handleClose} />,
-  //       {
-  //         wrapper: ClientContext,
-  //       }
-  //     );
-
-  //     // Mock successful API response
-  //     const mockResponse = { status: 201 };
-  //     (api.post as jest.Mock).mockResolvedValueOnce(mockResponse);
-
-  //     // Simulate form submission
-  //     await act(async () => {
-  //       fireEvent.submit(screen.getByTestId("create-drawer-form-submission"));
-  //     });
-
-  //     // Expect setReusableSnackBar to be called with success message
-  //     await waitFor(() => {
-  //       // Expect setReusableSnackBar to be called with success message
-  //       expect(setReusableSnackBar).toHaveBeenCalledWith({
-  //         severity: "success",
-  //         message: "Field Created Successfully!",
-  //         open: true,
-  //       });
-
-  //       // Expect HandlerCloseDrawer to be called
-  //       expect(handleClose).toHaveBeenCalled();
-
-  //       // Expect settabValue to be called with "table"
-  //       expect(settabValue).toHaveBeenCalledWith("table");
-  //     });
-  //   });
 });

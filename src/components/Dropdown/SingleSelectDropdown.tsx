@@ -34,12 +34,15 @@ const SingleSelectDropdown: FC<DropdownProps> = ({
     <FormControl fullWidth>
       <Select
         id="dropdown"
-        value={value.toString()}
+        value={
+          value === undefined || value === null || options.length === 0
+            ? ""
+            : value.toString()
+        }
         sx={SelectStyle}
         placeholder={label}
         displayEmpty
         onChange={onChange}
-        defaultValue={``}
         renderValue={(value) => {
           return value ? value : label;
         }}

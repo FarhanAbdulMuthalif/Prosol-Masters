@@ -67,26 +67,9 @@ export default function FlowConfigDialog({
 }: DialogProps) {
   const [value, setvalue] = useState("levelConfig");
   const [DynamicForms, setDynamicForms] = useState<DynamicFormsProps[]>([]);
-  const [formHeadFields, setFormHeadFields] = useState([
-    {
-      id: 0,
-      dataType: "",
-      identity: "",
-      fieldName: "",
-      pattern: [],
-      min: 0,
-      max: 0,
-      minLength: 0,
-      maxLength: 0,
-      extraField: false,
-      readable: false,
-      writable: false,
-      showAsColumn: false,
-      enums: [],
-      required: false,
-      dropDownValues: [],
-    },
-  ]);
+  const [formHeadFields, setFormHeadFields] = useState<PostCreateFieldData[]>(
+    []
+  );
   const [FormSelectionDropdown, setFormSelectionDropdown] = useState("");
   const [ReworkShowInput, setReworkShowInput] = useState(false);
   const [setFieldShowInForm, setsetFieldShowInForm] = useState<
@@ -156,10 +139,15 @@ export default function FlowConfigDialog({
     const selectedField: PostCreateFieldData | undefined = formHeadFields.find(
       (field: PostCreateFieldData) => field.id === value
     );
-    console.log(formHeadFields);
-    console.log("+++value++++++" + value);
-    console.log(selectedField);
-    return selectedField;
+
+    if (selectedField) {
+      console.log(formHeadFields);
+      console.log("+++value++++++" + value);
+      console.log(selectedField);
+      return selectedField;
+    } else {
+      return null; // Handle the case when the field with the ID is not found
+    }
   };
 
   const customList = (title: React.ReactNode, items: readonly number[]) => (

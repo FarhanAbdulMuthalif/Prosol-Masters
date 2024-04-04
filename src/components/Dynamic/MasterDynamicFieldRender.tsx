@@ -54,6 +54,7 @@ export default function MasterDynamicFieldRender({
         return data.identity === "single" ? (
           <DynamicSingleSelectDropdown
             label={`Select ${data.fieldName}`}
+            key={data.id}
             value={formData[data.fieldName]}
             onChange={handleSelectChange}
             options={data.dropDowns ?? []}
@@ -62,6 +63,7 @@ export default function MasterDynamicFieldRender({
         ) : (
           <MultipleDynamicSelectDropdown
             label={`Select ${data.fieldName}`}
+            key={data.id}
             value={formData[data.fieldName]}
             onChange={handleMultiSelectChange}
             options={data.dropDowns ?? []}
@@ -72,6 +74,7 @@ export default function MasterDynamicFieldRender({
         return (
           <RadioGroupComponent
             label={`${data.fieldName} :`}
+            key={data.id}
             name={data.fieldName}
             options={data.enums ?? []}
             value={formData[data.fieldName]}
@@ -85,74 +88,7 @@ export default function MasterDynamicFieldRender({
   return (
     <>
       {dynamicFields?.map((data: PostCreateFieldData) => {
-        return (
-          <>
-            {/* {data.dataType === "textField" ? (
-              <OutlineTextField
-                placeholder={`Enter ${data.fieldName}`}
-                key={data.id}
-                type={data.identity}
-                value={formData[data.fieldName]}
-                onChange={handleInputChange}
-                name={data.fieldName}
-                // inputProps={{
-                //   autoComplete: "new-password",
-                //   maxLength: data.max,
-                //   minLength: data.min,
-                // }}
-                error={
-                  dynFldErrValidation[data.fieldName]?.length > 0 ? true : false
-                }
-                helperText={dynFldErrValidation[data.fieldName]}
-              />
-            ) : data.dataType === "textArea" ? (
-              <TextareaOutline
-                placeholder={`Enter ${data.fieldName}`}
-                key={data.id}
-                rows={typeof Number(data.identity) ? data.identity : 2}
-                value={formData[data.fieldName]}
-                onChange={handleInputChange}
-                name={data.fieldName}
-                // inputProps={{
-                //   autoComplete: "new-password",
-                //   maxLength: data.max,
-                //   minLength: data.min,
-                // }}
-                error={
-                  dynFldErrValidation[data.fieldName]?.length > 0 ? true : false
-                }
-                helperText={dynFldErrValidation[data.fieldName]}
-              />
-            ) : data.dataType === "dropDown" && data.identity === "single" ? (
-              <DynamicSingleSelectDropdown
-                label={`Select ${data.fieldName}`}
-                value={formData[data.fieldName]}
-                onChange={handleSelectChange}
-                options={data.dropDowns ? data.dropDowns : []}
-                name={data.fieldName}
-              />
-            ) : data.dataType === "dropDown" && data.identity === "multiple" ? (
-              <MultipleDynamicSelectDropdown
-                label={`Select ${data.fieldName}`}
-                value={formData[data.fieldName]}
-                onChange={handleMultiSelectChange}
-                options={data.dropDowns ? data.dropDowns : []}
-                name={data.fieldName}
-              />
-            ) : data.dataType === "radioButton" ? (
-              <RadioGroupComponent
-                label={`${data.fieldName} :`}
-                name={data.fieldName}
-                options={data.enums ? data?.enums : []}
-                value={formData[data.fieldName]}
-                onChange={handleInputChange}
-              />
-            ) : (
-              ""
-            )} */}
-            {renderField(data)}
-          </>
-        );
+        return <>{renderField(data)}</>;
       })}
     </>
   );

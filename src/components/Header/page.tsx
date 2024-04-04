@@ -101,7 +101,7 @@ export default function Header() {
   return (
     <header style={{ fontFamily: `'${selectedFont}', sans-serif` }}>
       <Image
-        src="/Images/prosol-logo.svg"
+        src="/images/prosol-logo.svg"
         className="Logo-img"
         alt="Loading...."
         width={120}
@@ -112,7 +112,7 @@ export default function Header() {
         }}
       />
       <Image
-        src="/Images/Group.png"
+        src="/images/Group.png"
         height={20}
         width={20}
         className="GroupPng-img"
@@ -199,7 +199,7 @@ export default function Header() {
             {UserInfo?.firstName} {UserInfo?.lastName}
           </TextComp>
 
-          <Image src="/Images/AdminSvg.svg" height={40} width={40} alt="Img" />
+          <Image src="/images/AdminSvg.svg" height={40} width={40} alt="Img" />
         </div>
         <Menu
           id="basic-menu"

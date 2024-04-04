@@ -18,6 +18,7 @@ const OutlinedButton: React.FC<OutlinedButtonProps> = ({
   return (
     <Button
       {...props}
+      data-testid="OutlineButtonId"
       variant="outlined"
       sx={{
         fontSize: "12px",
@@ -25,6 +26,7 @@ const OutlinedButton: React.FC<OutlinedButtonProps> = ({
         whiteSpace: "nowrap",
         borderColor: ThemeColor.primaryColor,
         color: ThemeColor.primaryColor,
+
         "&:hover": {
           backgroundColor: ThemeColor.secondaryColor,
           color: ThemeColor.name === "LotusTheme" ? "black" : "white",
