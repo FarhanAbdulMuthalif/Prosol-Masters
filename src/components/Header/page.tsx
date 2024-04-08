@@ -112,7 +112,7 @@ export default function Header() {
         }}
       />
       <Image
-        src="/images/Group.png"
+        src="/images/Group.svg"
         height={20}
         width={20}
         className="GroupPng-img"
