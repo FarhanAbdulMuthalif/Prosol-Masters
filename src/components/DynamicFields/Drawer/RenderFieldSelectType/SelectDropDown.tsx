@@ -64,7 +64,7 @@ export default function SelectDropDown({
         </TextComp>
         <SingleSelectDropdown
           label="Select Field"
-          value={valueData?.identity ?? ""}
+          value={valueData?.identity ?? ``}
           onChange={handleSelect}
           options={[
             { value: "single", label: "Single Select" },

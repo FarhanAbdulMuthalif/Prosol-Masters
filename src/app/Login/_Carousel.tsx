@@ -28,29 +28,34 @@ export default function CarouselLogin() {
       infiniteLoop
       className="login-img-div"
       showThumbs={false}
+      // showArrows={false}
     >
       <div className="caroselImg">
         <Image
-          src="/images/prosollogin1.png"
+          src="/images/Login/prosolloginone.svg"
           /*  loading="lazy" */
           alt="loding view"
+          priority={true}
           // sizes="50vw"
           fill
-          // style={{
-          //   objectFit: "fill", // cover, contain, none
-          // }}
+          style={{
+            objectFit: "cover", // cover, contain, none
+            width: "100%",
+          }}
         />
       </div>
       <div className="caroselImg">
         <Image
-          src="/images/prosollogin2.png"
+          src="/images/Login/prosolloginone.svg"
           /* loading="lazy" */
           alt="loding view"
+          priority={true}
           // sizes="50vw"
           fill
-          // style={{
-          //   objectFit: "fill", // cover, contain, none
-          // }}
+          style={{
+            objectFit: "cover", // cover, contain, none
+            width: "100%",
+          }}
         />
       </div>
     </Carousel>
