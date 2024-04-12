@@ -90,13 +90,6 @@ export default function CreateMRPData() {
   const PlantFormSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    // setFormData((prevData: any) => ({
-    //   ...prevData,
-    //   [`${
-    //     SelectedMasterDatatab.charAt(0).toLowerCase() +
-    //     SelectedMasterDatatab.slice(1)
-    //   }Status`]: true,
-    // }));
     console.log(formData);
     if (formData[fieldName]?.length === 0) {
       setplantFormError((prev) => ({ ...prev, name: true }));
@@ -212,7 +205,7 @@ export default function CreateMRPData() {
                 : ""
             }
             error={plantFormError.name}
-            name={`${fieldName}Name`}
+            name={`${fieldName}`}
           />
           <OutlineTextField
             placeholder={`Enter ${SelectedMasterDatatab} Code`}
@@ -225,7 +218,7 @@ export default function CreateMRPData() {
                 : ""
             }
             error={plantFormError.code}
-            name={`${fieldCode}Code`}
+            name={`${fieldCode}`}
           />
           <MasterDynamicFieldRender
             formData={formData}
