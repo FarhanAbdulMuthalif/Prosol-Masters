@@ -31,7 +31,11 @@ export default function Home() {
             User Management
           </TextComp>
 
-          <OutlinedButton /*  className="dashboard-modules-sub-text" */>
+          <OutlinedButton
+            onClick={() => {
+              router.push("/UserManagement");
+            }} /*  className="dashboard-modules-sub-text" */
+          >
             Click here
           </OutlinedButton>
           <IconButton

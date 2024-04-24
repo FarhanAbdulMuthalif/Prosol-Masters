@@ -1,4 +1,3 @@
-import UseAuth from "@/Hooks/useAuth";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import TextComp from "@/components/TextComp/TextComp";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
@@ -16,17 +15,13 @@ export default function SettingsThemePage({
   const ContextDataHub = useContext(UseContextHook);
 
   const { colorThemesArr } = ContextDataHub;
-  const auth = UseAuth();
-  if (!auth) {
-    return null;
-  }
 
   return (
     <div className="theme-wrapper-div">
       <TextComp variant="subTitle">Theme Palettes</TextComp>
 
       <div className="setting-theme-div">
-        {colorThemesArr.map((data) => {
+        {colorThemesArr?.map((data) => {
           return (
             <div key={data.id} className="settings-container-theme-box-wrapper">
               <section

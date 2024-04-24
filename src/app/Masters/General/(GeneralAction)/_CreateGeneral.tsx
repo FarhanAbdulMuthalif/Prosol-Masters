@@ -3,9 +3,11 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -196,45 +198,74 @@ export default function CreateGeneral() {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
+  function clearFormValues<T extends object>(data: T) {
+    if (typeof data !== "object" || data === null) {
+      setFormData({} as { [K in keyof T]: string });
+    }
+
+    const clearedData: { [K in keyof T]: string } = Object.keys(data).reduce(
+      (acc, key) => {
+        acc[key as keyof T] = ""; // Set every value to an empty string
+        return acc;
+      },
+      {} as { [K in keyof T]: string }
+    );
+
+    setFormData(clearedData);
+  }
 
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
         <div className="create-plant-field-place-div">
-          <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Name`}
-            type="text"
-            value={formData ? formData[fieldName] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.name
-                ? `${SelectedMasterDatatab}Name Should not be empty`
-                : ""
-            }
-            error={plantFormError.name}
-            name={`${
-              (masters[ExactPath] as mastersGeneralSubFields)[
-                SelectedMasterDatatab as ValidMasterGeneralDataTabs
-              ]?.keyName
-            }Name`}
-          />
-          <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Code`}
-            type="text"
-            value={formData ? formData[fieldCode] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.code
-                ? `${SelectedMasterDatatab}Code Should not be empty`
-                : ""
-            }
-            error={plantFormError.code}
-            name={`${
-              (masters[ExactPath] as mastersGeneralSubFields)[
-                SelectedMasterDatatab as ValidMasterGeneralDataTabs
-              ]?.keyName
-            }Code`}
-          />
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Name
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter ${SelectedMasterDatatab} Name`}
+              type="text"
+              value={formData ? formData[fieldName] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.name
+                  ? `${SelectedMasterDatatab}Name Should not be empty`
+                  : ""
+              }
+              error={plantFormError.name}
+              name={`${
+                (masters[ExactPath] as mastersGeneralSubFields)[
+                  SelectedMasterDatatab as ValidMasterGeneralDataTabs
+                ]?.keyName
+              }Name`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Code
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter ${SelectedMasterDatatab} Code`}
+              type="text"
+              value={formData ? formData[fieldCode] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.code
+                  ? `${SelectedMasterDatatab}Code Should not be empty`
+                  : ""
+              }
+              error={plantFormError.code}
+              name={`${
+                (masters[ExactPath] as mastersGeneralSubFields)[
+                  SelectedMasterDatatab as ValidMasterGeneralDataTabs
+                ]?.keyName
+              }Code`}
+            />
+          </div>
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}
@@ -245,7 +276,13 @@ export default function CreateGeneral() {
           />
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton
+            onClick={() => {
+              clearFormValues(formData);
+            }}
+          >
+            CLEAR
+          </OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>

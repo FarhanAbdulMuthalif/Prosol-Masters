@@ -1,6 +1,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import { PrimaryTextColor } from "@/styles/colorsCode";
 import { pathObj } from "@/utils/LinkData";
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, Popover, TextField } from "@mui/material";
@@ -151,7 +152,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                           variant="bodySmall"
                           style={{ fontWeight: "600" }}
                         >
-                          {data.name}
+                          MM {splitWordByCapitalLetter(data.name)}
                         </TextComp>
                       </Link>
                     );
@@ -173,7 +174,10 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         variant="bodySmall"
                         style={{ fontWeight: "600" }}
                       >
-                        {data.name}
+                        MM{" "}
+                        {data.name === "SalesAndOthers"
+                          ? "Sales & Others"
+                          : splitWordByCapitalLetter(data.name)}
                       </TextComp>
                       <ArrowForwardIosIcon
                         sx={{ color: PrimaryTextColor, fontSize: "0.6rem" }}
@@ -244,7 +248,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                         variant="bodySmall"
                         style={{ fontWeight: "600" }}
                       >
-                        {data}
+                        {splitWordByCapitalLetter(data)}
                       </TextComp>
                     </li>
                   ))}

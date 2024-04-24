@@ -159,72 +159,134 @@ export default function DynamicField() {
   ) {
     return null;
   }
+  // const handleSelectChange = async (e: SelectChangeEvent) => {
+  //   const { name, value } = e.target;
+  //   setSelectedFormOption(value);
+  //   setSelectedMasterDatatab(value);
+  //   try {
+  //     const res = await api.get(`/dynamic/getAllDynamicFieldsByForm/${value}`);
+  //     const data = await res.data;
+
+  //     if (res.status === 200) {
+  //       setSelectedFormFields(data);
+  //       const fetchDataAndUpdateArray = async (
+  //         displayRelationFieldName: string,
+  //         fieldName: string
+  //       ) => {
+  //         try {
+  //           const res = await api.get(
+  //             `/dynamic/getListOfFieldNameValues?displayName=${displayRelationFieldName}&formName=${fieldName}`
+  //           );
+  //           const responseData = res.data;
+  //           setSelectedFormFields((prevArrObj) =>
+  //             data.map((obj: PostCreateFieldData) => {
+  //               if (
+  //                 obj.dataType === "relational" &&
+  //                 obj.fieldName === fieldName &&
+  //                 obj.displayRelationFieldName === displayRelationFieldName
+  //               ) {
+  //                 return { ...obj, enums: responseData };
+  //               }
+  //               return obj;
+  //             })
+  //           );
+  //         } catch (error) {
+  //           console.error("Error fetching data:", error);
+  //         }
+  //       };
+
+  //       data.forEach((obj: PostCreateFieldData) => {
+  //         if (obj.dataType === "relational") {
+  //           fetchDataAndUpdateArray(
+  //             obj.displayRelationFieldName || "",
+  //             obj.fieldName
+  //           );
+  //         }
+  //       });
+  //     }
+  //   } catch (e: any) {
+  //     if (!setReusableSnackBar) return;
+  //     setSelectedFormFields([]);
+  //     console.log(e?.response);
+  //     if (e?.response) {
+  //       setReusableSnackBar((prev) => ({
+  //         severity: "error",
+  //         message: String(
+  //           e?.response ? e?.response?.data : e?.response?.data?.error
+  //         ),
+  //         open: true,
+  //       }));
+  //     } else {
+  //       setReusableSnackBar((prev) => ({
+  //         severity: "error",
+  //         message: `Error: ${e?.message}`,
+  //         open: true,
+  //       }));
+  //     }
+  //   }
+  // };
+  // Utility function to fetch relational field data
+  async function fetchAndUpdateRelationalFields(
+    data: PostCreateFieldData[],
+    updateFormFields: Function
+  ) {
+    const updates = data.map(async (obj: PostCreateFieldData) => {
+      if (
+        obj.dataType === "relational" &&
+        obj.displayRelationFieldName &&
+        obj.fieldName
+      ) {
+        try {
+          const response = await api.get(
+            `/dynamic/getListOfFieldNameValues?displayName=${obj.displayRelationFieldName}&formName=${obj.fieldName}`
+          );
+          return { ...obj, enums: response.data };
+        } catch (error) {
+          console.error("Error fetching relational data:", error);
+          return obj; // Return the object unchanged in case of an error
+        }
+      }
+      return obj;
+    });
+
+    const updatedFields = await Promise.all(updates);
+    updateFormFields(updatedFields);
+  }
+
+  // Event handler for select change
   const handleSelectChange = async (e: SelectChangeEvent) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     setSelectedFormOption(value);
     setSelectedMasterDatatab(value);
     try {
-      const res = await api.get(`/dynamic/getAllDynamicFieldsByForm/${value}`);
-      const data = await res.data;
-
-      if (res.status === 200) {
-        setSelectedFormFields(data);
-        const fetchDataAndUpdateArray = async (
-          displayRelationFieldName: string,
-          fieldName: string
-        ) => {
-          try {
-            const res = await api.get(
-              `/dynamic/getListOfFieldNameValues?displayName=${displayRelationFieldName}&formName=${fieldName}`
-            );
-            const responseData = res.data;
-            setSelectedFormFields((prevArrObj) =>
-              data.map((obj: PostCreateFieldData) => {
-                if (
-                  obj.dataType === "relational" &&
-                  obj.fieldName === fieldName &&
-                  obj.displayRelationFieldName === displayRelationFieldName
-                ) {
-                  return { ...obj, enums: responseData };
-                }
-                return obj;
-              })
-            );
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
-
-        data.forEach((obj: PostCreateFieldData) => {
-          if (obj.dataType === "relational") {
-            fetchDataAndUpdateArray(
-              obj.displayRelationFieldName || "",
-              obj.fieldName
-            );
-          }
-        });
+      const response = await api.get(
+        `/dynamic/getAllDynamicFieldsByForm/${value}`
+      );
+      if (response.status === 200) {
+        const data = response.data;
+        setSelectedFormFields(data); // Set initial data
+        fetchAndUpdateRelationalFields(data, setSelectedFormFields); // Update with relational data asynchronously
       }
-    } catch (e: any) {
-      if (!setReusableSnackBar) return;
-      setSelectedFormFields([]);
-      console.log(e?.response);
-      if (e?.response) {
-        setReusableSnackBar((prev) => ({
-          severity: "error",
-          message: String(
-            e?.response ? e?.response?.data : e?.response?.data?.error
-          ),
-          open: true,
-        }));
-      } else {
-        setReusableSnackBar((prev) => ({
-          severity: "error",
-          message: `Error: ${e?.message}`,
-          open: true,
-        }));
-      }
+    } catch (error) {
+      console.error("Failed to fetch form fields:", error);
+      handleAPIError(error); // Handle API errors with a dedicated function
     }
   };
+
+  // Utility function for handling API errors
+  function handleAPIError(error: any) {
+    if (!setReusableSnackBar || !setSelectedFormFields) return;
+    setSelectedFormFields([]);
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "An unknown error occurred";
+    setReusableSnackBar({
+      severity: "error",
+      message: errorMessage,
+      open: true,
+    });
+  }
   const HandlerCloseCreateDrawer = () => {
     setEditDataSelected(initialDynamicStateField);
 
@@ -286,6 +348,7 @@ export default function DynamicField() {
       }
     }
   };
+  console.log(SelectedFormFields);
   return (
     <div className="dynamic-field-module-wrapper">
       <div className="dynamic-field-module-header-div">

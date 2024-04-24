@@ -295,6 +295,14 @@ export type RoleInitialStateProps = {
   updatedAt?: string;
   updatedBy?: string;
 };
+export type PrivilageInitialStateProps = {
+  id?: number;
+  name: string;
+  status: boolean;
+  updateAuditHistories?: [];
+  createdAt?: string;
+  createdBy?: string;
+};
 export type KeysToRemoveEditMaster =
   | "createdAt"
   | "createdBy"

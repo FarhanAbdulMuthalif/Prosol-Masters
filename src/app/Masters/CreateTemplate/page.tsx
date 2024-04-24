@@ -22,6 +22,7 @@ import {
 } from "../../../../TypesStore";
 
 import useFetch from "@/Hooks/useFetch";
+import useFetchWithoutSnackbar from "@/Hooks/useFetchWithoutSnackbar";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import CreateTemplateAttributeUOMDialog from "@/components/Dialog/CreateTemplateAttributeUOMDialog";
 import CreateTemplateValuesDialog from "@/components/Dialog/CreateTemplateValuesDialog";
@@ -97,7 +98,7 @@ export default function Value() {
       setSelectedMasterDatatab("CreateTemplate");
     }
   }, [setSelectedMasterDatatab]);
-  const { data: attributeMasterOriginalArray } = useFetch(
+  const { data: attributeMasterOriginalArray } = useFetchWithoutSnackbar(
     "/attribute/getAllAttributeFromMaster?showFull=true"
   ) ?? {
     data: [],
@@ -602,6 +603,10 @@ export default function Value() {
               alt="loading..."
               height={50}
               width={100}
+              onError={(e) => {
+                console.error("Error loading image:", e);
+              }}
+              unoptimized={true} // Disable image optimization temporarily
             />
           ) : (
             ""

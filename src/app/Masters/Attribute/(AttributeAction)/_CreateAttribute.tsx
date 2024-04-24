@@ -3,14 +3,13 @@ import useFetch from "@/Hooks/useFetch";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
-import RadioGroupComponent from "@/components/RadioButton/RadioGroup";
+import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
 import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
-import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
 import { PrimaryTextColor } from "@/styles/colorsCode";
-import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
-import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
+import { validateField } from "@/utils/DynamicFields/DynamicFunction";
+import { textCompStyle } from "@/utils/UserDataExport";
 import {
   Checkbox,
   FormControl,
@@ -144,6 +143,19 @@ export default function CreateAttribute() {
         fieldType: false,
       }));
     }
+    const validationErrors: Record<string, string> = {};
+    for (const field of dynamicFields) {
+      const value = formData[field.fieldName];
+      const error = validateField(field, value);
+      if (error) {
+        validationErrors[field.fieldName] = error;
+      }
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setdynFldErrValidation(validationErrors);
+      return; // Prevent form submission if there are errors
+    }
     if (
       formData["attributeName"]?.length > 0 &&
       formData["fieldType"]?.length > 0
@@ -216,130 +228,74 @@ export default function CreateAttribute() {
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-Attribute-wrapper-div">
         <div className="create-plant-field-place-div">
-          <OutlineTextField
-            placeholder={`Enter AttributeName`}
-            type="text"
-            value={formData ? formData["attributeName"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.attributeName
-                ? `ShortDesc Should not be empty`
-                : ""
-            }
-            error={plantFormError.attributeName}
-            name={`attributeName`}
-          />
-
-          <FormControl
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-              gap: "5px",
-            }}
-          >
-            <TextComp variant="subTitle" style={{ color: PrimaryTextColor }}>
-              FieldType :
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Name
+              <span>:</span>
             </TextComp>
-
-            <MuiRadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              row
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter AttributeName`}
+              type="text"
+              value={formData ? formData["attributeName"] : ""}
               onChange={handleInputChange}
-              name="fieldType"
-              value={formData["fieldType"]}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                height: "100%",
-                gap: "10px",
-              }}
-            >
-              {["NUMERIC", "AlphaNumeric"].map((option) => (
-                <FormControlLabel
-                  key={option}
-                  value={option}
-                  control={<Radio size="small" />}
-                  label={
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: "12px",
-                        margin: "0 ",
-                      }}
-                    >
-                      {option}
-                    </Typography>
-                  }
-                />
-              ))}
-            </MuiRadioGroup>
-          </FormControl>
+              helperText={
+                plantFormError.attributeName
+                  ? `ShortDesc Should not be empty`
+                  : ""
+              }
+              error={plantFormError.attributeName}
+              name={`attributeName`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              FieldType <span>:</span>
+            </TextComp>
+            <FormControl>
+              <MuiRadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                row
+                onChange={handleInputChange}
+                name="fieldType"
+                value={formData["fieldType"]}
+                // sx={{
+                //   display: "flex",
+                //   alignItems: "center",
+                //   height: "100%",
+                //   gap: "10px",
+                // }}
+              >
+                {["NUMERIC", "AlphaNumeric"].map((option) => (
+                  <FormControlLabel
+                    key={option}
+                    value={option}
+                    control={<Radio size="small" />}
+                    label={
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: "12px",
+                          margin: "0 ",
+                        }}
+                      >
+                        {option}
+                      </Typography>
+                    }
+                  />
+                ))}
+              </MuiRadioGroup>
+            </FormControl>
+          </div>
 
-          {dynamicFields?.map((data: PostCreateFieldData) => {
-            return (
-              <>
-                {data.dataType === "textField" ? (
-                  <OutlineTextField
-                    placeholder={`Enter ${data.fieldName}`}
-                    key={data.id}
-                    type={data.identity}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                    name={data.fieldName}
-                    inputProps={{
-                      autoComplete: "new-password",
-                      maxLength: data.max,
-                      minLength: data.min,
-                    }}
-                  />
-                ) : data.dataType === "textArea" ? (
-                  <TextareaOutline
-                    placeholder={`Enter ${data.fieldName}`}
-                    key={data.id}
-                    rows={typeof Number(data.identity) ? data.identity : 2}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                    name={data.fieldName}
-                    inputProps={{
-                      autoComplete: "new-password",
-                      maxLength: data.max,
-                      minLength: data.min,
-                    }}
-                  />
-                ) : data.dataType === "dropDown" &&
-                  data.identity === "single" ? (
-                  <DynamicSingleSelectDropdown
-                    label={`Select ${data.fieldName}`}
-                    value={formData[data.fieldName]}
-                    onChange={handleSelectDynChange}
-                    options={data.dropDowns ? data.dropDowns : []}
-                    name={data.fieldName}
-                  />
-                ) : data.dataType === "dropDown" &&
-                  data.identity === "multiple" ? (
-                  <MultipleDynamicSelectDropdown
-                    label={`Select ${data.fieldName}`}
-                    value={formData[data.fieldName]}
-                    onChange={handleMultiSelectChange}
-                    options={data.dropDowns ? data.dropDowns : []}
-                    name={data.fieldName}
-                  />
-                ) : data.dataType === "radioButton" ? (
-                  <RadioGroupComponent
-                    label={`${data.fieldName} :`}
-                    name={data.fieldName}
-                    options={data.enums ? data?.enums : []}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                  />
-                ) : (
-                  ""
-                )}
-              </>
-            );
-          })}
+          <MasterDynamicFieldRender
+            formData={formData}
+            dynamicFields={dynamicFields}
+            handleInputChange={handleInputChange}
+            handleMultiSelectChange={handleMultiSelectChange}
+            handleSelectChange={handleSelectChange}
+            dynFldErrValidation={dynFldErrValidation}
+          />
         </div>
         <div className="master-attribute-uom-list">
           <TextComp

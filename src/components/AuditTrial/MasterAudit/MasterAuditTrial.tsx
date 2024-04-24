@@ -32,15 +32,19 @@ export default function MasterAuditTrial({ formData }: any) {
             id="panel1-header"
             sx={{
               padding: "0 16px",
-              minHeight: "30px",
+              maxHeight: "30px",
               "&.Mui-expanded": {
-                minHeight: "42px", // Adjust the expanded minHeight
+                maxHeight: "42px", // Adjust the expanded minHeight
               },
               borderBottom: "1px solid rgba(73, 63, 53, 0.229)",
             }}
           >
             <Typography
-              sx={{ color: "#4642427c", fontSize: "10px", fontWeight: "500" }}
+              sx={{
+                color: "#4642427c",
+                fontSize: "10px",
+                fontWeight: "500",
+              }}
             >
               Updated History
             </Typography>

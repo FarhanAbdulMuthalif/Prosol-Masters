@@ -6,8 +6,10 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -269,52 +271,78 @@ export default function EditStorageBin({ EditDataGet }: any) {
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
         <div className="create-plant-field-place-div">
-          <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Name`}
-            type="text"
-            value={formData ? formData[fieldName] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.name
-                ? `${SelectedMasterDatatab}Name Should not be empty`
-                : ""
-            }
-            error={plantFormError.name}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Name`}
-          />
-          <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Code`}
-            type="text"
-            value={formData ? formData[fieldCode] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.code
-                ? `${SelectedMasterDatatab}Code Should not be empty`
-                : ""
-            }
-            error={plantFormError.code}
-            name={`${
-              SelectedMasterDatatab.charAt(0).toLowerCase() +
-              SelectedMasterDatatab.slice(1)
-            }Code`}
-          />
-          <NameSingleSelectDropdown
-            value={DwnValue ? DwnValue : ""}
-            onChange={handleSelectChange}
-            options={PlantDropDownData}
-            label={"Select Plant"}
-            name="plantId"
-          />
-          <NameSingleSelectDropdown
-            value={StgLcDwnValue ? StgLcDwnValue : ""}
-            onChange={handleSelectChange}
-            options={storgaeLocationDropDownData}
-            label={"Select Storage Location"}
-            name="storageLocationId"
-          />
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Name
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter ${SelectedMasterDatatab} Name`}
+              type="text"
+              value={formData ? formData[fieldName] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.name
+                  ? `${SelectedMasterDatatab}Name Should not be empty`
+                  : ""
+              }
+              error={plantFormError.name}
+              name={`${
+                SelectedMasterDatatab.charAt(0).toLowerCase() +
+                SelectedMasterDatatab.slice(1)
+              }Name`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Code
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter ${SelectedMasterDatatab} Code`}
+              type="text"
+              value={formData ? formData[fieldCode] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.code
+                  ? `${SelectedMasterDatatab}Code Should not be empty`
+                  : ""
+              }
+              error={plantFormError.code}
+              name={`${
+                SelectedMasterDatatab.charAt(0).toLowerCase() +
+                SelectedMasterDatatab.slice(1)
+              }Code`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Select Plant
+              <span>:</span>
+            </TextComp>
+            <NameSingleSelectDropdown
+              value={DwnValue ? DwnValue : ""}
+              onChange={handleSelectChange}
+              options={PlantDropDownData}
+              label={"Select Plant"}
+              name="plantId"
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Select Storage Location
+              <span>:</span>
+            </TextComp>
+            <NameSingleSelectDropdown
+              value={StgLcDwnValue ? StgLcDwnValue : ""}
+              onChange={handleSelectChange}
+              options={storgaeLocationDropDownData}
+              label={"Select Storage Location"}
+              name="storageLocationId"
+            />
+          </div>
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}
@@ -324,11 +352,11 @@ export default function EditStorageBin({ EditDataGet }: any) {
             dynFldErrValidation={dynFldErrValidation}
           />
         </div>
-        <MasterAuditTrial formData={formData}></MasterAuditTrial>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
+        <MasterAuditTrial formData={formData}></MasterAuditTrial>
       </div>
     </form>
   );

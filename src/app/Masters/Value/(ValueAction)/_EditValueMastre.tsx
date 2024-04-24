@@ -6,9 +6,11 @@ import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -219,57 +221,99 @@ export default function EditValueMastre({ EditDataGet }: any) {
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
-        <div className="create-plant-field-place-div-edit-vendor">
-          <OutlineTextField
-            placeholder={`Enter Value`}
-            type="text"
-            value={formData ? formData["value"] : ""}
-            onChange={handleInputChange}
-            helperText={plantFormError.value ? `Value Should not be empty` : ""}
-            error={plantFormError.value}
-            name={`value`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Abbreviation`}
-            type="text"
-            value={formData ? formData["abbreviation"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.abbreviation
-                ? `Abbreviation Should not be empty`
-                : ""
-            }
-            error={plantFormError.abbreviation}
-            name={`abbreviation`}
-          />
-          <OutlineTextField
-            placeholder={`Enter LikelyWords`}
-            type="text"
-            value={formData ? formData["likelyWords"] : ""}
-            onChange={handleInputChange}
-            name={`likelyWords`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Equivalent`}
-            type="text"
-            value={formData ? formData["equivalent"] : ""}
-            onChange={handleInputChange}
-            name={`equivalent`}
-          />
-          <NameSingleSelectDropdown
-            value={DwnValue ? DwnValue : ""}
-            onChange={handleSelectChange}
-            options={attUomDropDownData}
-            label={"Select Abbreviation Unit"}
-            name="abbreviationUnit"
-          />
-          <NameSingleSelectDropdown
-            value={DwnValue2 ? DwnValue2 : ""}
-            onChange={handleSelectChange}
-            options={attUomDropDownData}
-            label={"Select Equivalent Unit"}
-            name="equivalentUnit"
-          />
+        <div className="create-plant-field-place-div">
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Name
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter Value`}
+              type="text"
+              value={formData ? formData["value"] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.value ? `Value Should not be empty` : ""
+              }
+              error={plantFormError.value}
+              name={`value`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter Abbreviation
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter Abbreviation`}
+              type="text"
+              value={formData ? formData["abbreviation"] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.abbreviation
+                  ? `Abbreviation Should not be empty`
+                  : ""
+              }
+              error={plantFormError.abbreviation}
+              name={`abbreviation`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter LikelyWords
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter LikelyWords`}
+              type="text"
+              value={formData ? formData["likelyWords"] : ""}
+              onChange={handleInputChange}
+              name={`likelyWords`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter Equivalent
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter Equivalent`}
+              type="text"
+              value={formData ? formData["equivalent"] : ""}
+              onChange={handleInputChange}
+              name={`equivalent`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Select Abbreviation Unit
+              <span>:</span>
+            </TextComp>
+            <NameSingleSelectDropdown
+              value={DwnValue ? DwnValue : ""}
+              onChange={handleSelectChange}
+              options={attUomDropDownData}
+              label={"Select Abbreviation Unit"}
+              name="abbreviationUnit"
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Select Equivalent Unit
+              <span>:</span>
+            </TextComp>
+            <NameSingleSelectDropdown
+              value={DwnValue2 ? DwnValue2 : ""}
+              onChange={handleSelectChange}
+              options={attUomDropDownData}
+              label={"Select Equivalent Unit"}
+              name="equivalentUnit"
+            />
+          </div>
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}
@@ -279,11 +323,11 @@ export default function EditValueMastre({ EditDataGet }: any) {
             dynFldErrValidation={dynFldErrValidation}
           />
         </div>
-        <MasterAuditTrial formData={formData}></MasterAuditTrial>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
+        <MasterAuditTrial formData={formData}></MasterAuditTrial>
       </div>
     </form>
   );

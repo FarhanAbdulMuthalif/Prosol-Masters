@@ -1,5 +1,4 @@
 "use client";
-import UseAuth from "@/Hooks/useAuth";
 import Header from "@/components/Header/page";
 import Navbar from "@/components/NavBar/page";
 import ReusableSnackbar from "@/components/Snackbar/Snackbar";
@@ -142,7 +141,6 @@ export default function ClientContext({ children }: { children: ReactNode }) {
   const iconRotateHandler = {
     transform: toogleSidebar ? "rotate(180deg)" : "",
   };
-  const authHook = UseAuth();
   const dataTheme = MUIThemeComp(selectedFont, ThemeColor);
 
   return (

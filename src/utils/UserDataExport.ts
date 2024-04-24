@@ -1,6 +1,10 @@
 import apiLogin from "@/components/apiLogin";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { Dispatch, SetStateAction } from "react";
-import { SingleUserInfoProps } from "../../TypesStore";
+import {
+  PrivilageInitialStateProps,
+  SingleUserInfoProps,
+} from "../../TypesStore";
 
 export const UserInitialState = {
   email: "",
@@ -22,6 +26,14 @@ export const RoleInitialState = {
   status: false,
   privileges: [] as number[],
 };
+export const PrivilageInitialState: PrivilageInitialStateProps = {
+  id: 0,
+  name: "",
+  status: false,
+  updateAuditHistories: [],
+  createdBy: "",
+  createdAt: "",
+};
 
 export async function singleUserDataHandler(
   Token: string,
@@ -38,3 +50,8 @@ export async function singleUserDataHandler(
     setUser(resData);
   }
 }
+export const textCompStyle = {
+  color: PrimaryTextColor,
+  display: "flex",
+  justifyContent: "space-between",
+};

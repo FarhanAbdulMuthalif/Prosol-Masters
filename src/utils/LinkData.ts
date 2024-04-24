@@ -15,6 +15,7 @@ export const pathObj: PathObjProps = {
   UserManagement: [
     { name: "User", path: "/UserManagement" },
     { name: "Role", path: "/UserManagement/Role" },
+    { name: "Privilage", path: "/UserManagement/Privilage" },
   ],
   Settings: [{ name: "UI Settings", path: "/Settings" }],
   Dynamic: [

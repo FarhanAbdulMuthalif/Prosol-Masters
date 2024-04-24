@@ -3,9 +3,11 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FormEvent, useContext, useEffect, useState } from "react";
@@ -193,19 +195,26 @@ export default function CreateNMUOM() {
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
         <div className="create-plant-field-place-div">
-          <OutlineTextField
-            placeholder={`Enter ${SelectedMasterDatatab} Name`}
-            type="text"
-            value={formData ? formData[fieldName] : ""}
-            onChange={handleInputChange}
-            helperText={
-              plantFormError.name
-                ? `${SelectedMasterDatatab}Name Should not be empty`
-                : ""
-            }
-            error={plantFormError.name}
-            name={fieldName}
-          />
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Name
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter ${SelectedMasterDatatab} Name`}
+              type="text"
+              value={formData ? formData[fieldName] : ""}
+              onChange={handleInputChange}
+              helperText={
+                plantFormError.name
+                  ? `${SelectedMasterDatatab}Name Should not be empty`
+                  : ""
+              }
+              error={plantFormError.name}
+              name={fieldName}
+            />
+          </div>
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}

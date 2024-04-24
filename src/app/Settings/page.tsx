@@ -12,7 +12,7 @@ import SettingsThemePage from "./(SettingsComponents)/_SettingsThemePage";
 import "./style.scss";
 
 export default function Settings() {
-  const authHook = UseAuth();
+  const auth = UseAuth();
   const dataContextHub = useContext(UseContextHook);
 
   const {
@@ -23,7 +23,6 @@ export default function Settings() {
     setfontPropertyArr,
     setselectedFont,
     setReusableSnackBar,
-    auth,
   } = dataContextHub;
   const [tempSelectedFont, setTempSelectedFont] = useState(selectedFont);
   const [tempThemeColor, setTempThemeColor] = useState(ThemeColor);
@@ -31,14 +30,7 @@ export default function Settings() {
     ...fontPropertyArr,
   ]);
 
-  if (
-    !authHook ||
-    !setThemeColor ||
-    !setfontPropertyArr ||
-    !setselectedFont ||
-    !setReusableSnackBar ||
-    !auth
-  ) {
+  if (!auth) {
     return null;
   }
   const uiSettingsChangeHandler = async (e: FormEvent) => {
@@ -52,6 +44,13 @@ export default function Settings() {
       fontProperties: newTempFontPropertyArr,
       theme: newThemeObjData,
     };
+    if (
+      !setThemeColor ||
+      !setfontPropertyArr ||
+      !setselectedFont ||
+      !setReusableSnackBar
+    )
+      return null;
     try {
       const res = await api.put("/userSettings/updateFont", updateFontSettings);
       const data = await res.data;

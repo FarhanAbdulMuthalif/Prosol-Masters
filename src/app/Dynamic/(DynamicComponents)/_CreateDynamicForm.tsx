@@ -1,9 +1,11 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import api from "@/components/api";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { useContext, useState } from "react";
 
 export default function CreateDynamicForm() {
@@ -76,30 +78,44 @@ export default function CreateDynamicForm() {
     <form onSubmit={DynamicFormCreateHandler}>
       <div className="create-dynamic-form-module">
         <div className="create-dynamic-form-module-div">
-          <OutlineTextField
-            placeholder={`Enter Form Name`}
-            type="text"
-            value={formName.formName}
-            onChange={handleInputChange}
-            helperText={
-              DynamicformError.formName ? `Form Name Should not be empty` : ""
-            }
-            error={DynamicformError.formName}
-            name="formName"
-          />
-          <TextareaOutline
-            placeholder={`Enter Description`}
-            value={formName.formDescription}
-            onChange={handleInputChange}
-            helperText={
-              DynamicformError.desc
-                ? `Form Description Should not be empty`
-                : ""
-            }
-            error={DynamicformError.desc}
-            rows={3}
-            name="formDescription"
-          />
+          <div className="create-dynamic-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter FormName
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              placeholder={`Enter Form Name`}
+              type="text"
+              fullWidth
+              value={formName.formName}
+              onChange={handleInputChange}
+              helperText={
+                DynamicformError.formName ? `Form Name Should not be empty` : ""
+              }
+              error={DynamicformError.formName}
+              name="formName"
+            />
+          </div>
+          <div className="create-dynamic-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter Form Description
+              <span>:</span>
+            </TextComp>
+            <TextareaOutline
+              placeholder={`Enter Description`}
+              value={formName.formDescription}
+              onChange={handleInputChange}
+              fullWidth
+              helperText={
+                DynamicformError.desc
+                  ? `Form Description Should not be empty`
+                  : ""
+              }
+              error={DynamicformError.desc}
+              rows={3}
+              name="formDescription"
+            />
+          </div>
         </div>
         <div className="create-dynamic-form-module-action">
           <OutlinedButton>CLEAR</OutlinedButton>

@@ -38,7 +38,7 @@ export const colorThemesArr = [
     id: 6,
     name: "LotusTheme",
     primaryColor: "#1A1C20",
-    secondaryColor: "yellow",
+    secondaryColor: "#ffd300",
     tertiaryColor: "#fef7dd",
   },
   {

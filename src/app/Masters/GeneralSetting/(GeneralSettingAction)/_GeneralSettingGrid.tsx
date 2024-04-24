@@ -182,27 +182,27 @@ export default function GeneralSettingGrid({
   // console.log(filteredKeys);
   const masterDatagridColumns: GridColDef[] = filteredKeys?.map(
     (data: string) => {
-      if (data === "mainGroupCodesId") {
+      if (data === "mainGroupCodes") {
         return {
-          field: "mainGroupCodesId",
+          field: "mainGroupCodes",
           headerClassName: "super-app-theme--header",
           flex: 1,
 
           headerName: `MainGroupCodes`,
           renderCell: (params: any) => {
-            return params.row.mainGroupCodesId.mainGroupName;
+            return params.row.mainGroupCodes.mainGroupName;
           },
         };
       }
-      if (data === "subGroupCodesId") {
+      if (data === "subGroupCodes") {
         return {
-          field: "subGroupCodesId",
+          field: "subGroupCodes",
           headerClassName: "super-app-theme--header",
           flex: 1,
 
           headerName: `SubGroupCodes`,
           renderCell: (params: any) => {
-            return params.row.subGroupCodesId.subGroupName;
+            return params.row.subGroupCodes.subGroupName;
           },
         };
       }

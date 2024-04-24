@@ -84,6 +84,21 @@ export const RoleTableColumns: GridColDef[] = [
   //   flex: 1,
   // },
 ];
+export const PrivilageTableColumns: GridColDef[] = [
+  {
+    field: "name",
+    headerClassName: "super-app-theme--header",
+    flex: 1,
+    headerName: "Name",
+  },
+
+  // {
+  //   field: "plantId",
+  //   headerClassName: "super-app-theme--header",
+  //   headerName: "plantName",
+  //   flex: 1,
+  // },
+];
 export const DynamicFormTableColumns: GridColDef[] = [
   {
     field: "formName",

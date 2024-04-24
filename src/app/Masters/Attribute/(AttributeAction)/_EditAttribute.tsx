@@ -10,6 +10,7 @@ import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { PrimaryTextColor } from "@/styles/colorsCode";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
+import { textCompStyle } from "@/utils/UserDataExport";
 import {
   Checkbox,
   FormControl,
@@ -48,7 +49,7 @@ export default function EditAttribute({ EditDataGet }: any) {
       return {
         ...prev,
         ...prev,
-        listUom: EditDataGet.listUom.map((data: any) => data.id),
+        listUom: EditDataGet?.listUom?.map((data: any) => data.id),
       };
     });
 
@@ -241,65 +242,66 @@ export default function EditAttribute({ EditDataGet }: any) {
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-Attribute-wrapper-div">
         <div className="create-plant-field-place-div">
-          <OutlineTextField
-            placeholder={`Enter AttributeName`}
-            type="text"
-            value={formData ? formData["attributeName"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              VendorFormError.attributeName
-                ? `ShortDesc Should not be empty`
-                : ""
-            }
-            error={VendorFormError.attributeName}
-            name={`attributeName`}
-          />
-
-          <FormControl
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-              gap: "5px",
-            }}
-          >
-            <TextComp variant="subTitle" style={{ color: PrimaryTextColor }}>
-              FieldType :
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {SelectedMasterDatatab} Name
+              <span>:</span>
             </TextComp>
-            <MuiRadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              row
+            <OutlineTextField
+              fullWidth
+              placeholder={`Enter AttributeName`}
+              type="text"
+              value={formData ? formData["attributeName"] : ""}
               onChange={handleInputChange}
-              name="fieldType"
-              value={formData["fieldType"]}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                height: "100%",
-                gap: "10px",
-              }}
-            >
-              {["NUMERIC", "AlphaNumeric"].map((option) => (
-                <FormControlLabel
-                  key={option}
-                  value={option}
-                  control={<Radio size="small" />}
-                  label={
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: "12px",
-                        margin: "0 ",
-                      }}
-                    >
-                      {option}
-                    </Typography>
-                  }
-                />
-              ))}
-            </MuiRadioGroup>
-          </FormControl>
+              helperText={
+                VendorFormError.attributeName
+                  ? `ShortDesc Should not be empty`
+                  : ""
+              }
+              error={VendorFormError.attributeName}
+              name={`attributeName`}
+            />
+          </div>
+          <div className="create-plant-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              FieldType
+              <span>:</span>
+            </TextComp>
+            <FormControl>
+              <MuiRadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                row
+                onChange={handleInputChange}
+                name="fieldType"
+                value={formData["fieldType"]}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  height: "100%",
+                  gap: "10px",
+                }}
+              >
+                {["NUMERIC", "AlphaNumeric"].map((option) => (
+                  <FormControlLabel
+                    key={option}
+                    value={option}
+                    control={<Radio size="small" />}
+                    label={
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: "12px",
+                          margin: "0 ",
+                        }}
+                      >
+                        {option}
+                      </Typography>
+                    }
+                  />
+                ))}
+              </MuiRadioGroup>
+            </FormControl>
+          </div>
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}
@@ -338,11 +340,11 @@ export default function EditAttribute({ EditDataGet }: any) {
             })}
           </div>
         </div>
-        <MasterAuditTrial formData={formData}></MasterAuditTrial>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
+        <MasterAuditTrial formData={formData}></MasterAuditTrial>
       </div>
     </form>
   );

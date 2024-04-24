@@ -9,8 +9,7 @@ import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
-import { PrimaryTextColor } from "@/styles/colorsCode";
-import { UserInitialState } from "@/utils/UserDataExport";
+import { UserInitialState, textCompStyle } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { FormEvent, useContext, useState } from "react";
 import { UserInitialStateProps } from "../../../TypesStore";
@@ -177,68 +176,130 @@ export default function EditUser({
       }
     }
   };
+
   return (
     <form className="create-user-wrapper" onSubmit={UserFormSubmitHandler}>
       <div className="create-user-wrapper-inputs">
-        <OutlineTextField
-          placeholder={`Enter FirstName`}
-          type="text"
-          value={formData.firstName}
-          onChange={handleInputChange}
-          name="firstName"
-        />
-        <OutlineTextField
-          placeholder={`Enter LastName`}
-          type="text"
-          value={formData.lastName}
-          onChange={handleInputChange}
-          name="lastName"
-        />
-
-        <OutlineTextField
-          placeholder={`Enter Phone No`}
-          type="number"
-          value={formData.phone}
-          onChange={handleInputChange}
-          name="phone"
-        />
-
-        <NameSingleSelectDropdown
-          label="Select Department"
-          value={
-            formData.departmentId
-              ? DepartmentDropDownData.find(
-                  (data) => data.value === formData.departmentId
-                )?.label || ""
-              : ""
-          }
-          onChange={handleSelectChange}
-          options={DepartmentDropDownData ?? []}
-          name="departmentId"
-        />
-
-        <ReusableMultipleSelect
-          label="Select Plant"
-          values={formData.plantId ? formData.plantId : []}
-          options={PlantDropDownData ?? []}
-          onChange={multiplehandleSelectChange}
-          name="plantId"
-        />
-        <ReusableMultipleSelect
-          label="Select Role"
-          values={formData.roles ? formData.roles : []}
-          options={RolesDropDownData ?? []}
-          onChange={multiplehandleSelectChange}
-          name="roles"
-        />
-        <OutlineTextField
-          placeholder={`Enter Business`}
-          type="text"
-          value={formData.business}
-          onChange={handleInputChange}
-          name="business"
-        />
-        <div className="status-user-toogle-div">
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enter FirstName
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter FirstName`}
+            fullWidth
+            type="text"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            name="firstName"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enter LastName
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter LastName`}
+            fullWidth
+            type="text"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            name="lastName"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enter PhoneNo
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter Phone No`}
+            fullWidth
+            type="number"
+            value={formData.phone}
+            onChange={handleInputChange}
+            name="phone"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Select Department
+            <span>:</span>
+          </TextComp>
+          <NameSingleSelectDropdown
+            label="Select Department"
+            value={
+              formData.departmentId
+                ? DepartmentDropDownData.find(
+                    (data) => data.value === formData.departmentId
+                  )?.label || ""
+                : ""
+            }
+            onChange={handleSelectChange}
+            options={DepartmentDropDownData ?? []}
+            name="departmentId"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Select Plant
+            <span>:</span>
+          </TextComp>
+          <ReusableMultipleSelect
+            label="Select Plant"
+            values={formData.plantId ? formData.plantId : []}
+            options={PlantDropDownData ?? []}
+            onChange={multiplehandleSelectChange}
+            name="plantId"
+            fullWidth={true}
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Select Role
+            <span>:</span>
+          </TextComp>
+          <ReusableMultipleSelect
+            fullWidth={true}
+            label="Select Role"
+            values={formData.roles ? formData.roles : []}
+            options={RolesDropDownData ?? []}
+            onChange={multiplehandleSelectChange}
+            name="roles"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enter Business
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter Business`}
+            fullWidth
+            type="text"
+            value={formData.business}
+            onChange={handleInputChange}
+            name="business"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            User Status {`(Active / Inactive)`}
+            <span>:</span>
+          </TextComp>
+          <div
+            className="statusDiv-wrapper"
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <ReusableSwitch
+              checked={formData.status}
+              onChange={handleInputChange}
+              name="status"
+            />
+          </div>
+        </div>
+        {/* <div className="status-user-toogle-div">
           <TextComp
             variant="body"
             style={{ fontWeight: "bold", color: PrimaryTextColor }}
@@ -252,7 +313,7 @@ export default function EditUser({
             onChange={handleInputChange}
             name="status"
           />
-        </div>
+        </div> */}
       </div>
       {FormErrorMessage.length > 0 ? (
         <div className="user-error-message-div">
@@ -263,11 +324,11 @@ export default function EditUser({
       ) : (
         ""
       )}
-      <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
       <div className="create-user-wrapper-action">
         <OutlinedButton>Cancel</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
+      <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
     </form>
   );
 }

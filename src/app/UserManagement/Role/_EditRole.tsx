@@ -10,8 +10,7 @@ import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
-import { PrimaryTextColor } from "@/styles/colorsCode";
-import { RoleInitialState } from "@/utils/UserDataExport";
+import { RoleInitialState, textCompStyle } from "@/utils/UserDataExport";
 import {
   Checkbox,
   FormControlLabel,
@@ -167,35 +166,54 @@ export default function EditRole({
   return (
     <form className="create-user-wrapper" onSubmit={UserFormSubmitHandler}>
       <div className="create-user-wrapper-inputs">
-        <OutlineTextField
-          placeholder={`Enter Name`}
-          type="text"
-          value={formData.name}
-          onChange={handleInputChange}
-          name="name"
-        />
-        <OutlineTextField
-          placeholder={`Enter Description`}
-          type="text"
-          value={formData.description}
-          onChange={handleInputChange}
-          name="description"
-        />
-
-        <NameSingleSelectDropdown
-          label="Select Plant"
-          value={
-            formData.plantId
-              ? PlantDropDownData.find(
-                  (data) => data.value === formData.plantId
-                )?.label || ""
-              : ""
-          }
-          onChange={handleSelectChange}
-          options={PlantDropDownData ?? []}
-          name="plantId"
-        />
-        <div className="status-user-toogle-div">
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enter RoleName
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter Name`}
+            fullWidth
+            type="text"
+            value={formData.name}
+            onChange={handleInputChange}
+            name="name"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enter Description
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter Description`}
+            fullWidth
+            type="text"
+            value={formData.description}
+            onChange={handleInputChange}
+            name="description"
+          />
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Select Plant
+            <span>:</span>
+          </TextComp>
+          <NameSingleSelectDropdown
+            label="Select Plant"
+            value={
+              formData.plantId
+                ? PlantDropDownData.find(
+                    (data) => data.value === formData.plantId
+                  )?.label || ""
+                : ""
+            }
+            onChange={handleSelectChange}
+            options={PlantDropDownData ?? []}
+            name="plantId"
+          />
+        </div>
+        {/* <div className="status-user-toogle-div">
           <TextComp
             variant="body"
             style={{ fontWeight: "bold", color: PrimaryTextColor }}
@@ -210,8 +228,93 @@ export default function EditRole({
             onChange={handleInputChange}
             name="status"
           />
+        </div> */}
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            User Status {`(Active / Inactive)`}
+            <span>:</span>
+          </TextComp>
+          <div
+            className="statusDiv-wrapper"
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <ReusableSwitch
+              checked={formData.status}
+              onChange={handleInputChange}
+              name="status"
+            />
+          </div>
         </div>
-        <div className="status-role-div">
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Privilages
+            <span>:</span>
+          </TextComp>
+          <div
+            className="statusDiv-wrapper"
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <div className="status-role-div-checkbox-list">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={checkHandler2}
+                    checked={formData.privileges.includes(1)}
+                    value="1"
+                  />
+                }
+                label={
+                  <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                    Create
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={checkHandler2}
+                    checked={formData.privileges.includes(2)}
+                    value="2"
+                  />
+                }
+                label={
+                  <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                    Read
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={checkHandler2}
+                    checked={formData.privileges.includes(3)}
+                    value="3"
+                  />
+                }
+                label={
+                  <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                    Update
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={checkHandler2}
+                    checked={formData.privileges.includes(4)}
+                    value="4"
+                  />
+                }
+                label={
+                  <Typography sx={{ fontSize: "12px", color: "#71747A" }}>
+                    Delete
+                  </Typography>
+                }
+              />
+            </div>
+          </div>
+        </div>
+        {/* <div className="status-role-div">
           <TextComp
             variant="body"
             style={{ fontWeight: "bold", color: PrimaryTextColor }}
@@ -278,7 +381,7 @@ export default function EditRole({
               }
             />
           </div>
-        </div>
+        </div> */}
       </div>
       {FormErrorMessage.length > 0 ? (
         <div className="user-error-message-div">
@@ -287,11 +390,11 @@ export default function EditRole({
       ) : (
         ""
       )}
-      <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
       <div className="create-user-wrapper-action">
         <OutlinedButton>Cancel</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
+      <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
     </form>
   );
 }

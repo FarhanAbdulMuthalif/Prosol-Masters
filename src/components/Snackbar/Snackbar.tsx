@@ -20,7 +20,16 @@ const ReusableSnackbar = ({
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+    <Snackbar
+      open={open}
+      autoHideDuration={4000}
+      onClose={handleClose}
+      sx={{ height: "100%" }}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
+    >
       <Alert severity={severity} variant="filled" elevation={6}>
         {message}
       </Alert>

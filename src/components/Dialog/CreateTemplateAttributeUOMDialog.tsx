@@ -65,6 +65,7 @@ export default function CreateTemplateAttributeUOMDialog({
   const { setReusableSnackBar } = ContextDataHub;
 
   useEffect(() => {
+    if (CharacteristicDwnValueId === 0) return;
     async function asyncCall() {
       try {
         const res = await api.get(

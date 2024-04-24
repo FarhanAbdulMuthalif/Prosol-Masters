@@ -7,6 +7,7 @@ interface MultipleSelectProps {
   options: { value: number; label: string }[];
   onChange: (e: SelectChangeEvent) => void;
   name: string;
+  fullWidth?: boolean;
 }
 
 const ReusableMultipleSelect: FC<MultipleSelectProps> = ({
@@ -15,6 +16,7 @@ const ReusableMultipleSelect: FC<MultipleSelectProps> = ({
   options,
   onChange,
   name,
+  fullWidth,
 }) => {
   const menuItemStyle = {
     fontSize: "12px",
@@ -33,6 +35,7 @@ const ReusableMultipleSelect: FC<MultipleSelectProps> = ({
       sx={SelectStyle}
       value={values as any}
       displayEmpty
+      fullWidth={fullWidth}
       renderValue={(selected) => {
         if (values.length === 0) {
           return label;
