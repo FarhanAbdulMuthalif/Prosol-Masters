@@ -5,6 +5,7 @@ import useFetch from "@/Hooks/useFetch";
 import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTrial";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import EdtRoleUserListDialog from "@/components/Dialog/userDialog/Role/EdtRoleUserListDialog";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import TextComp from "@/components/TextComp/TextComp";
@@ -44,8 +45,9 @@ export default function EditRole({
   // Create a new object by filtering out specified keys
   const filteredUserData = { ...filteredData };
   const RoleDataCon = useContext(UseContextHook);
-  const { setReusableSnackBar } = RoleDataCon;
+  const { setReusableSnackBar, ThemeColor } = RoleDataCon;
   keysToRemove.forEach((key) => delete filteredUserData[key]);
+  const [UserListDialog, setUserListDialog] = useState(false);
   const [formData, setFormData] = useState(filteredUserData);
   const [FormErrorMessage, setFormErrorMessage] = useState("");
   const { data: originalArray } = useFetch("/plant/getAllPlant") ?? {
@@ -258,6 +260,7 @@ export default function EditRole({
               <FormControlLabel
                 control={
                   <Checkbox
+                    sx={{ accentColor: ThemeColor.primaryColor }}
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(1)}
                     value="1"
@@ -272,6 +275,7 @@ export default function EditRole({
               <FormControlLabel
                 control={
                   <Checkbox
+                    sx={{ accentColor: ThemeColor.primaryColor }}
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(2)}
                     value="2"
@@ -286,6 +290,7 @@ export default function EditRole({
               <FormControlLabel
                 control={
                   <Checkbox
+                    sx={{ accentColor: ThemeColor.primaryColor }}
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(3)}
                     value="3"
@@ -300,6 +305,7 @@ export default function EditRole({
               <FormControlLabel
                 control={
                   <Checkbox
+                    sx={{ accentColor: ThemeColor.primaryColor }}
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(4)}
                     value="4"
@@ -313,6 +319,24 @@ export default function EditRole({
               />
             </div>
           </div>
+        </div>
+        <div className="create-user-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Users Mapped
+            <span>:</span>
+          </TextComp>
+
+          <TextComp
+            variant="subTitle"
+            style={{
+              fontWeight: "bold",
+              color: ThemeColor.primaryColor,
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+          >
+            <span onClick={() => setUserListDialog(true)}>View users</span>
+          </TextComp>
         </div>
         {/* <div className="status-role-div">
           <TextComp
@@ -395,6 +419,11 @@ export default function EditRole({
         <FillButton type="submit">Submit</FillButton>
       </div>
       <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>
+      <EdtRoleUserListDialog
+        id={EditDataGet.id || 0}
+        open={UserListDialog}
+        handleClose={setUserListDialog}
+      />
     </form>
   );
 }

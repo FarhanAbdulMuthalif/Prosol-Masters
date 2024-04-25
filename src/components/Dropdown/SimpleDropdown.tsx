@@ -1,3 +1,4 @@
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import {
   FormControl,
   MenuItem,
@@ -25,9 +26,9 @@ const SimpleDropdown: FC<DropdownProps> = ({
   };
   const SelectStyle = {
     fontSize: "12px",
-    color: "brown",
-
-    height: "2.2rem",
+    color: PrimaryTextColor,
+    opacity: "0.7",
+    height: "1.55rem",
   };
   return (
     <FormControl fullWidth>

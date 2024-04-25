@@ -30,32 +30,6 @@
       .dashboard-modules-icon-btn {
         display: none;
       }
-
-      &:hover {
-        border: 1px solid #1976d2;
-        color: #1976d2;
-        .dashboard-modules-sub-text {
-          background-color: #1976d2;
-          color: white;
-        }
-        // border: 1px solid #1976d2;
-        // transition: all 400ms ease-in-out;
-        // position: relative;
-        // display: flex;
-        // align-items: start;
-        // padding-left: 15px;
-
-        // .dashboard-modules-icon-btn {
-        //   display: flex;
-        //   position: absolute;
-        //   right: 30px;
-        //   padding: 8px;
-        //   background-color: #1976d2;
-        //   box-shadow: rgba(205, 207, 211, 0.08) 0px 0px 0px 1px,
-        //     rgba(91, 92, 94, 0.08) 0px 2px 4px 1px;
-        //   color: white;
-        // }
-      }
     }
   }
 }

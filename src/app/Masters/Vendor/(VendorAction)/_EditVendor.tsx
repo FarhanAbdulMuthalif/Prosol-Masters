@@ -355,11 +355,11 @@ export default function EditVendor({ EditDataGet }: any) {
             dynFldErrValidation={dynFldErrValidation}
           />
         </div>
-        <MasterAuditTrial formData={formData}></MasterAuditTrial>
         <div className="create-plant-action-div">
           <OutlinedButton>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
+        <MasterAuditTrial formData={formData}></MasterAuditTrial>
       </div>
     </form>
   );

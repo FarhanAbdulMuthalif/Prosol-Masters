@@ -1,19 +1,22 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import { PrimaryTextColor } from "@/styles/colorsCode";
+import { defaultProfileImage } from "@/utils/UserDataExport";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import HelpIcon from "@mui/icons-material/Help";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Menu, MenuItem } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MouseEvent, useContext, useState } from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 import ThemedDialog from "../Dialog/ThemeDialog";
 import ChangePasswordDialog from "../Dialog/userDialog/ChangePasswordDialog";
+import ProfileDialog from "../Dialog/userDialog/ProfileDialog";
 import TextComp from "../TextComp/TextComp";
 import api from "../api";
 import "./style.scss";
@@ -23,9 +26,46 @@ export default function Header() {
   const router = useRouter();
   const [ChangePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
+  const [myProfileDialogOpen, setmyProfileDialogOpen] = useState(false);
   const [ThemeDialogOpen, setThemeDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [imageSrc, setImageSrc] = useState<string>(defaultProfileImage);
+  const {
+    auth,
+    setauth,
+    UserInfo,
+    setUserInfo,
+    setSelectedMasterDatatab,
+    ThemeColor,
+    setReusableSnackBar,
+    selectedFont,
+  } = useContext(UseContextHook);
+  useEffect(() => {
+    async function fetchImage() {
+      if (!UserInfo?.id || !UserInfo?.avatar) {
+        setImageSrc(defaultProfileImage);
+        return;
+      }
+      try {
+        const response = await api.get(
+          `/user/downloadFile/${UserInfo.id}/${UserInfo.avatar}`,
+          {
+            responseType: "blob",
+          }
+        );
+        const imageBlob = response.data;
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+
+        setImageSrc(imageObjectURL);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+        setImageSrc(defaultProfileImage); // Set to a default image on error
+      }
+    }
+
+    fetchImage();
+  }, [UserInfo?.id, UserInfo?.avatar]);
   const [anchorElSettings, setAnchorElSettings] =
     useState<null | SVGSVGElement>(null);
   const openSetting = Boolean(anchorElSettings);
@@ -44,16 +84,6 @@ export default function Header() {
   const handleSettingClose = () => {
     setAnchorElSettings(null);
   };
-
-  const {
-    auth,
-    setauth,
-    UserInfo,
-    setSelectedMasterDatatab,
-    ThemeColor,
-    setReusableSnackBar,
-    selectedFont,
-  } = useContext(UseContextHook);
 
   const listStyles = {
     borderBottom: `3px solid ${ThemeColor.primaryColor}`,
@@ -199,7 +229,17 @@ export default function Header() {
             {UserInfo?.firstName} {UserInfo?.lastName}
           </TextComp>
 
-          <Image src="/images/AdminSvg.svg" height={40} width={40} alt="Img" />
+          <Image
+            src={imageSrc}
+            height={30}
+            width={30}
+            alt="Img"
+            style={{ borderRadius: "50%" }}
+            onError={(e) => {
+              console.error("Error loading image:", e);
+            }}
+            unoptimized={true}
+          />
         </div>
         <Menu
           id="basic-menu"
@@ -219,8 +259,18 @@ export default function Header() {
           <MenuItem
             sx={myPrfStyle}
             onClick={() => {
-              setChangePasswordDialogOpen(true);
               handleClose();
+              setmyProfileDialogOpen(true);
+            }}
+          >
+            <PersonIcon sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }} />
+            My Profile
+          </MenuItem>
+          <MenuItem
+            sx={myPrfStyle}
+            onClick={() => {
+              handleClose();
+              setChangePasswordDialogOpen(true);
             }}
           >
             <LockResetIcon
@@ -254,6 +304,10 @@ export default function Header() {
         <ChangePasswordDialog
           open={ChangePasswordDialogOpen}
           handleClose={setChangePasswordDialogOpen}
+        />
+        <ProfileDialog
+          open={myProfileDialogOpen}
+          handleClose={setmyProfileDialogOpen}
         />
         <ThemedDialog open={ThemeDialogOpen} handleClose={setThemeDialogOpen} />
       </div>

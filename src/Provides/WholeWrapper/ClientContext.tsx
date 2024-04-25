@@ -41,6 +41,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     plantId: [],
     status: true,
     roles: [],
+    avatar: "",
   });
   const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);

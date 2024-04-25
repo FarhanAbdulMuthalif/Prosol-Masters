@@ -105,7 +105,7 @@ const MUIThemeComp = (selectedFont: string, ThemeColor: SingleThemeObjProps) =>
       MuiInputLabel: {
         styleOverrides: {
           root: {
-            color: "#8B4513", // Brown color
+            // color: "#8B4513", // Brown color
           },
         },
       },

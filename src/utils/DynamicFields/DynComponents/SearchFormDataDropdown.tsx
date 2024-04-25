@@ -1,4 +1,5 @@
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import { PrimaryTextColor } from "@/styles/colorsCode";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -41,8 +42,9 @@ const SearchFormDataDropdown: FC<DropdownProps> = ({
   };
   const SelectStyle = {
     fontSize: "10px",
-    color: "brown",
-    height: "2.2rem",
+    color: PrimaryTextColor,
+    opacity: "0.7",
+    height: "1.55rem",
   };
 
   const [SearchText, setSearchText] = useState("");

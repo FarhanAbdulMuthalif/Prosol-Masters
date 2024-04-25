@@ -4,114 +4,89 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import TextComp from "@/components/TextComp/TextComp";
 import { PrimaryTextColor } from "@/styles/colorsCode";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
-import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./style.scss";
 
 export default function Home() {
   const router = useRouter();
-  const MasterDetails = useContext(UseContextHook);
+  const ContextDataHub = useContext(UseContextHook);
+  const { ThemeColor } = ContextDataHub;
+  const [isHovered, setIsHovered] = useState(0);
+  const handleMouseEnter = (id: number) => {
+    setIsHovered(id);
+  };
+  const handleMouseLeave = () => {
+    setIsHovered(0);
+  };
   const auth = UseAuth();
   if (!auth) {
     return null;
   }
+  const dashboardModuleStyle = {
+    color: isHovered > 0 ? `${ThemeColor.primaryColor}` : "",
+    border: isHovered > 0 ? `1px solid ${ThemeColor.primaryColor}` : "none",
 
+    transition: "border 0.3s",
+  };
+  const dashboardTabdsArr = [
+    {
+      id: 1,
+      icon: <PersonIcon sx={{ fontSize: "2rem" }} />,
+      text: "User Management",
+      link: "/UserManagement",
+    },
+    {
+      id: 2,
+      icon: <SettingsSuggestIcon sx={{ fontSize: "2rem" }} />,
+      text: "Material Master",
+      link: "/Masters",
+    },
+    {
+      id: 3,
+      icon: <WarehouseIcon sx={{ fontSize: "2rem" }} />,
+      text: "Asset Master",
+      link: "",
+    },
+    {
+      id: 4,
+      icon: <ManageAccountsIcon sx={{ fontSize: "2rem" }} />,
+      text: "Service Master",
+      link: "",
+    },
+  ];
   return (
     <main className="dashboard-page-wrapper">
       <div className="dashboard-page-content-view">
-        <div className="dashboard-modules">
-          <PersonIcon sx={{ fontSize: "2rem" }} />
-          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
-            User Management
-          </TextComp>
-
-          <OutlinedButton
-            onClick={() => {
-              router.push("/UserManagement");
-            }} /*  className="dashboard-modules-sub-text" */
-          >
-            Click here
-          </OutlinedButton>
-          <IconButton
-            aria-label="delete"
-            size="small"
-            className="dashboard-modules-icon-btn"
-            onClick={() => {
-              router.push("/UserManagement");
-            }}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </div>
-        <div className="dashboard-modules">
-          <SettingsSuggestIcon sx={{ fontSize: "2rem" }} />
-          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
-            Material Master
-          </TextComp>
-
-          <OutlinedButton
-            onClick={() => {
-              router.push("/Masters");
-            }}
-            /*  className="dashboard-modules-sub-text" */
-          >
-            Click here
-          </OutlinedButton>
-
-          <IconButton
-            aria-label="delete"
-            size="small"
-            className="dashboard-modules-icon-btn"
-            onClick={() => {
-              router.push("/Masters");
-            }}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </div>
-        <div className="dashboard-modules">
-          <WarehouseIcon sx={{ fontSize: "2rem" }} />
-          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
-            Asset Master
-          </TextComp>
-
-          <OutlinedButton /*  className="dashboard-modules-sub-text" */>
-            Click here
-          </OutlinedButton>
-          <IconButton
-            aria-label="delete"
-            size="small"
-            className="dashboard-modules-icon-btn"
-            onClick={() => {}}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </div>
-        <div className="dashboard-modules">
-          <ManageAccountsIcon sx={{ fontSize: "2rem" }} />
-          <TextComp variant="title" style={{ color: PrimaryTextColor }}>
-            Service Master
-          </TextComp>
-
-          <OutlinedButton /*  className="dashboard-modules-sub-text" */>
-            Click here
-          </OutlinedButton>
-
-          <IconButton
-            aria-label="delete"
-            size="small"
-            className="dashboard-modules-icon-btn"
-            onClick={() => {}}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </div>
+        {dashboardTabdsArr.map((data) => {
+          return (
+            <div
+              className="dashboard-modules"
+              style={isHovered === data.id ? dashboardModuleStyle : {}}
+              onMouseEnter={() => {
+                handleMouseEnter(data.id);
+              }}
+              onMouseLeave={handleMouseLeave}
+              key={data.id}
+            >
+              {data.icon}
+              <TextComp variant="title" style={{ color: PrimaryTextColor }}>
+                {data.text}
+              </TextComp>
+              <OutlinedButton
+                onClick={() => {
+                  router.push(data.link);
+                }} /*  className="dashboard-modules-sub-text" */
+              >
+                Click here
+              </OutlinedButton>
+            </div>
+          );
+        })}
       </div>
     </main>
   );

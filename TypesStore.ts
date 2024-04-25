@@ -357,6 +357,7 @@ export type SingleUserInfoProps = {
   plantId: number[];
   status: boolean;
   roles: number[];
+  avatar: string;
 };
 export type SnackBarReusableProps = {
   open: boolean;

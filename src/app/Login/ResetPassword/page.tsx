@@ -2,7 +2,7 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import TextComp from "@/components/TextComp/TextComp";
-import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import FullSizeOutlineTextField from "@/components/Textfield/FullSizeOutlineTextfield";
 import apiLogin from "@/components/apiLogin";
 import { PrimaryTextColor } from "@/styles/colorsCode";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -103,7 +103,7 @@ const ResetPassword = () => {
             ENTER YOU NEW PASSWORD
           </TextComp>
 
-          <OutlineTextField
+          <FullSizeOutlineTextField
             type={showPassword.password ? "text" : "password"}
             placeholder="Enter New Password"
             size="small"
@@ -136,7 +136,7 @@ const ResetPassword = () => {
             }}
           />
 
-          <OutlineTextField
+          <FullSizeOutlineTextField
             type={showPassword.confirmPassword ? "text" : "password"}
             placeholder="Confirm New Password"
             fullWidth

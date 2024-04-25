@@ -1,9 +1,11 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import ReusableConfirmationDialog from "@/components/Dialog/ConformationDialog";
+import CreateDreawer from "@/components/DynamicFields/Drawer/Create/CreateDreawer";
 import api from "@/components/api";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
+import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import { GridColDef } from "@mui/x-data-grid";
 import { useContext, useEffect, useState } from "react";
@@ -12,9 +14,11 @@ import { DynamicFormsProps, PostCreateFieldData } from "../../../../TypesStore";
 export default function DynamicFormGrid() {
   const UserDataCon = useContext(UseContextHook);
   const [selectedId, setselectedId] = useState(0);
+  const [CreateDrawerOpen, setCreateDrawerOpen] = useState(false);
   const [isConfirmationDeleteDialogOpen, setisConfirmationDeleteDialogOpen] =
     useState(false);
-  const { setReusableSnackBar, ThemeColor } = UserDataCon;
+  const { setReusableSnackBar, ThemeColor, setSelectedMasterDatatab } =
+    UserDataCon;
   const [DynamicFormTableData, setDynamicFormTableData] = useState<
     DynamicFormsProps[]
   >([]);
@@ -37,7 +41,7 @@ export default function DynamicFormGrid() {
     }
     fetchData();
   }, [setReusableSnackBar]);
-  if (!setReusableSnackBar) return null;
+  if (!setReusableSnackBar || !setSelectedMasterDatatab) return null;
   const actionColumn: GridColDef[] = [
     {
       field: "action",
@@ -52,6 +56,18 @@ export default function DynamicFormGrid() {
                 console.log(params.row);
                 setselectedId(params.row.id);
                 setisConfirmationDeleteDialogOpen(true);
+              }}
+              sx={{
+                fontSize: "1rem",
+                color: ThemeColor.primaryColor,
+                cursor: "pointer",
+              }}
+            />
+            <AddIcon
+              onClick={() => {
+                console.log(params.row);
+                setSelectedMasterDatatab(params?.row?.formName);
+                setCreateDrawerOpen(true);
               }}
               sx={{
                 fontSize: "1rem",
@@ -147,7 +163,9 @@ export default function DynamicFormGrid() {
       }
     }
   };
-
+  const HandlerCloseCreateDrawer = () => {
+    setCreateDrawerOpen(false);
+  };
   return (
     <div>
       <CustomDataGrid
@@ -164,6 +182,10 @@ export default function DynamicFormGrid() {
         content="you may lose your record"
         onConfirm={handleDynamicFormDeleteHandler}
         onCancel={handleOpenConfirmationDeleteDialog}
+      />
+      <CreateDreawer
+        OpenDrawer={CreateDrawerOpen}
+        HandlerCloseDrawer={HandlerCloseCreateDrawer}
       />
     </div>
   );

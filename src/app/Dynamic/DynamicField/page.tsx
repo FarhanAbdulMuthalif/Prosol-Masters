@@ -159,73 +159,7 @@ export default function DynamicField() {
   ) {
     return null;
   }
-  // const handleSelectChange = async (e: SelectChangeEvent) => {
-  //   const { name, value } = e.target;
-  //   setSelectedFormOption(value);
-  //   setSelectedMasterDatatab(value);
-  //   try {
-  //     const res = await api.get(`/dynamic/getAllDynamicFieldsByForm/${value}`);
-  //     const data = await res.data;
 
-  //     if (res.status === 200) {
-  //       setSelectedFormFields(data);
-  //       const fetchDataAndUpdateArray = async (
-  //         displayRelationFieldName: string,
-  //         fieldName: string
-  //       ) => {
-  //         try {
-  //           const res = await api.get(
-  //             `/dynamic/getListOfFieldNameValues?displayName=${displayRelationFieldName}&formName=${fieldName}`
-  //           );
-  //           const responseData = res.data;
-  //           setSelectedFormFields((prevArrObj) =>
-  //             data.map((obj: PostCreateFieldData) => {
-  //               if (
-  //                 obj.dataType === "relational" &&
-  //                 obj.fieldName === fieldName &&
-  //                 obj.displayRelationFieldName === displayRelationFieldName
-  //               ) {
-  //                 return { ...obj, enums: responseData };
-  //               }
-  //               return obj;
-  //             })
-  //           );
-  //         } catch (error) {
-  //           console.error("Error fetching data:", error);
-  //         }
-  //       };
-
-  //       data.forEach((obj: PostCreateFieldData) => {
-  //         if (obj.dataType === "relational") {
-  //           fetchDataAndUpdateArray(
-  //             obj.displayRelationFieldName || "",
-  //             obj.fieldName
-  //           );
-  //         }
-  //       });
-  //     }
-  //   } catch (e: any) {
-  //     if (!setReusableSnackBar) return;
-  //     setSelectedFormFields([]);
-  //     console.log(e?.response);
-  //     if (e?.response) {
-  //       setReusableSnackBar((prev) => ({
-  //         severity: "error",
-  //         message: String(
-  //           e?.response ? e?.response?.data : e?.response?.data?.error
-  //         ),
-  //         open: true,
-  //       }));
-  //     } else {
-  //       setReusableSnackBar((prev) => ({
-  //         severity: "error",
-  //         message: `Error: ${e?.message}`,
-  //         open: true,
-  //       }));
-  //     }
-  //   }
-  // };
-  // Utility function to fetch relational field data
   async function fetchAndUpdateRelationalFields(
     data: PostCreateFieldData[],
     updateFormFields: Function
@@ -252,12 +186,7 @@ export default function DynamicField() {
     const updatedFields = await Promise.all(updates);
     updateFormFields(updatedFields);
   }
-
-  // Event handler for select change
-  const handleSelectChange = async (e: SelectChangeEvent) => {
-    const { value } = e.target;
-    setSelectedFormOption(value);
-    setSelectedMasterDatatab(value);
+  const FullDataHandlerField = async (value: string) => {
     try {
       const response = await api.get(
         `/dynamic/getAllDynamicFieldsByForm/${value}`
@@ -272,11 +201,19 @@ export default function DynamicField() {
       handleAPIError(error); // Handle API errors with a dedicated function
     }
   };
+  // Event handler for select change
+  const handleSelectChange = async (e: SelectChangeEvent) => {
+    const { value } = e.target;
+    setSelectedFormOption(value);
+    setSelectedMasterDatatab(value);
+    FullDataHandlerField(value);
+  };
 
   // Utility function for handling API errors
   function handleAPIError(error: any) {
     if (!setReusableSnackBar || !setSelectedFormFields) return;
     setSelectedFormFields([]);
+    if (error.response?.status === 400) return;
     const errorMessage =
       error.response?.data?.message ||
       error.message ||
@@ -320,6 +257,7 @@ export default function DynamicField() {
           setSelectedFormFields,
           setReusableSnackBar
         );
+        FullDataHandlerField(SelectedFormOption);
         setDeleteConfirmationDialogOpen(false);
         setReusableSnackBar({
           severity: "success",
@@ -348,7 +286,6 @@ export default function DynamicField() {
       }
     }
   };
-  console.log(SelectedFormFields);
   return (
     <div className="dynamic-field-module-wrapper">
       <div className="dynamic-field-module-header-div">
@@ -447,7 +384,7 @@ export default function DynamicField() {
               textTransform: "uppercase",
             }}
           >
-            No Fields
+            No Fields in {SelectedFormOption} Form
           </TextComp>
         )}
       </div>

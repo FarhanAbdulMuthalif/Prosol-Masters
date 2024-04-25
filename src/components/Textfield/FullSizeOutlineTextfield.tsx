@@ -7,16 +7,10 @@ import React from "react";
 //   // Example: customProp?: string;
 // }
 
-const OutlineTextField: React.FC<TextFieldProps> = ({ ...props }) => {
+const FullSizeOutlineTextField: React.FC<TextFieldProps> = ({ ...props }) => {
   return (
-    <TextField
-      size="small"
-      variant="outlined"
-      {...props}
-      autoComplete="off"
-      sx={{ "& .MuiInputBase-input": { height: 8, padding: 1 } }}
-    />
+    <TextField size="small" variant="outlined" {...props} autoComplete="off" />
   );
 };
 
-export default OutlineTextField;
+export default FullSizeOutlineTextField;

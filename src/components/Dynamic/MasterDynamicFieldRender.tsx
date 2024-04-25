@@ -1,11 +1,14 @@
 import DynamicSingleSelectDropdown from "@/utils/DynamicFields/DynamicFieldDropdown";
 import MultipleDynamicSelectDropdown from "@/utils/DynamicFields/MultipleDynamicSelectDropdown";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { SelectChangeEvent } from "@mui/material";
 import { ChangeEvent } from "react";
 import { PostCreateFieldData } from "../../../TypesStore";
 import RadioGroupComponent from "../RadioButton/RadioGroup";
+import TextComp from "../TextComp/TextComp";
 import OutlineTextField from "../Textfield/OutlineTextfield";
 import TextareaOutline from "../Textfield/TextareaOutline";
+import "./MasterDynamicFieldRender.scss";
 
 export default function MasterDynamicFieldRender({
   formData,
@@ -26,49 +29,75 @@ export default function MasterDynamicFieldRender({
     switch (data.dataType) {
       case "textField":
         return (
-          <OutlineTextField
-            placeholder={`Enter ${data.fieldName}`}
-            key={data.id}
-            type={data.identity}
-            value={formData[data.fieldName]}
-            onChange={handleInputChange}
-            name={data.fieldName}
-            error={!!dynFldErrValidation[data.fieldName]}
-            helperText={dynFldErrValidation[data.fieldName]}
-          />
+          <div className="create-dynamic-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {data.fieldName}
+              <span>:</span>
+            </TextComp>
+            <OutlineTextField
+              placeholder={`Enter ${data.fieldName}`}
+              fullWidth
+              key={data.id}
+              type={data.identity}
+              value={formData[data.fieldName]}
+              onChange={handleInputChange}
+              name={data.fieldName}
+              error={!!dynFldErrValidation[data.fieldName]}
+              helperText={dynFldErrValidation[data.fieldName]}
+            />
+          </div>
         );
       case "textArea":
         return (
-          <TextareaOutline
-            placeholder={`Enter ${data.fieldName}`}
-            key={data.id}
-            rows={typeof Number(data.identity) ? data.identity : 2}
-            value={formData[data.fieldName]}
-            onChange={handleInputChange}
-            name={data.fieldName}
-            error={!!dynFldErrValidation[data.fieldName]}
-            helperText={dynFldErrValidation[data.fieldName]}
-          />
+          <div className="create-dynamic-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Enter {data.fieldName}
+              <span>:</span>
+            </TextComp>
+            <TextareaOutline
+              placeholder={`Enter ${data.fieldName}`}
+              key={data.id}
+              fullWidth
+              rows={typeof Number(data.identity) ? data.identity : 2}
+              value={formData[data.fieldName]}
+              onChange={handleInputChange}
+              name={data.fieldName}
+              error={!!dynFldErrValidation[data.fieldName]}
+              helperText={dynFldErrValidation[data.fieldName]}
+            />
+          </div>
         );
       case "dropDown":
         return data.identity === "single" ? (
-          <DynamicSingleSelectDropdown
-            label={`Select ${data.fieldName}`}
-            key={data.id}
-            value={formData[data.fieldName]}
-            onChange={handleSelectChange}
-            options={data.dropDowns ?? []}
-            name={data.fieldName}
-          />
+          <div className="create-dynamic-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Select {data.fieldName}
+              <span>:</span>
+            </TextComp>
+            <DynamicSingleSelectDropdown
+              label={`Select ${data.fieldName}`}
+              key={data.id}
+              value={formData[data.fieldName]}
+              onChange={handleSelectChange}
+              options={data.dropDowns ?? []}
+              name={data.fieldName}
+            />
+          </div>
         ) : (
-          <MultipleDynamicSelectDropdown
-            label={`Select ${data.fieldName}`}
-            key={data.id}
-            value={formData[data.fieldName]}
-            onChange={handleMultiSelectChange}
-            options={data.dropDowns ?? []}
-            name={data.fieldName}
-          />
+          <div className="create-dynamic-wrapper-single-input">
+            <TextComp variant="subTitle" style={textCompStyle}>
+              Select {data.fieldName}
+              <span>:</span>
+            </TextComp>
+            <MultipleDynamicSelectDropdown
+              label={`Select ${data.fieldName}`}
+              key={data.id}
+              value={formData[data.fieldName]}
+              onChange={handleMultiSelectChange}
+              options={data.dropDowns ?? []}
+              name={data.fieldName}
+            />
+          </div>
         );
       case "radioButton":
         return (

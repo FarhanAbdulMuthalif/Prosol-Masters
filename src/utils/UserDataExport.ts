@@ -55,3 +55,5 @@ export const textCompStyle = {
   display: "flex",
   justifyContent: "space-between",
 };
+
+export const defaultProfileImage = "/images/AdminSvg.svg";
