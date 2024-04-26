@@ -189,7 +189,7 @@ export default function CreateRole() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            User Status {`(Active / Inactive)`}
+            Role Status {`(Active / Inactive)`}
             <span>:</span>
           </TextComp>
           <div

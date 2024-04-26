@@ -294,6 +294,7 @@ export type RoleInitialStateProps = {
   createdBy?: string;
   updatedAt?: string;
   updatedBy?: string;
+  updateAuditHistories?: [];
 };
 export type PrivilageInitialStateProps = {
   id?: number;

@@ -34,7 +34,12 @@ export default function EditRole({
   };
   const { id, ...filteredData } = ArrId;
   // Define a type for the keys to remove
-  type KeysToRemove = "createdAt" | "createdBy" | "updatedAt" | "updatedBy";
+  type KeysToRemove =
+    | "createdAt"
+    | "createdBy"
+    | "updatedAt"
+    | "updatedBy"
+    | "updateAuditHistories";
 
   // List of keys to be removed
   const keysToRemove: KeysToRemove[] = [
@@ -42,6 +47,7 @@ export default function EditRole({
     "createdBy",
     "updatedAt",
     "updatedBy",
+    "updateAuditHistories",
   ];
   // Create a new object by filtering out specified keys
   const filteredUserData = { ...filteredData };
@@ -310,7 +316,7 @@ export default function EditRole({
 
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            User Status {`(Active / Inactive)`}
+            Role Status {`(Active / Inactive)`}
             <span>:</span>
           </TextComp>
           <div
