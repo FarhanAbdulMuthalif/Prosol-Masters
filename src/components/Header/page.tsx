@@ -250,12 +250,6 @@ export default function Header() {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem sx={myPrfStyle} onClick={handleLogout}>
-            <LogoutOutlinedIcon
-              sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }}
-            />
-            Logout
-          </MenuItem>
           <MenuItem
             sx={myPrfStyle}
             onClick={() => {
@@ -277,6 +271,12 @@ export default function Header() {
               sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }}
             />
             Change Password
+          </MenuItem>
+          <MenuItem sx={myPrfStyle} onClick={handleLogout}>
+            <LogoutOutlinedIcon
+              sx={{ color: PrimaryTextColor, fontSize: "1.2rem" }}
+            />
+            Logout
           </MenuItem>
         </Menu>
         <Menu

@@ -60,7 +60,7 @@ export type MasterNavBarDataRenderTypes = {
   GeneralSetting: subSecondNavbarType[];
   Attribute: subSecondNavbarType[];
   Value: subSecondNavbarType[];
-  CreateTemplate: subSecondNavbarType[];
+  CreateDictionary: subSecondNavbarType[];
 };
 export type subSecondNavbarType = { name: string; path: string };
 
@@ -73,7 +73,7 @@ export type mastersProps = {
   GeneralSetting: masterGeneralSettingsSubFields;
   Attribute: mastersVendorSubsubFields;
   Value: mastersVendorSubsubFields;
-  CreateTemplate: mastersCreateTemplateSubsubFields;
+  CreateDictionary: mastersCreateTemplateSubsubFields;
 };
 export type masterGeneralSettingsSubFields = {
   MainGroupCodes: mastersGeneralSubsubFields;
@@ -256,7 +256,7 @@ export interface PostCreateFieldData {
 }
 export interface Option {
   id?: string;
-  value: string;
+  optionValue: string;
 }
 export type PathObjProps = {
   Masters: { name: string; path: string }[];

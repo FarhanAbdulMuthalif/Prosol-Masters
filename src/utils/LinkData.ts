@@ -10,7 +10,7 @@ export const pathObj: PathObjProps = {
     { name: "GeneralSetting", path: "/Masters/GeneralSetting" },
     { name: "Attribute", path: "/Masters/Attribute" },
     { name: "Value", path: "/Masters/Value" },
-    { name: "CreateTemplate", path: "/Masters/CreateTemplate" },
+    { name: "CreateDictionary", path: "/Masters/CreateDictionary" },
   ],
   UserManagement: [
     { name: "User", path: "/UserManagement" },

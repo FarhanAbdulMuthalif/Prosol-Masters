@@ -219,6 +219,21 @@ export default function CreateSubGroupCode() {
   const DwnValue = MainGroupDropDownData.find(
     (data) => data.value === formData?.mainGroupCodesId
   )?.label;
+  function clearFormValues<T extends object>(data: T) {
+    if (typeof data !== "object" || data === null) {
+      setFormData({} as { [K in keyof T]: string });
+    }
+
+    const clearedData: { [K in keyof T]: string } = Object.keys(data).reduce(
+      (acc, key) => {
+        acc[key as keyof T] = ""; // Set every value to an empty string
+        return acc;
+      },
+      {} as { [K in keyof T]: string }
+    );
+
+    setFormData(clearedData);
+  }
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
@@ -286,7 +301,13 @@ export default function CreateSubGroupCode() {
           />
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton
+            onClick={() => {
+              clearFormValues(formData);
+            }}
+          >
+            CLEAR
+          </OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>

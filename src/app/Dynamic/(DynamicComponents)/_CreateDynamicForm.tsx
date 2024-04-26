@@ -73,7 +73,12 @@ export default function CreateDynamicForm() {
       }
     }
   };
-
+  function clearFormValues() {
+    setformName({
+      formName: "",
+      formDescription: "",
+    });
+  }
   return (
     <form onSubmit={DynamicFormCreateHandler}>
       <div className="create-dynamic-form-module">
@@ -118,7 +123,7 @@ export default function CreateDynamicForm() {
           </div>
         </div>
         <div className="create-dynamic-form-module-action">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton onClick={clearFormValues}>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>

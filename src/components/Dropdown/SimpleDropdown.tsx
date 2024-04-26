@@ -27,7 +27,7 @@ const SimpleDropdown: FC<DropdownProps> = ({
   const SelectStyle = {
     fontSize: "12px",
     color: PrimaryTextColor,
-    opacity: "0.7",
+
     height: "1.55rem",
   };
   return (

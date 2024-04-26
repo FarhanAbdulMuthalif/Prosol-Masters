@@ -341,7 +341,13 @@ export default function EditAttribute({ EditDataGet }: any) {
           </div>
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton
+            onClick={() => {
+              settabValue("table");
+            }}
+          >
+            Cancel
+          </OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
         <MasterAuditTrial formData={formData}></MasterAuditTrial>

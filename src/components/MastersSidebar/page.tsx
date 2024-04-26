@@ -46,7 +46,7 @@ export default function MastersSidebar() {
     <>
       {ExactPath !== "Vendor" &&
       ExactPath !== "Attribute" &&
-      ExactPath !== "CreateTemplate" &&
+      ExactPath !== "CreateDictionary" &&
       ExactPath !== "Value" ? (
         <nav className="masters-sidenavbar-class">
           <p>{SelectedMasterDatatab}</p>

@@ -801,7 +801,7 @@ export const MasterSubFieldWithData: mastersProps = {
     includePlantDropdown: false,
     keyName: "vm",
   },
-  CreateTemplate: {
+  CreateDictionary: {
     getAllnoun: "/dictionary/noun-suggestions?noun=",
     getAllModifier: "/dictionary/modifier-suggestions?noun=",
     getAll: "/dictionary/getAllDictionary",

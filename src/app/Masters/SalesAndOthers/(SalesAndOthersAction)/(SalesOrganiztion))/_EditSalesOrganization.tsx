@@ -288,7 +288,13 @@ export default function EditSalesOrganization({ EditDataGet }: any) {
           />
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton
+            onClick={() => {
+              settabValue("table");
+            }}
+          >
+            Cancel
+          </OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
         <MasterAuditTrial formData={formData}></MasterAuditTrial>

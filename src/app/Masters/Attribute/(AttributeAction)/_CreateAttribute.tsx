@@ -224,6 +224,13 @@ export default function CreateAttribute() {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
+  function clearFormValues() {
+    setFormData({
+      attributeName: "",
+      fieldType: "NUMERIC",
+      listUom: [],
+    });
+  }
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-Attribute-wrapper-div">
@@ -327,7 +334,7 @@ export default function CreateAttribute() {
           </div>
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton onClick={clearFormValues}>CLEAR</OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>

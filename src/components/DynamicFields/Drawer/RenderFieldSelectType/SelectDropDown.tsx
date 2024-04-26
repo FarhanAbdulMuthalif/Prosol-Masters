@@ -100,11 +100,13 @@ export default function SelectDropDown({
         {dDChipList?.map((data: Option) => {
           return (
             <Chip
-              key={data.value}
-              label={data.value}
+              key={data.optionValue}
+              label={data.optionValue}
               onDelete={() => {
                 setDDChipList((prev: Option[]) =>
-                  prev.filter((chip: Option) => chip.value !== data.value)
+                  prev.filter(
+                    (chip: Option) => chip.optionValue !== data.optionValue
+                  )
                 );
               }}
             />

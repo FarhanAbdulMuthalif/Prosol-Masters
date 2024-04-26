@@ -11,7 +11,7 @@ interface DropdownProps {
   label: string;
   value: number | string;
   onChange: (event: SelectChangeEvent) => void;
-  options: { value: string }[];
+  options: { optionValue: string }[];
   name: string;
 }
 
@@ -29,7 +29,7 @@ const MultipleDynamicSelectDropdown: FC<DropdownProps> = ({
   const SelectStyle = {
     fontSize: "12px",
     color: PrimaryTextColor,
-    opacity: "0.7",
+
     height: "1.55rem",
   };
   return (
@@ -55,8 +55,12 @@ const MultipleDynamicSelectDropdown: FC<DropdownProps> = ({
           {label}
         </MenuItem>
         {options.map((option) => (
-          <MenuItem key={option.value} sx={menuItemStyle} value={option.value}>
-            {option.value}
+          <MenuItem
+            key={option.optionValue}
+            sx={menuItemStyle}
+            value={option.optionValue}
+          >
+            {option.optionValue}
           </MenuItem>
         ))}
       </Select>

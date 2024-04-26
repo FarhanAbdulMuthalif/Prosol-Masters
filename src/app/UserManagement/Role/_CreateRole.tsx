@@ -134,7 +134,9 @@ export default function CreateRole() {
       }));
     }
   };
-
+  function clearFormValues() {
+    setFormData(RoleInitialState);
+  }
   return (
     <form className="create-user-wrapper" onSubmit={UserFormSubmitHandler}>
       <div className="create-user-wrapper-inputs">
@@ -347,7 +349,7 @@ export default function CreateRole() {
         ""
       )}
       <div className="create-user-wrapper-action">
-        <OutlinedButton>Cancel</OutlinedButton>
+        <OutlinedButton onClick={clearFormValues}>Clear</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
     </form>

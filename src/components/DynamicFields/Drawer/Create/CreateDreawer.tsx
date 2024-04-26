@@ -111,11 +111,29 @@ export default function CreateDreawer({
       e.preventDefault();
       setDropDownChipArrayList((prev: Option[]) => {
         if (
-          DropDownChipArrayList.find((data) => data.value === ChipTextIndiual)
+          DropDownChipArrayList.find(
+            (data) => data.optionValue === ChipTextIndiual
+          )
         ) {
           return [...prev];
         } else {
-          return [...prev, { value: ChipTextIndiual }];
+          const enteredDataArr = ChipTextIndiual.trim()
+            .split(",")
+            .filter((n) => n);
+          const stingOnly = DropDownChipArrayList.map(
+            (data) => data.optionValue
+          );
+          if (enteredDataArr.length > 1) {
+            const filteredArray1 = enteredDataArr.filter(
+              (item) => !stingOnly.includes(item)
+            );
+            const transformedData = filteredArray1.map((data) => ({
+              optionValue: data,
+            }));
+            return [...prev, ...transformedData];
+          } else {
+            return [...prev, { optionValue: ChipTextIndiual }];
+          }
         }
       });
       setChipTextIndiual("");

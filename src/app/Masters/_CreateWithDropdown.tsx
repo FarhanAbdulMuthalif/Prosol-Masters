@@ -195,6 +195,21 @@ export default function CreateMastertWithDropdown() {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
+  function clearFormValues<T extends object>(data: T) {
+    if (typeof data !== "object" || data === null) {
+      setFormData({} as { [K in keyof T]: string });
+    }
+
+    const clearedData: { [K in keyof T]: string } = Object.keys(data).reduce(
+      (acc, key) => {
+        acc[key as keyof T] = ""; // Set every value to an empty string
+        return acc;
+      },
+      {} as { [K in keyof T]: string }
+    );
+
+    setFormData(clearedData);
+  }
   return (
     <form onSubmit={PlantFormSubmitHandler}>
       <div className="create-plant-wrapper-div">
@@ -258,69 +273,7 @@ export default function CreateMastertWithDropdown() {
               name="plantId"
             />
           </div>
-          {/* {dynamicFields?.map((data: PostCreateFieldData) => {
-            return (
-              <>
-                {data.dataType === "textField" ? (
-                  <OutlineTextField
-                    placeholder={`Enter ${data.fieldName}`}
-                    key={data.id}
-                    type={data.identity}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                    name={data.fieldName}
-                    inputProps={{
-                      autoComplete: "new-password",
-                      maxLength: data.max,
-                      minLength: data.min,
-                    }}
-                  />
-                ) : data.dataType === "textArea" ? (
-                  <TextareaOutline
-                    placeholder={`Enter ${data.fieldName}`}
-                    key={data.id}
-                    rows={typeof Number(data.identity) ? data.identity : 2}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                    name={data.fieldName}
-                    inputProps={{
-                      autoComplete: "new-password",
-                      maxLength: data.max,
-                      minLength: data.min,
-                    }}
-                  />
-                ) : data.dataType === "dropDown" &&
-                  data.identity === "single" ? (
-                  <DynamicSingleSelectDropdown
-                    label={`Select ${data.fieldName}`}
-                    value={formData[data.fieldName]}
-                    onChange={handleSelectDynChange}
-                    options={data.dropDowns ? data.dropDowns : []}
-                    name={data.fieldName}
-                  />
-                ) : data.dataType === "dropDown" &&
-                  data.identity === "multiple" ? (
-                  <MultipleDynamicSelectDropdown
-                    label={`Select ${data.fieldName}`}
-                    value={formData[data.fieldName]}
-                    onChange={handleMultiSelectChange}
-                    options={data.dropDowns ? data.dropDowns : []}
-                    name={data.fieldName}
-                  />
-                ) : data.dataType === "radioButton" ? (
-                  <RadioGroupComponent
-                    label={`${data.fieldName} :`}
-                    name={data.fieldName}
-                    options={data.enums ? data?.enums : []}
-                    value={formData[data.fieldName]}
-                    onChange={handleInputChange}
-                  />
-                ) : (
-                  ""
-                )}
-              </>
-            );
-          })} */}
+
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}
@@ -331,7 +284,13 @@ export default function CreateMastertWithDropdown() {
           />
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
+          <OutlinedButton
+            onClick={() => {
+              clearFormValues(formData);
+            }}
+          >
+            CLEAR
+          </OutlinedButton>
           <FillButton type="submit">SUBMIT</FillButton>
         </div>
       </div>

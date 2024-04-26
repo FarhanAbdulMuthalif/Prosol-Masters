@@ -78,7 +78,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
   const handleSecondBarClose = () => {
     setSecondSideBar(null);
   };
-  const noSecondBar = ["Vendor", "Attribute", "CreateTemplate", "Value"];
+  const noSecondBar = ["Vendor", "Attribute", "CreateDictionary", "Value"];
   const subListHandlerClick = (data: string) => {
     setSelectedMasterDatatab(data);
     settabValue("table");

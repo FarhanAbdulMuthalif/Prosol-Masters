@@ -325,7 +325,13 @@ export default function EditUser({
         ""
       )}
       <div className="create-user-wrapper-action">
-        <OutlinedButton>Cancel</OutlinedButton>
+        <OutlinedButton
+          onClick={() => {
+            settabValue("table");
+          }}
+        >
+          Cancel
+        </OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
       <MasterAuditTrial formData={EditDataGet}></MasterAuditTrial>

@@ -47,7 +47,7 @@ import {
 import Image from "next/image";
 import "./style.scss";
 
-export default function Value() {
+export default function CreateDictionary() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [OpenValueMasterDialog, setOpenValueMasterDialog] = useState(false);
   const [OpenAttUOMMasterDialog, setOpenAttUOMMasterDialog] = useState(false);

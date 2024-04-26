@@ -160,6 +160,9 @@ export default function CreateUser() {
       }
     }
   };
+  function clearFormValues() {
+    setFormData(UserInitialState);
+  }
 
   return (
     <form className="create-user-wrapper" onSubmit={UserFormSubmitHandler}>
@@ -352,7 +355,7 @@ export default function CreateUser() {
         ""
       )}
       <div className="create-user-wrapper-action">
-        <OutlinedButton>Cancel</OutlinedButton>
+        <OutlinedButton onClick={clearFormValues}>Clear</OutlinedButton>
         <FillButton type="submit">Submit</FillButton>
       </div>
     </form>

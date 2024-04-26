@@ -4,12 +4,16 @@ import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTri
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import MasterDynamicFieldRender from "@/components/Dynamic/MasterDynamicFieldRender";
+import ColoredTabs from "@/components/Tabs/ColoredTabs";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { validateField } from "@/utils/DynamicFields/DynamicFunction";
 import { replaceNullWithEmptyString } from "@/utils/NulltoStringConver";
 import { SelectChangeEvent } from "@mui/material";
 import { usePathname } from "next/navigation";
+
+import TextComp from "@/components/TextComp/TextComp";
+import { textCompStyle } from "@/utils/UserDataExport";
 import { FormEvent, useContext, useEffect, useState } from "react";
 import {
   KeysToRemoveEditMaster,
@@ -21,17 +25,19 @@ import {
 // Import statements...
 
 export default function EditVendor({ EditDataGet }: any) {
-  const [VendorFormError, setVendorFormError] = useState({
-    name: false,
-    short: false,
-    address: false,
-  });
+  const [tabEditValue, settabEditValue] = useState("personal");
+
   // const { id, updatedAt, updatedBy, createdBy, createdAt } = EditDataGet;
 
   const PlantDataCon = useContext(UseContextHook);
   const { masters, SelectedMasterDatatab, settabValue, setReusableSnackBar } =
     PlantDataCon;
   const [formData, setFormData] = useState<any>(EditDataGet);
+  const [plantFormError, setplantFormError] = useState({
+    name: false,
+    short: false,
+    address: false,
+  });
   const [dynamicFields, setdynamicFields] = useState<PostCreateFieldData[]>([]);
   useEffect(() => {
     const dynamicFormFieldHandler = async () => {
@@ -87,16 +93,16 @@ export default function EditVendor({ EditDataGet }: any) {
     e.preventDefault();
 
     if (formData["shortDescName"]?.length === 0) {
-      setVendorFormError((prev) => ({ ...prev, short: true }));
+      setplantFormError((prev) => ({ ...prev, short: true }));
     }
 
     if (formData["name"]?.length === 0) {
-      setVendorFormError((prev) => ({ ...prev, name: true }));
+      setplantFormError((prev) => ({ ...prev, name: true }));
     }
     if (formData["address"] < 1) {
-      setVendorFormError((prev) => ({ ...prev, address: true }));
+      setplantFormError((prev) => ({ ...prev, address: true }));
     } else {
-      setVendorFormError((prev) => ({
+      setplantFormError((prev) => ({
         name: false,
         short: false,
         address: false,
@@ -197,155 +203,314 @@ export default function EditVendor({ EditDataGet }: any) {
       [name]: Array.isArray(value) ? value : [],
     }));
   };
+  const handleChange = (
+    event: React.SyntheticEvent,
+    newValue: "additional" | "personal"
+  ) => {
+    settabEditValue(newValue);
+  };
+  const tabs = [
+    { label: `Personal Info`, value: "personal" },
+    {
+      label: `Additional Info`,
+      value: "additional",
+    },
+  ];
   return (
     <form onSubmit={PlantFormSubmitHandler}>
-      <div className="create-plant-wrapper-div">
+      <div className="create-plant-wrapper-div-vendor">
+        <ColoredTabs
+          value={tabEditValue}
+          onChange={handleChange}
+          tabs={tabs}
+        ></ColoredTabs>
         <div className="create-plant-field-place-div-edit-vendor">
-          <OutlineTextField
-            placeholder={`Enter ShortDesc`}
-            type="text"
-            value={formData ? formData["shortDescName"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              VendorFormError.short ? `ShortDesc Should not be empty` : ""
-            }
-            error={VendorFormError.short}
-            name={`shortDescName`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name`}
-            type="text"
-            value={formData ? formData["name"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              VendorFormError.name ? `Vendor Name Should not be empty` : ""
-            }
-            error={VendorFormError.name}
-            name={`name`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name2`}
-            type="text"
-            value={formData ? formData["name2"] : ""}
-            onChange={handleInputChange}
-            name={`name2`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name3`}
-            type="text"
-            value={formData ? formData["name3"] : ""}
-            onChange={handleInputChange}
-            name={`name3`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Name4`}
-            type="text"
-            value={formData ? formData["name4"] : ""}
-            onChange={handleInputChange}
-            name={`name4`}
-          />
-          <OutlineTextField
-            placeholder={`Enter address`}
-            type="text"
-            value={formData ? formData["address"] : ""}
-            onChange={handleInputChange}
-            helperText={
-              VendorFormError.address ? `Address Should not be empty` : ""
-            }
-            error={VendorFormError.address}
-            name={`address`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Address2`}
-            type="text"
-            value={formData ? formData["address2"] : ""}
-            onChange={handleInputChange}
-            name={`address2`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Address3`}
-            type="text"
-            value={formData ? formData["address3"] : ""}
-            onChange={handleInputChange}
-            name={`address3`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Address4`}
-            type="text"
-            value={formData ? formData["address4"] : ""}
-            onChange={handleInputChange}
-            name={`address4`}
-          />
-          <OutlineTextField
-            placeholder={`Enter City`}
-            type="text"
-            value={formData ? formData["city"] : ""}
-            onChange={handleInputChange}
-            name={`city`}
-          />
-          <OutlineTextField
-            placeholder={`Enter State`}
-            type="text"
-            value={formData ? formData["state"] : ""}
-            onChange={handleInputChange}
-            name={`state`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Country`}
-            type="text"
-            value={formData ? formData["country"] : ""}
-            onChange={handleInputChange}
-            name={`country`}
-          />
-          <OutlineTextField
-            placeholder={`Enter PostalCode`}
-            type="text"
-            value={formData ? formData["postalCode"] : ""}
-            onChange={handleInputChange}
-            name={`postalCode`}
-          />
-          <OutlineTextField
-            placeholder={`Enter TelephoneNo`}
-            type="text"
-            value={formData ? formData["telephoneNo"] : ""}
-            onChange={handleInputChange}
-            name={`telephoneNo`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Fax`}
-            type="text"
-            value={formData ? formData["fax"] : ""}
-            onChange={handleInputChange}
-            name={`fax`}
-          />
-          <OutlineTextField
-            placeholder={`Enter MobileNo`}
-            type="text"
-            value={formData ? formData["mobileNo"] : ""}
-            onChange={handleInputChange}
-            name={`mobileNo`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Email`}
-            type="text"
-            value={formData ? formData["email"] : ""}
-            onChange={handleInputChange}
-            name={`email`}
-          />
-          <OutlineTextField
-            placeholder={`Enter Website`}
-            type="text"
-            value={formData ? formData["website"] : ""}
-            onChange={handleInputChange}
-            name={`website`}
-          />
-          <OutlineTextField
-            placeholder={`Enter AcquriedBy`}
-            type="text"
-            value={formData ? formData["acquriedBy"] : ""}
-            onChange={handleInputChange}
-            name={`acquiredBy`}
-          />
+          {tabEditValue === "personal" ? (
+            <>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter ShortDesc
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter ShortDesc`}
+                  type="text"
+                  value={formData ? formData["shortDescName"] : ""}
+                  onChange={handleInputChange}
+                  helperText={
+                    plantFormError.short ? `ShortDesc Should not be empty` : ""
+                  }
+                  error={plantFormError.short}
+                  name={`shortDescName`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Name
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Name`}
+                  type="text"
+                  value={formData ? formData["name"] : ""}
+                  onChange={handleInputChange}
+                  helperText={
+                    plantFormError.name ? `Vendor Name Should not be empty` : ""
+                  }
+                  error={plantFormError.name}
+                  name={`name`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Address
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter address`}
+                  type="text"
+                  value={formData ? formData["address"] : ""}
+                  onChange={handleInputChange}
+                  helperText={
+                    plantFormError.address ? `Address Should not be empty` : ""
+                  }
+                  error={plantFormError.address}
+                  name={`address`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter City
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter City`}
+                  type="text"
+                  value={formData ? formData["city"] : ""}
+                  onChange={handleInputChange}
+                  name={`city`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter State
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter State`}
+                  type="text"
+                  value={formData ? formData["state"] : ""}
+                  onChange={handleInputChange}
+                  name={`state`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Country
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Country`}
+                  type="text"
+                  value={formData ? formData["country"] : ""}
+                  onChange={handleInputChange}
+                  name={`country`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Postal Code
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter PostalCode`}
+                  type="text"
+                  value={formData ? formData["postalCode"] : ""}
+                  onChange={handleInputChange}
+                  name={`postalCode`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter MobileNo
+                  <span>:</span>
+                </TextComp>
+
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter MobileNo`}
+                  type="text"
+                  value={formData ? formData["mobileNo"] : ""}
+                  onChange={handleInputChange}
+                  name={`mobileNo`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Email
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Email`}
+                  type="text"
+                  value={formData ? formData["email"] : ""}
+                  onChange={handleInputChange}
+                  name={`email`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter AcquiredBy
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter AcquriedBy`}
+                  type="text"
+                  value={formData ? formData["acquiredBy"] : ""}
+                  onChange={handleInputChange}
+                  name={`acquiredBy`}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Name2
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Name2`}
+                  type="text"
+                  value={formData ? formData["name2"] : ""}
+                  onChange={handleInputChange}
+                  name={`name2`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Name3
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Name3`}
+                  type="text"
+                  value={formData ? formData["name3"] : ""}
+                  onChange={handleInputChange}
+                  name={`name3`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Name4
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Name4`}
+                  type="text"
+                  value={formData ? formData["name4"] : ""}
+                  onChange={handleInputChange}
+                  name={`name4`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Address2
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Address2`}
+                  type="text"
+                  value={formData ? formData["address2"] : ""}
+                  onChange={handleInputChange}
+                  name={`address2`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Address3
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Address3`}
+                  type="text"
+                  value={formData ? formData["address3"] : ""}
+                  onChange={handleInputChange}
+                  name={`address3`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Address4
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Address4`}
+                  type="text"
+                  value={formData ? formData["address4"] : ""}
+                  onChange={handleInputChange}
+                  name={`address4`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Website
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Website`}
+                  type="text"
+                  value={formData ? formData["website"] : ""}
+                  onChange={handleInputChange}
+                  name={`website`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Fax
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter Fax`}
+                  type="text"
+                  value={formData ? formData["fax"] : ""}
+                  onChange={handleInputChange}
+                  name={`fax`}
+                />
+              </div>
+              <div className="create-plant-wrapper-single-input">
+                <TextComp variant="subTitle" style={textCompStyle}>
+                  Enter Telephone No
+                  <span>:</span>
+                </TextComp>
+                <OutlineTextField
+                  fullWidth
+                  placeholder={`Enter TelephoneNo`}
+                  type="text"
+                  value={formData ? formData["telephoneNo"] : ""}
+                  onChange={handleInputChange}
+                  name={`telephoneNo`}
+                />
+              </div>
+            </>
+          )}
           <MasterDynamicFieldRender
             formData={formData}
             dynamicFields={dynamicFields}
@@ -356,8 +521,38 @@ export default function EditVendor({ EditDataGet }: any) {
           />
         </div>
         <div className="create-plant-action-div">
-          <OutlinedButton>CLEAR</OutlinedButton>
-          <FillButton type="submit">SUBMIT</FillButton>
+          <OutlinedButton
+            onClick={() => {
+              settabEditValue("table");
+            }}
+          >
+            Cancel
+          </OutlinedButton>
+          {tabEditValue !== "personal" ? (
+            <>
+              <FillButton
+                onClick={() => {
+                  settabEditValue("personal");
+                }}
+              >
+                BACK
+              </FillButton>
+              <FillButton type="submit">SUBMIT</FillButton>
+            </>
+          ) : (
+            ""
+          )}
+          {tabEditValue === "personal" ? (
+            <FillButton
+              onClick={() => {
+                settabEditValue("additional");
+              }}
+            >
+              Next
+            </FillButton>
+          ) : (
+            ""
+          )}
         </div>
         <MasterAuditTrial formData={formData}></MasterAuditTrial>
       </div>
