@@ -31,7 +31,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, ...props }) => {
           key={index}
           {...tab}
           sx={{
-            padding: "0",
+            padding: "0 5px",
             borderRadius: "5px",
             minHeight: "30px",
             "&.Mui-selected": {

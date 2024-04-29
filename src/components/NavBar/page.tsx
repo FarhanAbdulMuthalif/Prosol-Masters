@@ -202,7 +202,7 @@ export default function Navbar({ OpenSideBar }: { OpenSideBar: boolean }) {
                     style={pathName === data.path ? listStyles : {}}
                   >
                     <TextComp variant="bodySmall" style={{ fontWeight: "600" }}>
-                      {data.name}
+                      {splitWordByCapitalLetter(data.name)}
                     </TextComp>
                   </Link>
                 );

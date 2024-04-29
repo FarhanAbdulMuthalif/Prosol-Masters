@@ -23,4 +23,5 @@ export const pathObj: PathObjProps = {
     { name: "Dynamic Field", path: "/Dynamic/DynamicField" },
     { name: "Workflow", path: "/Dynamic/Workflow" },
   ],
+  MaterialMaster: [{ name: "MaterialFrom", path: "/MaterialMaster" }],
 };

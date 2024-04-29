@@ -263,6 +263,7 @@ export type PathObjProps = {
   UserManagement: { name: string; path: string }[];
   Settings: { name: string; path: string }[];
   Dynamic: { name: string; path: string }[];
+  MaterialMaster: { name: string; path: string }[];
 };
 export type UserInitialStateProps = {
   id?: number;
@@ -380,4 +381,20 @@ export type DynamicFormsProps = {
   updatedBy: string;
   createdAt: string;
   updatedAt: string;
+};
+export type MaterialMasterRootProps = {
+  name: string;
+  isField: boolean;
+  isHaveSubForm: boolean;
+  formFields: MaterialMasterFormFieldProps[];
+};
+export type MaterialMasterFormFieldProps = {
+  name: string;
+  isField: boolean;
+  isHaveSubForm: boolean;
+  displayName: string;
+  view: boolean;
+  modify: boolean;
+
+  formFields: MaterialMasterFormFieldProps[];
 };

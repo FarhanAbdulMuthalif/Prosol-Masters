@@ -117,7 +117,7 @@ export default function CreateDynamicForm() {
                   : ""
               }
               error={DynamicformError.desc}
-              rows={3}
+              rows={2}
               name="formDescription"
             />
           </div>

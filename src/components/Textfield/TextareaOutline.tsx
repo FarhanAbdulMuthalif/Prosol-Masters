@@ -11,7 +11,7 @@ import "./TextareaOutline.scss";
 const TextareaOutline: React.FC<TextFieldProps> = ({ ...props }) => {
   return (
     <TextField
-      sx={{ color: "brown" }}
+      sx={{ "& .MuiInputBase-input": { height: 8, padding: 1 } }}
       multiline
       size="small"
       variant="outlined"

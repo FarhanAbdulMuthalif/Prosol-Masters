@@ -205,6 +205,19 @@ export default function Header() {
             <TextComp variant="subTitle">Dynamic</TextComp>
           </Link>
         </li>
+        <li>
+          <Link
+            className="active"
+            style={
+              currentRoute.split("/").includes("MaterialMaster")
+                ? listStyles
+                : { height: "100%" }
+            }
+            href="/MaterialMaster"
+          >
+            <TextComp variant="subTitle">Material Master</TextComp>
+          </Link>
+        </li>
       </ul>
 
       <div className="Header-Last-Side">
