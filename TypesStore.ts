@@ -398,3 +398,9 @@ export type MaterialMasterFormFieldProps = {
 
   formFields: MaterialMasterFormFieldProps[];
 };
+export type MMCharacteristic = {
+  characteristic: string;
+  value: string;
+  abbreviate: string;
+  unit: string;
+};

@@ -2,7 +2,7 @@ import { UseContextHook } from "@/Provides/UseContextHook";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
 import { Step, StepLabel, Stepper } from "@mui/material";
-import { useContext, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
 import MMDescriptionCharacteristic from "./(MMDescriptionAction)/_MMDescriptionCharacteristic";
 import MMDescriptionEquipment from "./(MMDescriptionAction)/_MMDescriptionEquipment";
 import MMDescriptionVendor from "./(MMDescriptionAction)/_MMDescriptionVendor";
@@ -14,21 +14,23 @@ export default function MMDescription() {
     {
       label: "Characteristic Details",
       description: "Enter Characteristic Details",
-      content: <MMDescriptionCharacteristic />,
     },
     {
       label: "Equipment Details",
       description: "Enter Equipmentr Details",
-      content: <MMDescriptionEquipment />,
     },
     {
       label: "Vendor Details",
       description: "Enter Vendor Details",
-      content: <MMDescriptionVendor />,
     },
   ];
+  const renderDescription: Record<number, ReactNode> = {
+    1: <MMDescriptionCharacteristic />,
+    2: <MMDescriptionEquipment />,
+    3: <MMDescriptionVendor />,
+  };
   const handleNext = () => {
-    if (activeStep > steps.length) return;
+    if (activeStep === 2) return;
     setactiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   const handleBack = () => {
@@ -60,11 +62,14 @@ export default function MMDescription() {
           </Step>
         ))}
       </Stepper>
+      <div className="material-master-description-fields-content">
+        {renderDescription[activeStep + 1]}
+      </div>
       <div className="material-master-description-fields-action">
         <OutlinedButton disabled={activeStep === 0} onClick={handleBack}>
           Back
         </OutlinedButton>
-        <FillButton onClick={handleNext}>
+        <FillButton onClick={handleNext} disabled={activeStep > 2}>
           {activeStep === steps.length - 1 ? "Finish" : "Next"}
         </FillButton>
       </div>

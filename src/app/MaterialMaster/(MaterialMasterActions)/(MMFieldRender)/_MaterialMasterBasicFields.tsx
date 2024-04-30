@@ -44,8 +44,8 @@ export default function MaterialMasterBasicFields() {
             <span>:</span>
           </TextComp>
           <OutlineTextField
-            placeholder={`Enter ${MMLegacySearch.displayName}`}
-            disabled={!MMLegacySearch.modify}
+            placeholder={`Enter ${MMLegacyData.displayName}`}
+            disabled={!MMLegacyData.modify}
             fullWidth
           />
         </div>
