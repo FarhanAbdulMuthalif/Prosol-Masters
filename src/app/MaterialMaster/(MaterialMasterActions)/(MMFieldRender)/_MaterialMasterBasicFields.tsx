@@ -1,5 +1,6 @@
 import TextComp from "@/components/TextComp/TextComp";
 import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import TextareaOutline from "@/components/Textfield/TextareaOutline";
 import { MaterialMasteresData } from "@/utils/MaterialMasters/MMData";
 import { textCompStyle } from "@/utils/UserDataExport";
 
@@ -13,15 +14,10 @@ export default function MaterialMasterBasicFields() {
   //   const rtnData = MMdata?.filter((data) => data.name === val)[0]?.displayName;
   //   return rtnData.length > 0 ? rtnData : capitalizeFunc(val);
   // };
-  const MMLegacyData = MasterDataJson.formFields?.filter(
-    (data) => data.name === "legacyData"
+  const MMSourceDesc = MasterDataJson.formFields?.filter(
+    (data) => data.name === "sourceDesc"
   )[0];
-  const MMLegacySearch = MasterDataJson.formFields?.filter(
-    (data) => data.name === "legacySearch"
-  )[0];
-  const MMAdditionalLegacy = MasterDataJson.formFields?.filter(
-    (data) => data.name === "additionalLegacy"
-  )[0];
+
   const MMNoun = MasterDataJson.formFields?.filter(
     (data) => data.name === "noun"
   )[0];
@@ -37,51 +33,23 @@ export default function MaterialMasterBasicFields() {
 
   return (
     <>
-      {MMLegacyData.view ? (
+      {MMSourceDesc.view ? (
         <div className="create-mm-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            {MMLegacyData.displayName}
+            {MMSourceDesc.displayName}
             <span>:</span>
           </TextComp>
-          <OutlineTextField
-            placeholder={`Enter ${MMLegacyData.displayName}`}
-            disabled={!MMLegacyData.modify}
+          <TextareaOutline
+            placeholder={`Enter ${MMSourceDesc.displayName}`}
+            disabled={!MMSourceDesc.modify}
+            rows={2}
             fullWidth
           />
         </div>
       ) : (
         ""
       )}
-      {MMLegacySearch.view ? (
-        <div className="create-mm-wrapper-single-input">
-          <TextComp variant="subTitle" style={textCompStyle}>
-            {MMLegacySearch.displayName}
-            <span>:</span>
-          </TextComp>
-          <OutlineTextField
-            placeholder={`Enter ${MMLegacySearch.displayName}`}
-            disabled={!MMLegacySearch.modify}
-            fullWidth
-          />
-        </div>
-      ) : (
-        ""
-      )}
-      {MMAdditionalLegacy.view ? (
-        <div className="create-mm-wrapper-single-input">
-          <TextComp variant="subTitle" style={textCompStyle}>
-            {MMAdditionalLegacy.displayName}
-            <span>:</span>
-          </TextComp>
-          <OutlineTextField
-            placeholder={`Enter ${MMAdditionalLegacy.displayName}`}
-            disabled={!MMAdditionalLegacy.modify}
-            fullWidth
-          />
-        </div>
-      ) : (
-        ""
-      )}
+
       {MMNoun.view ? (
         <div className="create-mm-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
@@ -106,6 +74,21 @@ export default function MaterialMasterBasicFields() {
           <OutlineTextField
             placeholder={`Enter ${MMModifier.displayName}`}
             disabled={!MMModifier.modify}
+            fullWidth
+          />
+        </div>
+      ) : (
+        ""
+      )}
+      {MMUOM.view ? (
+        <div className="create-mm-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            {MMUOM.displayName}
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField
+            placeholder={`Enter ${MMUOM.displayName}`}
+            disabled={!MMUOM.modify}
             fullWidth
           />
         </div>

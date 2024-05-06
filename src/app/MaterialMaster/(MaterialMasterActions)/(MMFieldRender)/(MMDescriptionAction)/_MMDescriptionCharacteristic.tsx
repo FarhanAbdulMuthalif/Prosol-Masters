@@ -1,4 +1,12 @@
+import TextComp from "@/components/TextComp/TextComp";
+import NoBorderTextfield from "@/components/Textfield/NoBorderTextfield";
+import OutlineTextField from "@/components/Textfield/OutlineTextfield";
+import TextareaOutline from "@/components/Textfield/TextareaOutline";
+import { PrimaryTextColor } from "@/styles/colorsCode";
+import { textCompStyle } from "@/utils/UserDataExport";
+import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import {
+  Autocomplete,
   Table,
   TableBody,
   TableCell,
@@ -22,11 +30,12 @@ export default function MMDescriptionCharacteristic() {
       unit: "",
     },
   ];
+  const ValueOptions = ["19", "78", "234"];
   return (
     <div className="material-master-description-fields-content-characteristic">
       <div className="material-master-description-fields-content-characteristic-table">
-        <TableContainer>
-          <Table sx={{ width: "50%" }} size="small" aria-label="a dense table">
+        <TableContainer sx={{ width: "100%" }}>
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <TableCell sx={tableStyle} align="left">
@@ -52,13 +61,89 @@ export default function MMDescriptionCharacteristic() {
                         {row.characteristic}
                       </TableCell>
                       <TableCell sx={tableStyle} align="left">
-                        {row.value}
+                        <Autocomplete
+                          options={ValueOptions}
+                          forcePopupIcon={false}
+                          autoHighlight
+                          freeSolo
+                          getOptionLabel={(option) => option} // Specify how the value should be displayed
+                          fullWidth
+                          sx={{
+                            fontSize: "10px",
+                            color: PrimaryTextColor,
+                            "& .MuiInputBase-input": {
+                              fontSize: "10px",
+                              color: PrimaryTextColor,
+                            },
+                          }}
+                          renderOption={(props, option: string) => (
+                            <li
+                              style={{
+                                fontSize: "10px",
+                                color: PrimaryTextColor,
+                              }}
+                              {...props}
+                            >
+                              {capitalizeFunc(option)}
+                            </li>
+                          )}
+                          renderInput={(params) => (
+                            <NoBorderTextfield
+                              {...params}
+                              type="text"
+                              // value={formData ? formData["modifier"] : ""}
+                              // onChange={handleInputChange}
+                              // name={`modifier`}
+
+                              size="small"
+                            />
+                          )}
+                          clearIcon={null} // Set clearIcon to null to remove the "x" icon
+                        />
                       </TableCell>
                       <TableCell sx={tableStyle} align="left">
-                        {row.abbreviate}
+                        <NoBorderTextfield />
                       </TableCell>
                       <TableCell sx={tableStyle} align="left">
-                        {row.unit}
+                        <Autocomplete
+                          options={ValueOptions}
+                          forcePopupIcon={false}
+                          autoHighlight
+                          freeSolo
+                          getOptionLabel={(option) => option} // Specify how the value should be displayed
+                          fullWidth
+                          sx={{
+                            fontSize: "10px",
+                            color: PrimaryTextColor,
+                            "& .MuiInputBase-input": {
+                              fontSize: "10px",
+                              color: PrimaryTextColor,
+                            },
+                          }}
+                          renderOption={(props, option: string) => (
+                            <li
+                              style={{
+                                fontSize: "10px",
+                                color: PrimaryTextColor,
+                              }}
+                              {...props}
+                            >
+                              {capitalizeFunc(option)}
+                            </li>
+                          )}
+                          renderInput={(params) => (
+                            <NoBorderTextfield
+                              {...params}
+                              type="text"
+                              // value={formData ? formData["modifier"] : ""}
+                              // onChange={handleInputChange}
+                              // name={`modifier`}
+
+                              size="small"
+                            />
+                          )}
+                          clearIcon={null} // Set clearIcon to null to remove the "x" icon
+                        />
                       </TableCell>
                     </TableRow>
                   );
@@ -67,7 +152,54 @@ export default function MMDescriptionCharacteristic() {
           </Table>
         </TableContainer>
       </div>
-      <div className="material-master-description-fields-content-characteristic-lng-shrt-desc"></div>
+      <div className="material-master-description-fields-content-characteristic-lng-shrt-desc">
+        <div className="create-mm-description-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Short Desc
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField fullWidth placeholder={`Enter Short Desc`} />
+        </div>
+        <div className="create-mm-description-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Long Desc
+            <span>:</span>
+          </TextComp>
+          <TextareaOutline rows={2} placeholder={`Enter Long Desc`} fullWidth />
+        </div>
+        <div className="create-mm-description-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Additional Data For Description
+            <span>:</span>
+          </TextComp>
+          <TextareaOutline
+            rows={2}
+            placeholder={`Enter Additional Data For Description`}
+            fullWidth
+          />
+        </div>
+        <div className="create-mm-description-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Missing Value
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField fullWidth placeholder={`Enter Missing Value`} />
+        </div>
+        <div className="create-mm-description-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Enriched Value
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField fullWidth placeholder={`Enter Enriched Value`} />
+        </div>
+        <div className="create-mm-description-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            Repeated Value
+            <span>:</span>
+          </TextComp>
+          <OutlineTextField fullWidth placeholder={`Enter Repeated Value`} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -104,6 +104,7 @@ const Login = () => {
             }
             localStorage.setItem("accessToken", data?.accessToken);
             localStorage.setItem("refreshToken", data?.refreshToken);
+            localStorage.setItem("expiresAt", data?.expiresAt);
             router.push("/");
             router.refresh();
             setauth(true);

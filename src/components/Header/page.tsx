@@ -205,7 +205,7 @@ export default function Header() {
             <TextComp variant="subTitle">Dynamic</TextComp>
           </Link>
         </li>
-        <li>
+        <li style={{ position: "relative", overflow: "hidden" }}>
           <Link
             className="active"
             style={

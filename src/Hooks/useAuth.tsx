@@ -1,11 +1,11 @@
 import { UseContextHook } from "@/Provides/UseContextHook";
 import apiLogin from "@/components/apiLogin";
+import { parseCustomDateString } from "@/utils/Date/ParseDate";
 import { singleUserDataHandler } from "@/utils/UserDataExport";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 const UseAuth = () => {
-  // const [auth, setAuth] = useState(false);
   const {
     setauth: SetContextAuth,
     setUserInfo,
@@ -21,16 +21,21 @@ const UseAuth = () => {
       try {
         const storedAccessToken = localStorage.getItem("accessToken");
         const storedRefreshToken = localStorage.getItem("refreshToken");
+        const storedExpiresAt = localStorage.getItem("expiresAt");
 
-        if (!storedAccessToken && !storedRefreshToken) {
+        if (!storedAccessToken || !storedExpiresAt || !storedRefreshToken) {
           if (!auth && !currentRoute.split("/").includes("Login")) {
             router.push("/Login");
           }
           return;
         }
+        const expiresAt = parseCustomDateString(storedExpiresAt);
+        const now = new Date();
 
         let accessToken = storedAccessToken || "";
-        if (storedAccessToken) {
+        let refreshToken = storedRefreshToken || "";
+        let expiresAtTxt = storedExpiresAt || "";
+        if (expiresAt > now && storedAccessToken) {
           try {
             const res = await apiLogin.post(
               `/user/auth/validateToken?token=${storedAccessToken}`
@@ -42,21 +47,40 @@ const UseAuth = () => {
             }
           } catch (e: any) {
             if (storedRefreshToken) {
-              const refreshRes = await apiLogin.post(
-                `/user/auth/refresh-token?token=${storedRefreshToken}`
-              );
-              accessToken = refreshRes?.data?.accessToken;
-              localStorage.setItem("accessToken", accessToken);
+              try {
+                const refreshRes = await apiLogin.post(
+                  `/user/auth/refresh-token?token=${storedRefreshToken}`
+                );
+                if (refreshRes.status === 200) {
+                  accessToken = refreshRes?.data?.accessToken;
+                  refreshToken = refreshRes?.data?.refreshToken;
+                  expiresAtTxt = refreshRes?.data?.expiresAt;
+                  localStorage.setItem("accessToken", accessToken);
+                  localStorage.setItem("refreshToken", refreshToken);
+                  localStorage.setItem("expiresAt", expiresAtTxt);
+                  SetContextAuth(true);
+                  singleUserDataHandler(storedAccessToken, setUserInfo);
+                }
+              } catch (e: any) {
+                router.push("/Login");
+                SetContextAuth(false);
+              }
             }
           }
-        }
-
-        const retryRes = await apiLogin.post(
-          `/user/auth/validateToken?token=${accessToken}`
-        );
-        if (retryRes.status === 200) {
-          SetContextAuth(true);
-          singleUserDataHandler(accessToken, setUserInfo);
+        } else {
+          const refreshRes = await apiLogin.post(
+            `/user/auth/refresh-token?token=${storedRefreshToken}`
+          );
+          if (refreshRes.status === 200) {
+            accessToken = refreshRes?.data?.accessToken;
+            refreshToken = refreshRes?.data?.refreshToken;
+            expiresAtTxt = refreshRes?.data?.expiresAt;
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("expiresAt", expiresAtTxt);
+            SetContextAuth(true);
+            singleUserDataHandler(storedAccessToken, setUserInfo);
+          }
         }
       } catch (error: any) {
         console.error("Error in authentication:", error);
