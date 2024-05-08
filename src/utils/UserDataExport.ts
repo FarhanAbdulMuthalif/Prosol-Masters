@@ -34,11 +34,15 @@ export const PrivilageInitialState: PrivilageInitialStateProps = {
   createdBy: "",
   createdAt: "",
 };
+export function delayFunction(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export async function singleUserDataHandler(
   Token: string,
   setUser: Dispatch<SetStateAction<SingleUserInfoProps>>
 ) {
+  // await delayFunction(3000);
   const resMe = await apiLogin.get("/user/me", {
     headers: {
       Authorization: `Bearer ${Token}`,
@@ -54,6 +58,12 @@ export const textCompStyle = {
   color: PrimaryTextColor,
   display: "flex",
   justifyContent: "space-between",
+};
+export const textCompStyleMM = {
+  color: PrimaryTextColor,
+  display: "flex",
+  justifyContent: "space-between",
+  fontWeight: "600",
 };
 
 export const defaultProfileImage = "/images/AdminSvg.svg";

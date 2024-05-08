@@ -6,14 +6,7 @@ import { textCompStyle } from "@/utils/UserDataExport";
 
 export default function MaterialMasterBasicFields() {
   const MasterDataJson = MaterialMasteresData;
-  // const MMdata = MasterDataJson?.formFields?.filter(
-  //   (data) => data.isField === true
-  // );
-  // console.log(MMdata);
-  // const getDisplayName = (val: string) => {
-  //   const rtnData = MMdata?.filter((data) => data.name === val)[0]?.displayName;
-  //   return rtnData.length > 0 ? rtnData : capitalizeFunc(val);
-  // };
+
   const MMSourceDesc = MasterDataJson.formFields?.filter(
     (data) => data.name === "sourceDesc"
   )[0];
@@ -42,7 +35,7 @@ export default function MaterialMasterBasicFields() {
           <TextareaOutline
             placeholder={`Enter ${MMSourceDesc.displayName}`}
             disabled={!MMSourceDesc.modify}
-            rows={2}
+            maxRows={2}
             fullWidth
           />
         </div>

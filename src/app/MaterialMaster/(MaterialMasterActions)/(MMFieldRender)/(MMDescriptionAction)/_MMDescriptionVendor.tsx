@@ -1,3 +1,4 @@
+import BasicCheckbox from "@/components/Checkbox/Checkbox";
 import NoBorderTextfield from "@/components/Textfield/NoBorderTextfield";
 import { PrimaryTextColor } from "@/styles/colorsCode";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
@@ -47,10 +48,10 @@ export default function MMDescriptionVendor() {
                 Ref No
               </TableCell>
               <TableCell style={{ width: 60 }} sx={tableStyle} align="left">
-                S
+                Short
               </TableCell>
               <TableCell style={{ width: 60 }} sx={tableStyle} align="left">
-                S
+                Long
               </TableCell>
               <TableCell style={{ width: 100 }} sx={tableStyle} align="left">
                 Add / Remove
@@ -151,10 +152,10 @@ export default function MMDescriptionVendor() {
                       <NoBorderTextfield />
                     </TableCell>
                     <TableCell sx={tableStyle} align="left">
-                      <NoBorderTextfield />
+                      <BasicCheckbox />
                     </TableCell>
                     <TableCell sx={tableStyle} align="left">
-                      <NoBorderTextfield />
+                      <BasicCheckbox />
                     </TableCell>
                     <TableCell sx={tableStyle} align="left">
                       <NoBorderTextfield />

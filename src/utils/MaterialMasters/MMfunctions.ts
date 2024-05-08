@@ -22,12 +22,28 @@ export const getMMTabData = () => {
   });
   return tabArr;
 };
-const descriptionFields = MaterialMasteresData.formFields?.filter(
+export const MMDescriptionFields = MaterialMasteresData.formFields?.filter(
   (field) => field.name === "description"
 )[0];
+export const MMPlantFields = MaterialMasteresData.formFields?.filter(
+  (field) => field.name === "ERPData"
+)[0];
 export const getMMDescriptionTabData = () => {
-  const dataTab = descriptionFields.formFields.map((data) => {
-    return { label: data.displayName, value: data.name };
+  const dataTab = MMDescriptionFields.formFields.map((data) => {
+    if (data.view) {
+      return { label: data.displayName, value: data.name };
+    }
+    return;
+  });
+  return dataTab;
+};
+
+export const getMMPlantTabData = () => {
+  const dataTab = MMPlantFields.formFields.map((data) => {
+    if (data.view) {
+      return { label: data.displayName, value: data.name };
+    }
+    return;
   });
   return dataTab;
 };

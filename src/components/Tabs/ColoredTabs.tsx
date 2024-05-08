@@ -20,7 +20,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, ...props }) => {
         // backgroundColor: ThemeColor.tertiaryColor,
         display: "flex",
         borderBottom: "0.5px solid #c5ccd4",
-        minHeight: "40px",
+        minHeight: "35px",
         alignItems: "center",
         "& .MuiTabs-indicator": {
           backgroundColor: "transparent",

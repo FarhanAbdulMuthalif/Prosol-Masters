@@ -404,3 +404,11 @@ export type MMCharacteristic = {
   abbreviate: string;
   unit: string;
 };
+export interface StepperStepInfo {
+  label: string;
+  value: string;
+}
+export interface ReusableStepperProps {
+  steps: StepperStepInfo[] | undefined;
+  activeStep: number;
+}

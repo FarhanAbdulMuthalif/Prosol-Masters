@@ -3,6 +3,7 @@ import ColoredTabs from "@/components/Tabs/ColoredTabs";
 import { MaterialMasteresData } from "@/utils/MaterialMasters/MMData";
 import { getMMTabData } from "@/utils/MaterialMasters/MMfunctions";
 import { ReactNode, useState } from "react";
+import MMCodeLogic from "./(MMFieldRender)/(MMCodeLogic)/_MMCodeLogic";
 import MMPlant from "./(MMFieldRender)/(MMPlantAction)/_MMPlant";
 import MMDescription from "./(MMFieldRender)/_MMDescription";
 import MaterialMasterBasicFields from "./(MMFieldRender)/_MaterialMasterBasicFields";
@@ -12,7 +13,7 @@ export default function CreateMaterialMaster() {
 
   const handleChange = (
     event: React.SyntheticEvent,
-    newValue: "description" | "plant" | "CodeLogic" | "attachment"
+    newValue: "description" | "plant" | "codeLogic" | "attachment"
   ) => {
     settabValue(newValue);
   };
@@ -29,8 +30,8 @@ export default function CreateMaterialMaster() {
   const tabs = getMMTabData() || [];
   const tabObjValue: Record<string, ReactNode> = {
     description: <MMDescription />,
-    plant: <MMPlant />,
-    // CodeLogic: <MaterialMasterBasicFields />,
+    ERPData: <MMPlant />,
+    codeLogic: <MMCodeLogic />,
     // attachment: <MaterialMasterBasicFields />,
     // physicalObservation: <MaterialMasterBasicFields />,
   };

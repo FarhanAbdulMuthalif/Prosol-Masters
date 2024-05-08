@@ -5,6 +5,7 @@ import useFetch from "@/Hooks/useFetch";
 import MasterAuditTrial from "@/components/AuditTrial/MasterAudit/MasterAuditTrial";
 import FillButton from "@/components/Button/FillButton";
 import OutlinedButton from "@/components/Button/OutlineButton";
+import BasicCheckbox from "@/components/Checkbox/Checkbox";
 import ReusableMultipleSelect from "@/components/Dropdown/MultipleDropdown";
 import NameSingleSelectDropdown from "@/components/Dropdown/NameSingleDropdown";
 import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
@@ -13,7 +14,6 @@ import OutlineTextField from "@/components/Textfield/OutlineTextfield";
 import api from "@/components/api";
 import { RoleInitialState, textCompStyle } from "@/utils/UserDataExport";
 import {
-  Checkbox,
   Chip,
   FormControlLabel,
   SelectChangeEvent,
@@ -384,8 +384,7 @@ export default function EditRole({
             <div className="status-role-div-checkbox-list">
               <FormControlLabel
                 control={
-                  <Checkbox
-                    sx={{ accentColor: ThemeColor.primaryColor }}
+                  <BasicCheckbox
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(1)}
                     value="1"
@@ -399,8 +398,7 @@ export default function EditRole({
               />
               <FormControlLabel
                 control={
-                  <Checkbox
-                    sx={{ accentColor: ThemeColor.primaryColor }}
+                  <BasicCheckbox
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(2)}
                     value="2"
@@ -414,8 +412,7 @@ export default function EditRole({
               />
               <FormControlLabel
                 control={
-                  <Checkbox
-                    sx={{ accentColor: ThemeColor.primaryColor }}
+                  <BasicCheckbox
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(3)}
                     value="3"
@@ -429,8 +426,7 @@ export default function EditRole({
               />
               <FormControlLabel
                 control={
-                  <Checkbox
-                    sx={{ accentColor: ThemeColor.primaryColor }}
+                  <BasicCheckbox
                     onChange={checkHandler2}
                     checked={formData.privileges.includes(4)}
                     value="4"
