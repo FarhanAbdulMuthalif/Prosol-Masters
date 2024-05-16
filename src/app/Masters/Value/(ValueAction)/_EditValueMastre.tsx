@@ -224,7 +224,7 @@ export default function EditValueMastre({ EditDataGet }: any) {
         <div className="create-plant-field-place-div">
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab} Name
+              {SelectedMasterDatatab} Name
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -242,7 +242,7 @@ export default function EditValueMastre({ EditDataGet }: any) {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter Abbreviation
+              Abbreviation
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -262,7 +262,7 @@ export default function EditValueMastre({ EditDataGet }: any) {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter LikelyWords
+              LikelyWords
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -276,7 +276,7 @@ export default function EditValueMastre({ EditDataGet }: any) {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter Equivalent
+              Equivalent
               <span>:</span>
             </TextComp>
             <OutlineTextField

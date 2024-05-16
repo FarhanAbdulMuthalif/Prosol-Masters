@@ -203,7 +203,7 @@ export default function CreateDepartmentMastert() {
         <div className="create-plant-field-place-div">
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab} Name
+              {SelectedMasterDatatab} Name
               <span>:</span>
             </TextComp>
             <OutlineTextField

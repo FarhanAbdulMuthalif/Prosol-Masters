@@ -199,7 +199,7 @@ export default function EditMaster({ EditDataGet }: any) {
         <div className="create-plant-field-place-div">
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab} Name
+              {SelectedMasterDatatab} Name
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -219,7 +219,7 @@ export default function EditMaster({ EditDataGet }: any) {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab} Code
+              {SelectedMasterDatatab} Code
               <span>:</span>
             </TextComp>
             <OutlineTextField

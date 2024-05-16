@@ -31,7 +31,7 @@ export default function MasterDynamicFieldRender({
         return (
           <div className="create-dynamic-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {data.fieldName}
+              {data.fieldName}
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -51,7 +51,7 @@ export default function MasterDynamicFieldRender({
         return (
           <div className="create-dynamic-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {data.fieldName}
+              {data.fieldName}
               <span>:</span>
             </TextComp>
             <TextareaOutline

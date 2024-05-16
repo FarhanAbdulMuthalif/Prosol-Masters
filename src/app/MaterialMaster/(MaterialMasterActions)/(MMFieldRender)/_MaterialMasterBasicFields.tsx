@@ -23,6 +23,9 @@ export default function MaterialMasterBasicFields() {
   const MMItemType = MasterDataJson.formFields?.filter(
     (data) => data.name === "itemType"
   )[0];
+  const MMRemarks = MasterDataJson.formFields?.filter(
+    (data) => data.name === "remarks"
+  )[0];
 
   return (
     <>
@@ -97,6 +100,22 @@ export default function MaterialMasterBasicFields() {
           <OutlineTextField
             placeholder={`Enter ${MMItemType.displayName}`}
             disabled={!MMItemType.modify}
+            fullWidth
+          />
+        </div>
+      ) : (
+        ""
+      )}
+      {MMRemarks.view ? (
+        <div className="create-mm-wrapper-single-input">
+          <TextComp variant="subTitle" style={textCompStyle}>
+            {MMRemarks.displayName}
+            <span>:</span>
+          </TextComp>
+          <TextareaOutline
+            placeholder={`Enter ${MMRemarks.displayName}`}
+            disabled={!MMRemarks.modify}
+            maxRows={2}
             fullWidth
           />
         </div>

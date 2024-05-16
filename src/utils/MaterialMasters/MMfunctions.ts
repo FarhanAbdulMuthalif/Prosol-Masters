@@ -13,7 +13,7 @@ export const getMMFieldDisplayName = (
 export const getMMTabData = () => {
   let tabArr: { label: string; value: string }[] = [];
   MaterialMasteresData.formFields?.forEach((field) => {
-    if (field.isHaveSubForm || !field.isField) {
+    if (field.view && (field.isHaveSubForm || !field.isField)) {
       const data = { label: field.displayName, value: field.name };
       tabArr.push(data);
 

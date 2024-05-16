@@ -138,7 +138,7 @@ export default function CreateRole() {
       <div className="create-user-wrapper-inputs">
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter RoleName
+            RoleName
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -152,7 +152,7 @@ export default function CreateRole() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Description
+            Description
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -166,11 +166,11 @@ export default function CreateRole() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Plant
+            Plant
             <span>:</span>
           </TextComp>
           <NameSingleSelectDropdown
-            label="Select Plant"
+            label="Select Plant "
             value={
               formData.plantId
                 ? PlantDropDownData.find(

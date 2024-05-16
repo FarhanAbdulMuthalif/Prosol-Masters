@@ -52,6 +52,15 @@ export const MaterialMasteresData: MaterialMasterRootProps = {
       modify: false,
     },
     {
+      name: "remarks",
+      isField: true,
+      formFields: [],
+      displayName: "Remarks",
+      isHaveSubForm: false,
+      view: true,
+      modify: true,
+    },
+    {
       name: "description",
       isField: false,
       displayName: "Description",

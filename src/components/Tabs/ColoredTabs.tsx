@@ -19,9 +19,10 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, ...props }) => {
       sx={{
         // backgroundColor: ThemeColor.tertiaryColor,
         display: "flex",
+        flexDirection: "row",
         borderBottom: "0.5px solid #c5ccd4",
-        minHeight: "35px",
-        alignItems: "center",
+        minHeight: "25px",
+        // alignItems: "center",
         "& .MuiTabs-indicator": {
           backgroundColor: "transparent",
         },
@@ -33,11 +34,19 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, ...props }) => {
           {...tab}
           sx={{
             padding: "0 5px",
-            borderRadius: "5px",
+            marginRight: "3px",
             minHeight: "25px",
+            border: "1px solid #c5ccd4",
+            borderBottom: "none",
+            borderRadius: "5px 5px 0 0",
+            // "&:hover": {
+            //   fontWeight: "700",
+            // },
             "&.Mui-selected": {
+              // borderRadius: "5px",
               backgroundColor: ThemeColor.primaryColor,
               color: "white",
+              fontWeight: "700",
             },
           }}
         />

@@ -3,6 +3,7 @@ import CustomDataGrid from "@/components/DataGrid/CustomDatagrid";
 import api from "@/components/api";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
@@ -152,7 +153,7 @@ export default function ValueGrid({
         headerClassName: "super-app-theme--header",
         flex: 1,
 
-        headerName: `AbbreviationUnit`,
+        headerName: `Abbreviation Unit`,
         renderCell: (params: any) => {
           return params?.row?.abbreviationUnit?.attributeUomName;
         },
@@ -164,7 +165,7 @@ export default function ValueGrid({
         headerClassName: "super-app-theme--header",
         flex: 1,
 
-        headerName: `EquivalentUnit`,
+        headerName: `Equivalent Unit`,
         renderCell: (params: any) => {
           return params?.row?.equivalentUnit?.attributeUomName;
         },
@@ -174,7 +175,7 @@ export default function ValueGrid({
       field: data,
       headerClassName: "super-app-theme--header",
       flex: 1,
-      headerName: `${capitalizeFunc(data)}`,
+      headerName: `${splitWordByCapitalLetter(capitalizeFunc(data))}`,
     };
   });
   // console.log(filteredKeys);

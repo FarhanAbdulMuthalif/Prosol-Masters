@@ -4,6 +4,7 @@ import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import api from "@/components/api";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
@@ -163,7 +164,7 @@ export default function Generalgrid({
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `${capitalizeFunc(data)}`,
+          headerName: `${splitWordByCapitalLetter(capitalizeFunc(data))}`,
           renderCell: (params: any) => {
             return params.row.plant.plantName;
           },
@@ -175,7 +176,7 @@ export default function Generalgrid({
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `${capitalizeFunc(data)}`,
+          headerName: `${splitWordByCapitalLetter(capitalizeFunc(data))}`,
           renderCell: (params: any) => {
             return params.row.storageLocation.storageLocationName;
           },
@@ -186,14 +187,14 @@ export default function Generalgrid({
           field: data,
           headerClassName: "super-app-theme--header",
           flex: 0.5,
-          headerName: `${capitalizeFunc(data)}`,
+          headerName: `${splitWordByCapitalLetter(capitalizeFunc(data))}`,
         };
       }
       return {
         field: data,
         headerClassName: "super-app-theme--header",
         flex: 1,
-        headerName: `${capitalizeFunc(data)}`,
+        headerName: `${splitWordByCapitalLetter(capitalizeFunc(data))}`,
       };
     }
   );

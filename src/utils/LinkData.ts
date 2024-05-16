@@ -15,7 +15,7 @@ export const pathObj: PathObjProps = {
   UserManagement: [
     { name: "User", path: "/UserManagement" },
     { name: "Role", path: "/UserManagement/Role" },
-    { name: "Privilage", path: "/UserManagement/Privilage" },
+    { name: "Privilege", path: "/UserManagement/Privilege" },
   ],
   Settings: [{ name: "UI Settings", path: "/Settings" }],
   Dynamic: [
@@ -23,5 +23,5 @@ export const pathObj: PathObjProps = {
     { name: "Dynamic Field", path: "/Dynamic/DynamicField" },
     { name: "Workflow", path: "/Dynamic/Workflow" },
   ],
-  MaterialMaster: [{ name: "MaterialFrom", path: "/MaterialMaster" }],
+  MaterialMaster: [{ name: "MaterialForm", path: "/MaterialMaster" }],
 };

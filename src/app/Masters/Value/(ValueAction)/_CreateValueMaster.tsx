@@ -220,7 +220,7 @@ export default function CreateValue() {
         <div className="create-plant-field-place-div">
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab}
+              {SelectedMasterDatatab}
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -238,7 +238,7 @@ export default function CreateValue() {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter Abbreviation
+              Abbreviation
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -258,7 +258,7 @@ export default function CreateValue() {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter Likely Words
+              Likely Words
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -272,7 +272,7 @@ export default function CreateValue() {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter Equivalent
+              Equivalent
               <span>:</span>
             </TextComp>
             <OutlineTextField

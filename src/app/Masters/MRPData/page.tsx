@@ -21,6 +21,7 @@ import {
 
 import OutlinedButton from "@/components/Button/OutlineButton";
 import UploadButton from "@/components/Button/UploadButton";
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import { Menu, MenuItem } from "@mui/material";
 import CreateMRPData from "./(MRPActions)/_CreateMRPData";
 import CreateMRPDataWithPlant from "./(MRPActions)/_CreateMRPDataWithPlant";
@@ -89,14 +90,20 @@ export default function MRPData() {
     settabValue(newValue);
   };
   const tabs = [
-    { label: `${SelectedMasterDatatab} View`, value: "table" },
     {
-      label: `Create ${SelectedMasterDatatab}`,
+      label: `${splitWordByCapitalLetter(SelectedMasterDatatab)} View`,
+      value: "table",
+    },
+    {
+      label: `Create ${splitWordByCapitalLetter(SelectedMasterDatatab)}`,
       value: "create",
     },
 
     {
-      label: tabValue === "edit" ? `Edit ${SelectedMasterDatatab}` : "",
+      label:
+        tabValue === "edit"
+          ? `Edit ${splitWordByCapitalLetter(SelectedMasterDatatab)}`
+          : "",
       value: "edit",
       disabled: editTabShow,
     },

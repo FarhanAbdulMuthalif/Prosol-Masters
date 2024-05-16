@@ -8,7 +8,7 @@ import api from "@/components/api";
 import { PrivilageInitialState, textCompStyle } from "@/utils/UserDataExport";
 import { FormEvent, useContext, useState } from "react";
 
-export default function CreatePrivilage() {
+export default function CreatePrivilege() {
   const [formData, setFormData] = useState({ name: "", status: false });
   const [FormErrorMessage, setFormErrorMessage] = useState("");
 
@@ -89,11 +89,11 @@ export default function CreatePrivilage() {
       <div className="create-user-wrapper-inputs">
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Privilage Name
+            Privilege Name
             <span>:</span>
           </TextComp>
           <OutlineTextField
-            placeholder={`Enter Name`}
+            placeholder={`Enter Privilege Name`}
             fullWidth
             type="text"
             value={formData.name}

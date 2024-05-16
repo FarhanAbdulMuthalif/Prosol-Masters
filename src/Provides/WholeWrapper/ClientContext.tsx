@@ -8,6 +8,7 @@ import {
   colorThemesArr,
   initialFontProperty,
 } from "@/utils/Theme/themeData";
+import { defaultProfileImage } from "@/utils/UserDataExport";
 import { MasterSubFieldWithData, getAllPlantData } from "@/utils/masters/plant";
 import { toogleSidebarHandler } from "@/utils/sideBarFunc";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -41,7 +42,7 @@ export default function ClientContext({ children }: { children: ReactNode }) {
     plantId: [],
     status: true,
     roles: [],
-    avatar: "",
+    avatar: defaultProfileImage,
   });
   const [auth, setauth] = useState(false);
   const [editTabShow, seteditTabShow] = useState(true);

@@ -43,8 +43,30 @@
         box-shadow: rgb(9 30 66 / 8%) 0px 0px 0px 1px,
           rgb(9 30 66 / 8%) 0px 2px 4px 1px;
         padding: 5px;
+        .material-master-description-fields-colored-tabs-wrapper {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          border-bottom: 0.5px solid #c5ccd4;
+          .material-master-description-fields-colored-tabs {
+            width: 50%;
+          }
+          .material-master-description-fields-colored-tabs-content {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            .material-master-description-fields-colored-tabs-item-image {
+              height: 20px;
+              width: 20px;
+              border-radius: 50%;
+              background-color: pink;
+            }
+          }
+        }
         .material-master-description-fields-content {
           width: 100%;
+
           .material-master-description-fields-content-characteristic {
             width: 100%;
             display: flex;
@@ -164,14 +186,14 @@
     // }
   }
 }
-@media (height <= 560px) {
+@media (height <= 540px) {
   .material-master-description-fields-content-characteristic {
-    height: 210px;
+    height: 200px;
 
     overflow-y: auto;
   }
 }
-@media (height > 560px) and (height <= 600px) {
+@media (height > 540px) and (height <= 600px) {
   .material-master-description-fields-content-characteristic {
     height: 250px;
 

@@ -268,7 +268,7 @@ export default function EditRole({
       <div className="create-user-wrapper-inputs">
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter RoleName
+            RoleName
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -282,7 +282,7 @@ export default function EditRole({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Description
+            Description
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -296,7 +296,7 @@ export default function EditRole({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Plant
+            Plant
             <span>:</span>
           </TextComp>
           <NameSingleSelectDropdown

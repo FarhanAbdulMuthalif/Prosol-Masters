@@ -17,7 +17,7 @@ import {
 } from "react";
 import { PrivilageInitialStateProps } from "../../../../TypesStore";
 
-export default function PrivilageGrid({
+export default function PrivilegeGrid({
   setSelectionIDArr,
   PrivilageData,
   setPrivilageData,

@@ -10,10 +10,10 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { GridRowId } from "@mui/x-data-grid";
 import { ReactNode, useContext, useState } from "react";
 import { PrivilageInitialStateProps } from "../../../../TypesStore";
-import CreatePrivilage from "./_CreatePrivilage";
-import EditPrivilage from "./_EditPrivilage";
-import PrivilageGrid from "./_PrivilageGrid";
-export default function Privilage() {
+import CreatePrivilege from "./_CreatePrivilage";
+import EditPrivilege from "./_EditPrivilage";
+import PrivilegeGrid from "./_PrivilageGrid";
+export default function Privilege() {
   const DataContextHub = useContext(UseContextHook);
   const { setReusableSnackBar } = DataContextHub;
   const [tabValue, settabValue] = useState("table");
@@ -32,11 +32,11 @@ export default function Privilage() {
     return null;
   }
   const tabs = [
-    { label: `Privilage View`, value: "table" },
-    { label: `Create Privilage`, value: "create" },
+    { label: `Privilege View`, value: "table" },
+    { label: `Create Privilege`, value: "create" },
 
     {
-      label: tabValue === "edit" ? `Edit Privilage` : "",
+      label: tabValue === "edit" ? `Edit Privilege` : "",
       value: "edit",
       disabled: true,
     },
@@ -53,15 +53,15 @@ export default function Privilage() {
   };
   const tabRenderedData: Record<string, ReactNode> = {
     table: (
-      <PrivilageGrid
+      <PrivilegeGrid
         setSelectionIDArr={setSelectionIDArr}
         setPrivilageData={setPrivilageData}
         PrivilageData={PrivilageData}
         EditSetRecordAndGotoAction={EditSetRecordAndGotoAction}
       />
     ),
-    create: <CreatePrivilage />,
-    edit: <EditPrivilage settabValue={settabValue} EditDataGet={EditDataGet} />,
+    create: <CreatePrivilege />,
+    edit: <EditPrivilege settabValue={settabValue} EditDataGet={EditDataGet} />,
   };
   const handleOpenBulkStatusDialog = () => {
     setbulkStatusDialog(!bulkStatusDialog);

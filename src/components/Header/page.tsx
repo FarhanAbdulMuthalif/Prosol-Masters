@@ -1,7 +1,6 @@
 "use client";
 import { UseContextHook } from "@/Provides/UseContextHook";
 import { PrimaryTextColor } from "@/styles/colorsCode";
-import { defaultProfileImage } from "@/utils/UserDataExport";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import HelpIcon from "@mui/icons-material/Help";
 import LockResetIcon from "@mui/icons-material/LockReset";
@@ -13,7 +12,7 @@ import { Menu, MenuItem } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import ThemedDialog from "../Dialog/ThemeDialog";
 import ChangePasswordDialog from "../Dialog/userDialog/ChangePasswordDialog";
 import ProfileDialog from "../Dialog/userDialog/ProfileDialog";
@@ -30,7 +29,7 @@ export default function Header() {
   const [ThemeDialogOpen, setThemeDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [imageSrc, setImageSrc] = useState<string>(defaultProfileImage);
+  // const [imageSrc, setImageSrc] = useState<string>(defaultProfileImage);
   const {
     auth,
     setauth,
@@ -41,31 +40,31 @@ export default function Header() {
     setReusableSnackBar,
     selectedFont,
   } = useContext(UseContextHook);
-  useEffect(() => {
-    async function fetchImage() {
-      if (!UserInfo?.id || !UserInfo?.avatar) {
-        setImageSrc(defaultProfileImage);
-        return;
-      }
-      try {
-        const response = await api.get(
-          `/user/downloadFile/${UserInfo.id}/${UserInfo.avatar}`,
-          {
-            responseType: "blob",
-          }
-        );
-        const imageBlob = response.data;
-        const imageObjectURL = URL.createObjectURL(imageBlob);
+  // useEffect(() => {
+  //   async function fetchImage() {
+  //     if (!UserInfo?.id || !UserInfo?.avatar) {
+  //       setImageSrc(defaultProfileImage);
+  //       return;
+  //     }
+  //     try {
+  //       const response = await api.get(
+  //         `/user/downloadFile/${UserInfo.id}/${UserInfo.avatar}`,
+  //         {
+  //           responseType: "blob",
+  //         }
+  //       );
+  //       const imageBlob = response.data;
+  //       const imageObjectURL = URL.createObjectURL(imageBlob);
 
-        setImageSrc(imageObjectURL);
-      } catch (error) {
-        console.error("Error fetching image:", error);
-        setImageSrc(defaultProfileImage); // Set to a default image on error
-      }
-    }
+  //       setImageSrc(imageObjectURL);
+  //     } catch (error) {
+  //       console.error("Error fetching image:", error);
+  //       setImageSrc(defaultProfileImage); // Set to a default image on error
+  //     }
+  //   }
 
-    fetchImage();
-  }, [UserInfo?.id, UserInfo?.avatar]);
+  //   fetchImage();
+  // }, [UserInfo?.id, UserInfo?.avatar]);
   const [anchorElSettings, setAnchorElSettings] =
     useState<null | SVGSVGElement>(null);
   const openSetting = Boolean(anchorElSettings);
@@ -243,7 +242,7 @@ export default function Header() {
           </TextComp>
 
           <Image
-            src={imageSrc}
+            src={UserInfo?.avatar || ""}
             height={30}
             width={30}
             alt="Img"

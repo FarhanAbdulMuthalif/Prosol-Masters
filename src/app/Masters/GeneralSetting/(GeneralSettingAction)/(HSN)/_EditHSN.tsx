@@ -205,7 +205,7 @@ export default function EditHSN({ EditDataGet }: any) {
         <div className="create-plant-field-place-div">
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab} Code
+              {SelectedMasterDatatab} Code
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -225,7 +225,7 @@ export default function EditHSN({ EditDataGet }: any) {
           </div>
           <div className="create-plant-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter {SelectedMasterDatatab} Desc
+              {SelectedMasterDatatab} Desc
               <span>:</span>
             </TextComp>
             <OutlineTextField

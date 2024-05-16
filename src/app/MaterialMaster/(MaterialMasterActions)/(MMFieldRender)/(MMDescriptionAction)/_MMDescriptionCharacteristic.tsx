@@ -40,7 +40,7 @@ export default function MMDescriptionCharacteristic() {
     color: PrimaryTextColor,
     border: ".5px solid #e3e3e3",
     display: "flex",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "space-between",
   };
   const data = [
@@ -85,7 +85,13 @@ export default function MMDescriptionCharacteristic() {
     <div className="material-master-description-fields-content-characteristic">
       {MMDescCharacteristics?.view ? (
         <div className="material-master-description-fields-content-characteristic-table">
-          <TableContainer sx={{ width: "100%" }}>
+          <TableContainer
+            sx={{
+              width: "100%",
+              borderRadius: "5px",
+              border: ".5px solid #e3e3e3",
+            }}
+          >
             <Table size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>

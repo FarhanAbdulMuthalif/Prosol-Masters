@@ -10,7 +10,7 @@ import { PrivilageInitialState, textCompStyle } from "@/utils/UserDataExport";
 import { FormEvent, useContext, useState } from "react";
 import { PrivilageInitialStateProps } from "../../../../TypesStore";
 
-export default function EditPrivilage({
+export default function EditPrivilege({
   settabValue,
   EditDataGet,
 }: {
@@ -108,11 +108,11 @@ export default function EditPrivilage({
       <div className="create-user-wrapper-inputs">
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter RoleName
+            Privilege Name
             <span>:</span>
           </TextComp>
           <OutlineTextField
-            placeholder={`Enter Name`}
+            placeholder={`Enter Privilege Name`}
             fullWidth
             type="text"
             value={formData.name}

@@ -24,8 +24,16 @@ const UseAuth = () => {
     let refreshToken = storedRefreshToken || "";
     let expiresAtTxt = storedExpiresAt || "";
     if (!storedAccessToken || !storedExpiresAt || !storedRefreshToken) {
-      refreshTokenHandler();
-      return;
+      if (!storedRefreshToken) {
+        if (!SetContextAuth || !setUserInfo || !setReusableSnackBar) return;
+
+        router.push("/Login");
+        SetContextAuth(false);
+        return;
+      } else {
+        refreshTokenHandler();
+        return;
+      }
     }
     const expiresAt = parseCustomDateString(storedExpiresAt);
     const now = new Date();

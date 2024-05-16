@@ -18,6 +18,7 @@ import {
   mastersSalesAndOthersSubFields,
 } from "../../../../TypesStore";
 
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import CreateSalesOrganization from "./(SalesAndOthersAction)/(SalesOrganiztion))/_CreateSalesOrganization";
 import EditSalesOrganization from "./(SalesAndOthersAction)/(SalesOrganiztion))/_EditSalesOrganization";
 import CreateSalesAndOthers from "./(SalesAndOthersAction)/_CreateSalesAndOthers";
@@ -78,14 +79,20 @@ export default function SalesAndOthers() {
     settabValue(newValue);
   };
   const tabs = [
-    { label: `${SelectedMasterDatatab} View`, value: "table" },
     {
-      label: `Create ${SelectedMasterDatatab}`,
+      label: `${splitWordByCapitalLetter(SelectedMasterDatatab)} View`,
+      value: "table",
+    },
+    {
+      label: `Create ${splitWordByCapitalLetter(SelectedMasterDatatab)}`,
       value: "create",
     },
 
     {
-      label: tabValue === "edit" ? `Edit ${SelectedMasterDatatab}` : "",
+      label:
+        tabValue === "edit"
+          ? `Edit ${splitWordByCapitalLetter(SelectedMasterDatatab)}`
+          : "",
       value: "edit",
       disabled: editTabShow,
     },

@@ -1,3 +1,4 @@
+import api from "@/components/api";
 import apiLogin from "@/components/apiLogin";
 import { PrimaryTextColor } from "@/styles/colorsCode";
 import { Dispatch, SetStateAction } from "react";
@@ -51,7 +52,21 @@ export async function singleUserDataHandler(
 
   const resData = await resMe?.data; // Extract data from response
   if (resMe.status === 200) {
-    setUser(resData);
+    // setUser(resData);
+    try {
+      const response = await api.get(
+        `/user/downloadFile/${resData.id}/${resData.avatar}`,
+        {
+          responseType: "blob",
+        }
+      );
+      const imageBlob = response.data;
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+
+      setUser((prev) => ({ ...resData, avatar: imageObjectURL }));
+    } catch (e: any) {
+      console.log(e?.response);
+    }
   }
 }
 export const textCompStyle = {

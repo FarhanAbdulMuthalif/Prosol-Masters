@@ -169,7 +169,7 @@ export default function CreateUser() {
       <div className="create-user-wrapper-inputs">
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter FirstName
+            FirstName
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -183,7 +183,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter LastName
+            LastName
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -197,7 +197,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Email
+            Email
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -211,7 +211,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Phone No
+            Phone No
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -225,7 +225,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Password
+            Password
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -239,7 +239,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Confirm Password
+            Confirm Password
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -253,7 +253,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Department
+            Department
             <span>:</span>
           </TextComp>
           <NameSingleSelectDropdown
@@ -272,11 +272,11 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Plant
+            Plant
             <span>:</span>
           </TextComp>
           <ReusableMultipleSelect
-            label="Select Plant"
+            label="Select Plant (Multiple Selection)"
             values={formData.plantId ? formData.plantId : []}
             options={PlantDropDownData ?? []}
             onChange={multiplehandleSelectChange}
@@ -286,11 +286,11 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Role
+            Role
             <span>:</span>
           </TextComp>
           <ReusableMultipleSelect
-            label="Select Role"
+            label="Select Role (Multiple Selection)"
             values={formData.roles ? formData.roles : []}
             options={RolesDropDownData ?? []}
             onChange={multiplehandleSelectChange}
@@ -300,7 +300,7 @@ export default function CreateUser() {
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Business
+            Business
             <span>:</span>
           </TextComp>
           <OutlineTextField

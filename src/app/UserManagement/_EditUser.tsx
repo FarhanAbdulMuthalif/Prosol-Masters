@@ -182,7 +182,7 @@ export default function EditUser({
       <div className="create-user-wrapper-inputs">
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter FirstName
+            FirstName
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -196,7 +196,7 @@ export default function EditUser({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter LastName
+            LastName
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -210,7 +210,7 @@ export default function EditUser({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter PhoneNo
+            PhoneNo
             <span>:</span>
           </TextComp>
           <OutlineTextField
@@ -224,7 +224,7 @@ export default function EditUser({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Department
+            Department
             <span>:</span>
           </TextComp>
           <NameSingleSelectDropdown
@@ -243,11 +243,11 @@ export default function EditUser({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Plant
+            Plant
             <span>:</span>
           </TextComp>
           <ReusableMultipleSelect
-            label="Select Plant"
+            label="Select Plant (Multiple Selection)"
             values={formData.plantId ? formData.plantId : []}
             options={PlantDropDownData ?? []}
             onChange={multiplehandleSelectChange}
@@ -257,12 +257,12 @@ export default function EditUser({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Select Role
+            Role
             <span>:</span>
           </TextComp>
           <ReusableMultipleSelect
             fullWidth={true}
-            label="Select Role"
+            label="Select Role (Multiple Selection)"
             values={formData.roles ? formData.roles : []}
             options={RolesDropDownData ?? []}
             onChange={multiplehandleSelectChange}
@@ -271,7 +271,7 @@ export default function EditUser({
         </div>
         <div className="create-user-wrapper-single-input">
           <TextComp variant="subTitle" style={textCompStyle}>
-            Enter Business
+            Business
             <span>:</span>
           </TextComp>
           <OutlineTextField

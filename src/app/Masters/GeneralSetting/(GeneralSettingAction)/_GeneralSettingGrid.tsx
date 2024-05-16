@@ -4,6 +4,7 @@ import ReusableSwitch from "@/components/SwitchToogle/SimpleSwitch";
 import api from "@/components/api";
 import { capitalizeFunc } from "@/utils/capitalizeFunc";
 import { getAllPlantData } from "@/utils/masters/plant";
+import { splitWordByCapitalLetter } from "@/utils/splitWordByCapitalLetter";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { GridColDef, GridRowId } from "@mui/x-data-grid";
@@ -188,7 +189,7 @@ export default function GeneralSettingGrid({
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `MainGroupCodes`,
+          headerName: `Main Group Codes`,
           renderCell: (params: any) => {
             return params.row.mainGroupCodes.mainGroupName;
           },
@@ -200,7 +201,7 @@ export default function GeneralSettingGrid({
           headerClassName: "super-app-theme--header",
           flex: 1,
 
-          headerName: `SubGroupCodes`,
+          headerName: `Sub Group Codes`,
           renderCell: (params: any) => {
             return params.row.subGroupCodes.subGroupName;
           },
@@ -219,7 +220,7 @@ export default function GeneralSettingGrid({
           field: "duplicateCheck",
           headerClassName: "super-app-theme--header",
           flex: 1,
-          headerName: "DuplicateCheck",
+          headerName: "Duplicate Check",
           renderCell: (params: any) => {
             return (
               <div className="wrapperIconAction">
@@ -238,7 +239,7 @@ export default function GeneralSettingGrid({
         field: data,
         headerClassName: "super-app-theme--header",
         flex: 1,
-        headerName: `${capitalizeFunc(data)}`,
+        headerName: `${splitWordByCapitalLetter(capitalizeFunc(data))}`,
       };
     }
   );

@@ -5,10 +5,7 @@ import OutlinedButton from "@/components/Button/OutlineButton";
 import TextComp from "@/components/TextComp/TextComp";
 import api from "@/components/api";
 import { PrimaryTextColor } from "@/styles/colorsCode";
-import {
-  defaultProfileImage,
-  singleUserDataHandler,
-} from "@/utils/UserDataExport";
+import { singleUserDataHandler } from "@/utils/UserDataExport";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -19,13 +16,7 @@ import {
   IconButton,
 } from "@mui/material";
 import Image from "next/image";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import "./ProfileDialog.scss";
 
 interface myProfileDialogProps {
@@ -46,32 +37,32 @@ export default function ProfileDialog({
   };
   const { setReusableSnackBar, UserInfo, ThemeColor, setUserInfo } =
     ContextDataHub;
-  const [imageSrc, setImageSrc] = useState<string>(defaultProfileImage);
+  // const [imageSrc, setImageSrc] = useState<string>(defaultProfileImage);
 
-  useEffect(() => {
-    async function fetchImage() {
-      if (!UserInfo?.id || !UserInfo?.avatar) {
-        setImageSrc(defaultProfileImage);
-        return;
-      }
-      try {
-        const response = await api.get(
-          `/user/downloadFile/${UserInfo.id}/${UserInfo.avatar}`,
-          {
-            responseType: "blob",
-          }
-        );
-        const imageBlob = response.data;
-        const imageObjectURL = URL.createObjectURL(imageBlob);
-        setImageSrc(imageObjectURL);
-      } catch (error) {
-        console.error("Error fetching image:", error);
-        setImageSrc(defaultProfileImage); // Set to a default image on error
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchImage() {
+  //     if (!UserInfo?.id || !UserInfo?.avatar) {
+  //       setImageSrc(defaultProfileImage);
+  //       return;
+  //     }
+  //     try {
+  //       const response = await api.get(
+  //         `/user/downloadFile/${UserInfo.id}/${UserInfo.avatar}`,
+  //         {
+  //           responseType: "blob",
+  //         }
+  //       );
+  //       const imageBlob = response.data;
+  //       const imageObjectURL = URL.createObjectURL(imageBlob);
+  //       setImageSrc(imageObjectURL);
+  //     } catch (error) {
+  //       console.error("Error fetching image:", error);
+  //       setImageSrc(defaultProfileImage); // Set to a default image on error
+  //     }
+  //   }
 
-    fetchImage();
-  }, [UserInfo?.id, UserInfo?.avatar]);
+  //   fetchImage();
+  // }, [UserInfo?.id, UserInfo?.avatar]);
 
   if (!setReusableSnackBar || !UserInfo || !setUserInfo) return null;
   const closeHandler = () => {
@@ -166,7 +157,7 @@ export default function ProfileDialog({
                 style={{ border: `3px solid ${ThemeColor.secondaryColor}` }}
               >
                 <Image
-                  src={imageSrc}
+                  src={UserInfo.avatar}
                   alt="loading..."
                   height={70}
                   width={70}

@@ -85,7 +85,7 @@ export default function CreateDynamicForm() {
         <div className="create-dynamic-form-module-div">
           <div className="create-dynamic-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter FormName
+              FormName
               <span>:</span>
             </TextComp>
             <OutlineTextField
@@ -103,7 +103,7 @@ export default function CreateDynamicForm() {
           </div>
           <div className="create-dynamic-wrapper-single-input">
             <TextComp variant="subTitle" style={textCompStyle}>
-              Enter Form Description
+              Form Description
               <span>:</span>
             </TextComp>
             <TextareaOutline
